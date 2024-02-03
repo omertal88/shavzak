@@ -5,12 +5,14 @@ from datetime import datetime
 from PyQt5.QtWidgets import QWidget, QDialog
 from PyQt5.QtGui import QIntValidator
 from ui.SoldierDialog import Ui_SoldierDialog
+from src.Common import Role
 
 class SoldierDialog(QDialog):
     
     def __init__(self, parent : QWidget):
         
         super().__init__(parent)
+        
         self.ui = Ui_SoldierDialog()
         self.ui.setupUi(self)
         
@@ -18,15 +20,6 @@ class SoldierDialog(QDialog):
         pnValidator = QIntValidator(self.ui.pnEdit)
         pnValidator.setBottom(0)
         self.ui.pnEdit.setValidator(pnValidator)
-        
-class Role:
-    OFFICER            = 1 << 0
-    COMMANDER          = 1 << 1
-    SHARPSHOOTER       = 1 << 2
-    GRENADE_LAUNCHER   = 1 << 3
-    MEDIC              = 1 << 4
-    SNIPER             = 1 << 5
-    SIGNALLER          = 1 << 6
 
 @dataclass(init=True)
 class Absence:

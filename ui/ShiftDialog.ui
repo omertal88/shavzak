@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Edit Shift</string>
+   <string>עריכת משמרת</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -19,7 +19,7 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Position</string>
+        <string>עמדה</string>
        </property>
       </widget>
      </item>
@@ -29,58 +29,58 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Weekdays</string>
+        <string>ימים</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
-        <widget class="QCheckBox" name="checkBox">
+        <widget class="QCheckBox" name="sundayCheck">
          <property name="text">
-          <string>Sunday</string>
+          <string>ראשון</string>
          </property>
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QCheckBox" name="checkBox_2">
+        <widget class="QCheckBox" name="mondayCheck">
          <property name="text">
-          <string>Monday</string>
+          <string>שני</string>
          </property>
         </widget>
        </item>
        <item row="0" column="2">
-        <widget class="QCheckBox" name="checkBox_3">
+        <widget class="QCheckBox" name="tuesdayCheck">
          <property name="text">
-          <string>Tuesday</string>
+          <string>שלישי</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QCheckBox" name="checkBox_4">
+        <widget class="QCheckBox" name="wednesdayCheck">
          <property name="text">
-          <string>Wednesday</string>
+          <string>רביעי</string>
          </property>
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QCheckBox" name="checkBox_5">
+        <widget class="QCheckBox" name="thursdayCheck">
          <property name="text">
-          <string>Thursday</string>
+          <string>חמישי</string>
          </property>
         </widget>
        </item>
        <item row="1" column="2">
-        <widget class="QCheckBox" name="checkBox_6">
+        <widget class="QCheckBox" name="fridayCheck">
          <property name="text">
-          <string>Friday</string>
+          <string>שישי</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1">
-        <widget class="QCheckBox" name="checkBox_7">
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="saturdayCheck">
          <property name="text">
-          <string>Saturday</string>
+          <string>שבת</string>
          </property>
         </widget>
        </item>
@@ -89,7 +89,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>From</string>
+        <string>שעת התחלה</string>
        </property>
       </widget>
      </item>
@@ -99,12 +99,94 @@
      <item row="3" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Until</string>
+        <string>זמן משמרת</string>
        </property>
       </widget>
      </item>
      <item row="3" column="1">
-      <widget class="QTimeEdit" name="untilTime"/>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>שעות</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>דקות</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>50</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </item>
+     <item row="4" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>הצמד למשמרת</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QComboBox" name="stickToShiftCombo">
+       <item>
+        <property name="text">
+         <string>ללא הצמדה</string>
+        </property>
+       </item>
+      </widget>
      </item>
     </layout>
    </item>
@@ -129,8 +211,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>230</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -145,8 +227,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>230</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

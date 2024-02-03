@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>623</width>
-    <height>365</height>
+    <height>373</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Edit Soldier</string>
+   <string>עריכת חייל</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
@@ -19,7 +19,7 @@
      <item row="1" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Soldier name</string>
+        <string>שם החייל</string>
        </property>
       </widget>
      </item>
@@ -29,7 +29,7 @@
      <item row="2" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
-        <string>Platoon</string>
+        <string>מחלקה</string>
        </property>
       </widget>
      </item>
@@ -52,79 +52,93 @@
        </item>
        <item>
         <property name="text">
-         <string>Maflag</string>
+         <string>מפל&quot;ג</string>
         </property>
        </item>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
-        <string>Role</string>
+        <string>תפקיד</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="2">
-        <widget class="QCheckBox" name="sharpshooterCheck">
-         <property name="text">
-          <string>Sharpshooter</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QCheckBox" name="grenLauncherCheck">
-         <property name="text">
-          <string>Grenade Launcher</string>
-         </property>
-        </widget>
-       </item>
        <item row="0" column="1">
         <widget class="QCheckBox" name="commanderCheck">
          <property name="text">
-          <string>Commander</string>
+          <string>מפקד</string>
          </property>
         </widget>
        </item>
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="officerCheck">
+       <item row="0" column="2">
+        <widget class="QCheckBox" name="sharpshooterCheck">
          <property name="text">
-          <string>Officer / Sgt.</string>
+          <string>קלע</string>
          </property>
         </widget>
        </item>
        <item row="1" column="0">
         <widget class="QCheckBox" name="medicCheck">
          <property name="text">
-          <string>Medic</string>
+          <string>חובש</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="sniperCheck">
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="officerCheck">
          <property name="text">
-          <string>Sniper</string>
+          <string>מ&quot;מ / סמל</string>
          </property>
         </widget>
        </item>
        <item row="1" column="2">
         <widget class="QCheckBox" name="signallerCheck">
          <property name="text">
-          <string>Signaller</string>
+          <string>קשר</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QCheckBox" name="grenLauncherCheck">
+         <property name="text">
+          <string>מטול</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QCheckBox" name="sniperCheck">
+         <property name="text">
+          <string>צלף</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QCheckBox" name="hamalistCheck">
+         <property name="text">
+          <string>חמ&quot;ליסט</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="hamalRunnerCheck">
+         <property name="text">
+          <string>רץ חמ&quot;ל</string>
          </property>
         </widget>
        </item>
       </layout>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
-        <string>Absences</string>
+        <string>היעדרויות</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="5" column="1">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QListWidget" name="listWidget"/>
@@ -132,16 +146,16 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QPushButton" name="pushButton">
+          <widget class="QPushButton" name="addAbsenceButton">
            <property name="text">
-            <string>Add Absence</string>
+            <string>הוסיף היעדרות</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_2">
+          <widget class="QPushButton" name="removeAbsenceButton">
            <property name="text">
-            <string>Remove Absence</string>
+            <string>הסר היעדרות</string>
            </property>
           </widget>
          </item>
@@ -152,12 +166,22 @@
      <item row="0" column="0">
       <widget class="QLabel" name="label_5">
        <property name="text">
-        <string>P.N</string>
+        <string>מ.א</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="pnEdit"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>מספר טלפון</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="telephoneEdit"/>
      </item>
     </layout>
    </item>
@@ -177,6 +201,7 @@
   <tabstop>pnEdit</tabstop>
   <tabstop>soldierNameEdit</tabstop>
   <tabstop>platoonCombo</tabstop>
+  <tabstop>telephoneEdit</tabstop>
   <tabstop>officerCheck</tabstop>
   <tabstop>commanderCheck</tabstop>
   <tabstop>sharpshooterCheck</tabstop>
@@ -185,8 +210,10 @@
   <tabstop>sniperCheck</tabstop>
   <tabstop>signallerCheck</tabstop>
   <tabstop>listWidget</tabstop>
-  <tabstop>pushButton</tabstop>
-  <tabstop>pushButton_2</tabstop>
+  <tabstop>addAbsenceButton</tabstop>
+  <tabstop>removeAbsenceButton</tabstop>
+  <tabstop>hamalistCheck</tabstop>
+  <tabstop>hamalRunnerCheck</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -197,8 +224,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>257</x>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -213,8 +240,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>325</x>
+     <y>355</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

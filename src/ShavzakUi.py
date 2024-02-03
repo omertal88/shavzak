@@ -2,12 +2,10 @@ from typing import Tuple, Union
 from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem
 from PyQt5.QtWidgets import QAction
 from ui.ShavzakWindow import Ui_Shavzak
-from ui.SoldierDialog import Ui_SoldierDialog
-from ui.PositionDialog import Ui_NewPositionDialog
-from ui.ShiftDialog import Ui_ShiftDialog
 
 from src.Common import DialogReturnCode
 from src.Manpower import SoldierDialog, Soldier, Absence
+from src.Positions import PositionDialog, Position
 
 class ShavzakWindow(QMainWindow):
     
@@ -17,6 +15,9 @@ class ShavzakWindow(QMainWindow):
         
         self.ui = Ui_Shavzak()
         self.ui.setupUi(self)
+        
+        self.soldiers = list()
+        self.positions = list()
         
         self.exitAction = QAction(self)
         self.exitAction.setShortcut("Esc")
@@ -35,15 +36,19 @@ class ShavzakWindow(QMainWindow):
             soldier = Soldier.makeSoldier(dialog.ui)
             newSoldierListItem = QListWidgetItem(self.ui.manpowerList)
             newSoldierListItem.setText("%s (%s)" % (soldier.name, soldier.platoon))
-        
+            
+            self.soldiers.append(soldier)
         
     def removeSoldier(self):
-        pass
+        self.ui.manpowerList.takeItem(self.ui.manpowerList.currentRow())
     
     def editSoldier(self):
         pass
     def addNewPosition(self):
-        pass
+        dialog = PositionDialog(self)
+        retval : DialogReturnCode = self.openGenericDialog(dialog)
+        # TODO: Continue tomorrow :)
+
     def removePosition(self):
         pass
     def editPosition(self):
@@ -56,6 +61,6 @@ class ShavzakWindow(QMainWindow):
         pass
     
     def selectionChanged(self):
-        self.ui.removeSoldierButton.setEnabled(len(self.ui.manpowerList.selectedItems))
-        self.ui.removePositionButton.setEnabled(len(self.ui.positionsList.selectedItems))
-        self.ui.removeShiftButton.setEnabled(len(self.ui.shiftsList.selectedItems))
+        self.ui.removeSoldierButton.setEnabled(self.ui.manpowerList.currentItem() is not None)
+        self.ui.removePositionButton.setEnabled(self.ui.positionsList.currentItem() is not None)
+        self.ui.removeShiftButton.setEnabled(self.ui.positionsList.currentItem() is not None)

@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Shavzak Tool</string>
+   <string>שבצ&quot;ק</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -22,7 +22,7 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Manpower</string>
+           <string>כוח אדם</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -37,7 +37,7 @@
           <item>
            <widget class="QPushButton" name="addSoldierButton">
             <property name="text">
-             <string>Add</string>
+             <string>הוסף</string>
             </property>
            </widget>
           </item>
@@ -47,7 +47,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Remove</string>
+             <string>הסר</string>
             </property>
            </widget>
           </item>
@@ -60,7 +60,7 @@
         <item>
          <widget class="QLabel" name="label_2">
           <property name="text">
-           <string>Positions</string>
+           <string>עמדות</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -75,7 +75,7 @@
           <item>
            <widget class="QPushButton" name="addPositionButton">
             <property name="text">
-             <string>Add</string>
+             <string>הוסף</string>
             </property>
            </widget>
           </item>
@@ -85,7 +85,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Remove</string>
+             <string>הסר</string>
             </property>
            </widget>
           </item>
@@ -98,7 +98,7 @@
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
-           <string>Shifts</string>
+           <string>משמרות</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -113,7 +113,7 @@
           <item>
            <widget class="QPushButton" name="addShiftButton">
             <property name="text">
-             <string>Add</string>
+             <string>הוסף</string>
             </property>
            </widget>
           </item>
@@ -123,7 +123,7 @@
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Remove</string>
+             <string>הסר</string>
             </property>
            </widget>
           </item>
@@ -148,7 +148,7 @@
        </size>
       </property>
       <property name="title">
-       <string>Generator</string>
+       <string>פרמוטטור</string>
       </property>
       <widget class="QWidget" name="layoutWidget">
        <property name="geometry">
@@ -165,7 +165,7 @@
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
-             <string>From</string>
+             <string>שעת התחלה</string>
             </property>
            </widget>
           </item>
@@ -175,12 +175,16 @@
           <item row="1" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>To</string>
+             <string>משך זמן</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QDateTimeEdit" name="toDateTime"/>
+           <widget class="QTimeEdit" name="durationEdit">
+            <property name="displayFormat">
+             <string>h:mm</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
@@ -193,7 +197,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string>Generate</string>
+           <string>ייצר</string>
           </property>
          </widget>
         </item>
@@ -226,7 +230,6 @@
   <tabstop>addShiftButton</tabstop>
   <tabstop>removeShiftButton</tabstop>
   <tabstop>fromDateTime</tabstop>
-  <tabstop>toDateTime</tabstop>
   <tabstop>generateButton</tabstop>
  </tabstops>
  <resources/>
@@ -372,6 +375,38 @@
     <hint type="destinationlabel">
      <x>640</x>
      <y>191</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>manpowerList</sender>
+   <signal>currentRowChanged(int)</signal>
+   <receiver>Shavzak</receiver>
+   <slot>selectionChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>71</x>
+     <y>231</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-35</x>
+     <y>164</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>positionsList</sender>
+   <signal>currentRowChanged(int)</signal>
+   <receiver>Shavzak</receiver>
+   <slot>selectionChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>351</x>
+     <y>258</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>618</x>
+     <y>243</y>
     </hint>
    </hints>
   </connection>
