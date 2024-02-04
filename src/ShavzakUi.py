@@ -26,7 +26,7 @@ class ShavzakWindow(QMainWindow):
         
         self.manpowerModel = ManpowerModel()
         self.positionsModel = PositionsModel()
-        self.shiftsModel = ShiftsModel()
+        self.shiftsModel = ShiftsModel(self.positionsModel)
         
         self.ui.manpowerView.setModel(self.manpowerModel)
         self.ui.positionsView.setModel(self.positionsModel)
@@ -55,7 +55,7 @@ class ShavzakWindow(QMainWindow):
         dialog.show()
         return DialogReturnCode(dialog.exec_())
         
-    def addNewSoldier(self):
+    def addSoldier(self):
         dialog = SoldierDialog(self)
         retval : DialogReturnCode = self.openGenericDialog(dialog)
         
@@ -76,7 +76,7 @@ class ShavzakWindow(QMainWindow):
             newSoldier = Soldier.make(dialog.ui)
             self.manpowerModel.update(newSoldier)
     
-    def addNewPosition(self):
+    def addPosition(self):
         dialog = PositionDialog(self)
         dialog.ui.uidEdit.setText(str(self.currentPositionUid))
         retval : DialogReturnCode = self.openGenericDialog(dialog)
@@ -99,18 +99,20 @@ class ShavzakWindow(QMainWindow):
             newPosition = Position.make(dialog.ui)
             self.positionsModel.update(newPosition)
         
-    def addNewShift(self):
+    def addShift(self):
         dialog = ShiftDialog(self)
         dialog.ui.uidEdit.setText(str(self.currentShiftUid))
+        dialog.ui.positionCombo.addItems([x.name for x in self.positionsModel.positions])
         retval : DialogReturnCode = self.openGenericDialog(dialog)
         
         if retval == DialogReturnCode.OK:
             self.currentShiftUid += 1
-            shift = Shift.make(dialog.ui)
+            shift = Shift.make(dialog.ui, [x.uid for x in self.positionsModel.positions])
             self.shiftsModel.add(shift)
 
     def removeShift(self):
         pass
+    
     def editShift(self):
         pass
     

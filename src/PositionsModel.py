@@ -31,7 +31,10 @@ class PositionsModel(QAbstractTableModel):
     
     def columnCount(self, parent : QModelIndex):
         return 3
-
+    
+    def uidToName(self, uid : int):
+        return next(pos.name for pos in self.positions if pos.uid == uid)
+    
     def data(self, index : QModelIndex, role : Qt.ItemDataRole):
         if role == Qt.DisplayRole:
             if index.column() == 0:

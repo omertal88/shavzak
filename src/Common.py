@@ -23,11 +23,11 @@ class PositionProperty(IntFlag):
     NO_REST_NEEDED     = auto()
     NOT_COMMANDER      = auto()
 
-class Weekday(Enum):
-    SUNDAY      = 1
-    MONDAY      = 2
-    TUESDAY     = 3
-    WEDNESDAY   = 4
-    THURSDAY    = 5
-    FRIDAY      = 6
-    SATURDAY    = 7
+class Weekday(IntFlag):
+    SUNDAY      = auto()
+    MONDAY      = auto()
+    TUESDAY     = auto()
+    WEDNESDAY   = auto()
+    THURSDAY    = auto()
+    FRIDAY      = auto()
+    SATURDAY    = auto()

@@ -2,12 +2,16 @@ from typing import List
 from PyQt5.QtCore import QAbstractTableModel, QModelIndex, QVariant
 from PyQt5.QtCore import Qt
 from src.Positions import Position
+from src.PositionsModel import PositionsModel
 from src.Shifts import Shift
 
 class ShiftsModel(QAbstractTableModel):
     
-    def __init__(self):
+    def __init__(self, positionsModel):
         super().__init__()
+        
+        self.positionsModel : PositionsModel = positionsModel
+        
         self.setHeaderData(0, Qt.Horizontal, QVariant("עמדה"), role = Qt.UserRole)
         self.setHeaderData(1, Qt.Horizontal, QVariant("שם"), role = Qt.UserRole)
         self.setHeaderData(2, Qt.Horizontal, QVariant("מס\"ד"), role = Qt.UserRole)
@@ -37,8 +41,10 @@ class ShiftsModel(QAbstractTableModel):
     def data(self, index : QModelIndex, role : Qt.ItemDataRole):
         if role == Qt.DisplayRole:
             if index.column() == 0:
-                return QVariant(self.shifts[index.row()].name)
+                return QVariant(self.positionsModel.uidToName(self.shifts[index.row()].position_uid))
             elif index.column() == 1:
+                return QVariant(self.shifts[index.row()].nickname)
+            elif index.column() == 2:
                 return QVariant(self.shifts[index.row()].uid)
 
     def headerData(self, column, orientation, role):

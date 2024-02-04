@@ -2,7 +2,6 @@ from dataclasses import dataclass
 from PyQt5.QtWidgets import QDialog, QWidget
 
 from ui.PositionDialog import Ui_NewPositionDialog
-from ui.RolesWidget import Ui_RolesWidget
 from src.Common import Role, PositionProperty
 
 @dataclass(init=True)
@@ -14,7 +13,7 @@ class Position:
     properties : int # bit field (PositionProperty)
 
     @staticmethod
-    def makePosition(ui : Ui_NewPositionDialog):
+    def make(ui : Ui_NewPositionDialog):
         position = Position(
             uid = int(ui.uidEdit.text()),
             name = ui.positionNameEdit.text(),

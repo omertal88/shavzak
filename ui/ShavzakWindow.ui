@@ -133,6 +133,12 @@
         </item>
         <item>
          <widget class="QTableView" name="shiftsView">
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
           <attribute name="horizontalHeaderMinimumSectionSize">
            <number>20</number>
           </attribute>
@@ -273,7 +279,7 @@
    <sender>addSoldierButton</sender>
    <signal>clicked()</signal>
    <receiver>Shavzak</receiver>
-   <slot>addNewSoldier()</slot>
+   <slot>addSoldier()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>73</x>
@@ -305,7 +311,7 @@
    <sender>addPositionButton</sender>
    <signal>clicked()</signal>
    <receiver>Shavzak</receiver>
-   <slot>addNewPosition()</slot>
+   <slot>addPosition()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>284</x>
@@ -337,7 +343,7 @@
    <sender>addShiftButton</sender>
    <signal>clicked()</signal>
    <receiver>Shavzak</receiver>
-   <slot>addNewShift()</slot>
+   <slot>addShift()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>471</x>
@@ -415,13 +421,13 @@
   </connection>
  </connections>
  <slots>
-  <slot>addNewSoldier()</slot>
+  <slot>addSoldier()</slot>
   <slot>removeSoldier()</slot>
   <slot>editSoldier()</slot>
-  <slot>addNewPosition()</slot>
+  <slot>addPosition()</slot>
   <slot>removePosition()</slot>
   <slot>editPosition()</slot>
-  <slot>addNewShift()</slot>
+  <slot>addShift()</slot>
   <slot>removeShift()</slot>
   <slot>editShift()</slot>
   <slot>selectionChanged(QModelIndex)</slot>

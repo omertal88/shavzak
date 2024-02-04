@@ -26,14 +26,14 @@
      <item row="1" column="1">
       <widget class="QComboBox" name="positionCombo"/>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>ימים</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <layout class="QGridLayout" name="gridLayout">
        <item row="0" column="0">
         <widget class="QCheckBox" name="sundayCheck">
@@ -86,24 +86,24 @@
        </item>
       </layout>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>שעת התחלה</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="QTimeEdit" name="fromTime"/>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>זמן משמרת</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="5" column="1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QLabel" name="label_5">
@@ -116,7 +116,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="startHourEdit">
+        <widget class="QLineEdit" name="durationHoursEdit">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -142,7 +142,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="startMinuteEdit">
+        <widget class="QLineEdit" name="durationMinutesEdit">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
@@ -172,14 +172,14 @@
        </item>
       </layout>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QLabel" name="label_7">
        <property name="text">
         <string>הצמד למשמרת</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item row="6" column="1">
       <widget class="QComboBox" name="stickToShiftCombo">
        <item>
         <property name="text">
@@ -188,24 +188,24 @@
        </item>
       </widget>
      </item>
-     <item row="6" column="0">
+     <item row="7" column="0">
       <widget class="QLabel" name="label_8">
        <property name="text">
         <string>החל מ-</string>
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
+     <item row="8" column="0">
       <widget class="QLabel" name="label_9">
        <property name="text">
         <string>עד ל-</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item row="7" column="1">
       <widget class="QDateTimeEdit" name="validFromDatetime"/>
      </item>
-     <item row="7" column="1">
+     <item row="8" column="1">
       <widget class="QDateTimeEdit" name="validUntilDatetime"/>
      </item>
      <item row="0" column="0">
@@ -222,6 +222,16 @@
        </property>
       </widget>
      </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_11">
+       <property name="text">
+        <string>כינוי משמרת</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="nicknameEdit"/>
+     </item>
     </layout>
    </item>
    <item>
@@ -236,6 +246,24 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>positionCombo</tabstop>
+  <tabstop>nicknameEdit</tabstop>
+  <tabstop>sundayCheck</tabstop>
+  <tabstop>mondayCheck</tabstop>
+  <tabstop>tuesdayCheck</tabstop>
+  <tabstop>wednesdayCheck</tabstop>
+  <tabstop>thursdayCheck</tabstop>
+  <tabstop>fridayCheck</tabstop>
+  <tabstop>saturdayCheck</tabstop>
+  <tabstop>fromTime</tabstop>
+  <tabstop>durationHoursEdit</tabstop>
+  <tabstop>durationMinutesEdit</tabstop>
+  <tabstop>stickToShiftCombo</tabstop>
+  <tabstop>validFromDatetime</tabstop>
+  <tabstop>validUntilDatetime</tabstop>
+  <tabstop>uidEdit</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -245,8 +273,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>230</y>
+     <x>266</x>
+     <y>349</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -261,8 +289,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>325</x>
-     <y>230</y>
+     <x>334</x>
+     <y>349</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
