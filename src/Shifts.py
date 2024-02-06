@@ -1,29 +1,31 @@
-from typing import List, Dict
+from typing import List, Union
 import datetime
 from dataclasses import dataclass
 from PyQt5.QtWidgets import QDialog, QWidget
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QIntValidator
 
 from src.Common import Weekday, DateTimeTools
+from src.Positions import Position
 from Ui.ShiftDialog import Ui_ShiftDialog
 
 @dataclass(init=True)
 class Shift:
     uid : int
     nickname : str
-    position_uid : int
+    position : Position
     days : int
     start_time : datetime.time
     duration : datetime.timedelta
     valid_from : datetime.datetime
-    valid_until : datetime.datetime
+    valid_until : Union[datetime.datetime,None]
     single_shot : bool
 
-    def make(ui : Ui_ShiftDialog, positionsDict : Dict[int, int]):
+    def make(ui : Ui_ShiftDialog, positions : List[Position]):
         shift = Shift(
             uid = int(ui.uidEdit.text()),
             nickname = ui.nicknameEdit.text(),
-            position_uid = positionsDict[ui.positionCombo.currentIndex()],
+            position = positions[ui.positionCombo.currentIndex()],
             days = (
                 Weekday.SUNDAY     * ui.sundayCheck.isChecked()     |
                 Weekday.MONDAY     * ui.mondayCheck.isChecked()     |
@@ -34,9 +36,9 @@ class Shift:
                 Weekday.SATURDAY   * ui.saturdayCheck.isChecked()
             ),
             start_time = datetime.time(ui.fromTime.time().hour(), ui.fromTime.time().minute()),
-            duration = datetime.timedelta(hours = int(ui.durationHoursEdit.text()), minutes = int(ui.durationMinutesEdit.text())),
+            duration = datetime.timedelta(hours = ui.durationHourSpin.value(), minutes = ui.durationMinuteSpin.value()),
             valid_from = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.validFromDatetime),
-            valid_until = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.validUntilDatetime),
+            valid_until = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.validUntilDatetime) if ui.validUntilCheck.isChecked() else None,
             single_shot=False
         )
         
@@ -53,6 +55,7 @@ class ShiftDialog(QDialog):
         self.ui.validFromDatetime.setDateTime(DateTimeTools.getCurrentDateWithHour())
         self.ui.validUntilDatetime.setDateTime(DateTimeTools.getCurrentDateWithHour())
 
+
         if shift is not None:
             self.ui.uidEdit.setText(str(shift.uid))
             self.ui.nicknameEdit.setText(shift.nickname)
@@ -65,9 +68,13 @@ class ShiftDialog(QDialog):
             self.ui.saturdayCheck.setChecked(shift.days & Weekday.SATURDAY)
             
             self.ui.fromTime.setTime(shift.start_time)
-            self.ui.durationHoursEdit.setText(str(int(shift.duration.seconds / 3600)))
-            self.ui.durationMinutesEdit.setText(str(int(shift.duration.seconds % 3600 / 60)))
+            self.ui.durationHourSpin.setValue(int(shift.duration.seconds / 3600))
+            self.ui.durationMinuteSpin.setValue(int(shift.duration.seconds % 3600 / 60))
             self.ui.validFromDatetime.setDateTime(shift.valid_from)
-            self.ui.validUntilDatetime.setDateTime(shift.valid_until)
+            if shift.valid_until is not None:
+                self.ui.validUntilCheck.setChecked(True)
+                self.ui.validUntilDatetime.setDateTime(shift.valid_until)
+            else:
+                self.ui.validUntilCheck.setChecked(False)
             
             # self.ui.check

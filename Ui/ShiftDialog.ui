@@ -16,242 +16,247 @@
   <property name="windowTitle">
    <string>עריכת משמרת</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_4">
-       <property name="text">
-        <string>עמדה</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="positionCombo"/>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>ימים</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="sundayCheck">
-         <property name="text">
-          <string>ראשון</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QCheckBox" name="mondayCheck">
-         <property name="text">
-          <string>שני</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QCheckBox" name="tuesdayCheck">
-         <property name="text">
-          <string>שלישי</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="wednesdayCheck">
-         <property name="text">
-          <string>רביעי</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="thursdayCheck">
-         <property name="text">
-          <string>חמישי</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QCheckBox" name="fridayCheck">
-         <property name="text">
-          <string>שישי</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="saturdayCheck">
-         <property name="text">
-          <string>שבת</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>שעת התחלה</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QTimeEdit" name="fromTime"/>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_3">
-       <property name="text">
-        <string>זמן משמרת</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>שעות</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="durationHoursEdit">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>50</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>דקות</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="durationMinutesEdit">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>50</width>
-           <height>16777215</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>הצמד למשמרת</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="1">
-      <widget class="QComboBox" name="stickToShiftCombo">
-       <item>
-        <property name="text">
-         <string>ללא הצמדה</string>
-        </property>
-       </item>
-      </widget>
-     </item>
-     <item row="7" column="0">
-      <widget class="QLabel" name="label_8">
-       <property name="text">
-        <string>החל מ-</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0">
-      <widget class="QLabel" name="label_9">
-       <property name="text">
-        <string>עד ל-</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="1">
-      <widget class="QDateTimeEdit" name="validFromDatetime">
-       <property name="displayFormat">
-        <string>d/M/yy hh:mm</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1">
-      <widget class="QDateTimeEdit" name="validUntilDatetime">
-       <property name="displayFormat">
-        <string>d/M/yy hh:mm</string>
-       </property>
-      </widget>
-     </item>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label_10">
+     <property name="text">
+      <string>מזהה משמרת</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="uidEdit">
+     <property name="readOnly">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_4">
+     <property name="text">
+      <string>עמדה</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QComboBox" name="positionCombo"/>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_11">
+     <property name="text">
+      <string>כינוי משמרת</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="nicknameEdit"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>ימים</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1">
+    <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
-      <widget class="QLabel" name="label_10">
+      <widget class="QCheckBox" name="sundayCheck">
        <property name="text">
-        <string>מזהה משמרת</string>
+        <string>ראשון</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="uidEdit">
-       <property name="readOnly">
+      <widget class="QCheckBox" name="mondayCheck">
+       <property name="text">
+        <string>שני</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QCheckBox" name="tuesdayCheck">
+       <property name="text">
+        <string>שלישי</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QCheckBox" name="wednesdayCheck">
+       <property name="text">
+        <string>רביעי</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QCheckBox" name="thursdayCheck">
+       <property name="text">
+        <string>חמישי</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QCheckBox" name="fridayCheck">
+       <property name="text">
+        <string>שישי</string>
+       </property>
+       <property name="checked">
         <bool>true</bool>
        </property>
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QLabel" name="label_11">
+      <widget class="QCheckBox" name="saturdayCheck">
        <property name="text">
-        <string>כינוי משמרת</string>
+        <string>שבת</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="nicknameEdit"/>
+    </layout>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>שעת התחלה</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QTimeEdit" name="fromTime">
+     <property name="displayFormat">
+      <string>hh:mm</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>זמן משמרת</string>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>שעות</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="durationHourSpin"/>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>דקות</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="durationMinuteSpin">
+       <property name="maximum">
+        <number>59</number>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
-   <item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="label_7">
+     <property name="text">
+      <string>הצמד למשמרת</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QComboBox" name="stickToShiftCombo">
+     <item>
+      <property name="text">
+       <string>ללא הצמדה</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="label_8">
+     <property name="text">
+      <string>החל מ-</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="0">
+    <widget class="QCheckBox" name="validUntilCheck">
+     <property name="layoutDirection">
+      <enum>Qt::RightToLeft</enum>
+     </property>
+     <property name="text">
+      <string>עד ל-</string>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <widget class="QDateTimeEdit" name="validUntilDatetime">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="displayFormat">
+      <string>d/M/yy hh:mm</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="0" colspan="2">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QDateTimeEdit" name="validFromDatetime">
+     <property name="displayFormat">
+      <string>d/M/yy hh:mm</string>
      </property>
     </widget>
    </item>
@@ -268,10 +273,11 @@
   <tabstop>fridayCheck</tabstop>
   <tabstop>saturdayCheck</tabstop>
   <tabstop>fromTime</tabstop>
-  <tabstop>durationHoursEdit</tabstop>
-  <tabstop>durationMinutesEdit</tabstop>
+  <tabstop>durationHourSpin</tabstop>
+  <tabstop>durationMinuteSpin</tabstop>
   <tabstop>stickToShiftCombo</tabstop>
   <tabstop>validFromDatetime</tabstop>
+  <tabstop>validUntilCheck</tabstop>
   <tabstop>validUntilDatetime</tabstop>
   <tabstop>uidEdit</tabstop>
  </tabstops>
@@ -285,7 +291,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>275</x>
-     <y>380</y>
+     <y>378</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -301,11 +307,27 @@
    <hints>
     <hint type="sourcelabel">
      <x>343</x>
-     <y>380</y>
+     <y>378</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
      <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>validUntilCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>validUntilDatetime</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>65</x>
+     <y>333</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>143</x>
+     <y>331</y>
     </hint>
    </hints>
   </connection>

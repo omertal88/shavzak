@@ -7,7 +7,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QModelIndex, QDateTime
 from Ui.ShavzakWindow import Ui_Shavzak
 
-from src.Common import DialogReturnCode, DateTimeTools
+from src.Common import DateTimeTools
 from src.CsvImporter import importFromCsv
 from src.Manpower import SoldierDialog, Soldier, Absence
 from src.ManpowerModel import ManpowerModel
@@ -26,9 +26,6 @@ class ShavzakWindow(QMainWindow):
         
         self.ui = Ui_Shavzak()
         self.ui.setupUi(self)
-        
-        self.calendarWindow = CalendarWindow(self)
-        self.calendarWindow.hide()
         
         self.currentPositionUid = 1
         self.currentShiftUid = 1
@@ -59,7 +56,7 @@ class ShavzakWindow(QMainWindow):
         self.ui.positionsView.horizontalHeader().setStretchLastSection(True)
         
         self.ui.shiftsView.setColumnWidth(0, 100)
-        self.ui.shiftsView.setColumnWidth(1, 40)
+        self.ui.shiftsView.setColumnWidth(1, 70)
         self.ui.shiftsView.setColumnWidth(2, 40)
         self.ui.shiftsView.horizontalHeader().setStretchLastSection(True)
         
@@ -67,20 +64,24 @@ class ShavzakWindow(QMainWindow):
         self.exitAction.setShortcut("Esc")
         self.exitAction.triggered.connect(self.promptExit)
         self.addAction(self.exitAction)
-    
+
+        self.calendarWindow = CalendarWindow(self, self.manpowerModel.soldiers, self.positionsModel.positions)
+        self.calendarWindow.hide()
+        
+
     ##============================================================================##
     
-    def openGenericDialog(self, dialog : QDialog) -> DialogReturnCode:
+    def openGenericDialog(self, dialog : QDialog) -> QDialog.DialogCode:
         dialog.show()
-        return DialogReturnCode(dialog.exec_())
+        return dialog.exec_()
     
     ##============================================================================##
         
     def addSoldier(self):
         dialog = SoldierDialog(self)
-        retval : DialogReturnCode = self.openGenericDialog(dialog)
+        retval : QDialog.DialogCode = self.openGenericDialog(dialog)
         
-        if retval == DialogReturnCode.OK:
+        if retval == QDialog.Accepted:
             soldier = Soldier.make(dialog.ui)
             self.manpowerModel.add(soldier)
     
@@ -97,7 +98,7 @@ class ShavzakWindow(QMainWindow):
         dialog = SoldierDialog(self, soldier)
         retval = self.openGenericDialog(dialog)
         
-        if retval == DialogReturnCode.OK:
+        if retval == QDialog.Accepted:
             newSoldier = Soldier.make(dialog.ui)
             self.manpowerModel.update(newSoldier)
     
@@ -106,9 +107,9 @@ class ShavzakWindow(QMainWindow):
     def addPosition(self):
         dialog = PositionDialog(self)
         dialog.ui.uidEdit.setText(str(self.currentPositionUid))
-        retval : DialogReturnCode = self.openGenericDialog(dialog)
+        retval : QDialog.DialogCode = self.openGenericDialog(dialog)
         
-        if retval == DialogReturnCode.OK:
+        if retval == QDialog.Accepted:
             self.currentPositionUid += 1
             position = Position.make(dialog.ui)
             self.positionsModel.add(position)
@@ -126,7 +127,7 @@ class ShavzakWindow(QMainWindow):
         dialog = PositionDialog(self, position)
         retval = self.openGenericDialog(dialog)
         
-        if retval == DialogReturnCode.OK:
+        if retval == QDialog.Accepted:
             newPosition = Position.make(dialog.ui)
             self.positionsModel.update(newPosition)
     
@@ -139,11 +140,11 @@ class ShavzakWindow(QMainWindow):
         dialog.ui.positionCombo.setCurrentText(self.positionsModel.positions[self.ui.positionsView.selectedIndexes()[0].row()].name)
         dialog.ui.validFromDatetime = DateTimeTools.getCurrentDateWithHour()
         dialog.ui.validUntilDatetime = DateTimeTools.getCurrentDateWithHour().addDays(7)
-        retval : DialogReturnCode = self.openGenericDialog(dialog)
+        retval : QDialog.DialogCode = self.openGenericDialog(dialog)
         
-        if retval == DialogReturnCode.OK:
+        if retval == QDialog.Accepted:
             self.currentShiftUid += 1
-            shift = Shift.make(dialog.ui, [x.uid for x in self.positionsModel.positions])
+            shift = Shift.make(dialog.ui, self.positionsModel.positions)
             self.shiftsModel.add(shift)
     
     ##============================================================================##
@@ -158,11 +159,11 @@ class ShavzakWindow(QMainWindow):
         shift = self.shiftsModel.shifts[index.row()]
         dialog = ShiftDialog(self, shift)
         dialog.ui.positionCombo.addItems([x.name for x in self.positionsModel.positions])
-        dialog.ui.positionCombo.setCurrentText(next(x.name for x in self.positionsModel.positions if x.uid == shift.position_uid))
+        dialog.ui.positionCombo.setCurrentText(next(position.name for position in self.positionsModel.positions if position is shift.position))
         retval = self.openGenericDialog(dialog)
         
-        if retval == DialogReturnCode.OK:
-            newshift = Shift.make(dialog.ui, [x.uid for x in self.positionsModel.positions])
+        if retval == QDialog.Accepted:
+            newshift = Shift.make(dialog.ui, self.positionsModel.positions)
             self.shiftsModel.update(newshift)
 
     
@@ -199,6 +200,8 @@ class ShavzakWindow(QMainWindow):
             self.manpowerModel.clear()
             self.positionsModel.clear()
             self.shiftsModel.clear()
+            self.calendarWindow.clear()
+            self.calendarWindow.schedule = data.schedule
             
             self.currentPositionUid = 1
             self.currentShiftUid = 1
@@ -222,7 +225,8 @@ class ShavzakWindow(QMainWindow):
         data : SerializedData = SerializedData(
             soldiers = self.manpowerModel.soldiers,
             positions = self.positionsModel.positions,
-            shifts = self.shiftsModel.shifts
+            shifts = self.shiftsModel.shifts,
+            schedule = self.calendarWindow.schedule
         )
         data.dump(path)
     

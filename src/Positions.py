@@ -50,7 +50,6 @@ class PositionDialog(QDialog):
         self.ui.setupUi(self)
         
         if position is not None:
-            
             self.ui.uidEdit.setText(str(position.uid))
             self.ui.positionNameEdit.setText(position.name)
             self.ui.manpowerEdit.setText(str(position.needed_manpower))

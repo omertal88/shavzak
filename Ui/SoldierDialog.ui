@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>623</width>
-    <height>406</height>
+    <height>444</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -209,7 +209,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>257</x>
-     <y>388</y>
+     <y>426</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -225,7 +225,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>325</x>
-     <y>388</y>
+     <y>426</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -241,7 +241,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>300</x>
-     <y>321</y>
+     <y>359</y>
     </hint>
     <hint type="destinationlabel">
      <x>622</x>
@@ -257,7 +257,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>553</x>
-     <y>323</y>
+     <y>361</y>
     </hint>
     <hint type="destinationlabel">
      <x>622</x>

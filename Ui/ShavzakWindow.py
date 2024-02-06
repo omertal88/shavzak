@@ -189,7 +189,7 @@ class Ui_Shavzak(object):
 
     def retranslateUi(self, Shavzak):
         _translate = QtCore.QCoreApplication.translate
-        Shavzak.setWindowTitle(_translate("Shavzak", "שבצ\"ק"))
+        Shavzak.setWindowTitle(_translate("Shavzak", "ניהול מוצב"))
         self.label.setText(_translate("Shavzak", "כוח אדם"))
         self.addSoldierButton.setText(_translate("Shavzak", "הוסף"))
         self.removeSoldierButton.setText(_translate("Shavzak", "הסר"))
@@ -205,7 +205,7 @@ class Ui_Shavzak(object):
         self.label_5.setText(_translate("Shavzak", "זמן סיום"))
         self.untilDateTime.setDisplayFormat(_translate("Shavzak", "d/M/yyyy hh:mm"))
         self.generateButton.setText(_translate("Shavzak", "ייצר"))
-        self.pushButton.setText(_translate("Shavzak", "פתח לוח שנה"))
+        self.pushButton.setText(_translate("Shavzak", "פתח שיבוץ קרבי"))
         self.menuFile.setTitle(_translate("Shavzak", "קובץ"))
         self.importAction.setText(_translate("Shavzak", "טען נתונים מקובץ"))
         self.exportAction.setText(_translate("Shavzak", "שמור נתונים לקובץ"))

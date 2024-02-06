@@ -1,10 +1,7 @@
+from dataclasses import dataclass
 from enum import Enum, IntFlag, auto
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 from PyQt5.QtCore import QDateTime, QTime
-class DialogReturnCode(Enum):
-    
-    CANCEL = 0
-    OK     = 1
 
 class Role(IntFlag):
     COMPANY_COMMANDER  = auto()
@@ -42,10 +39,9 @@ class DateTimeTools:
     
     @staticmethod
     def getCurrentDateWithHour():
-        return QDateTime(
-            *[getattr(QDateTime.currentDateTime().date(), attr)() for attr in ("year", "month", "day")],
-            QDateTime.currentDateTime().time().hour(), 0, 0)
-    
+        return QDateTime(QDateTime.currentDateTime().date(),
+                        QTime(QDateTime.currentDateTime().time().hour(), 0, 0))
+
     @classmethod
     def getCurrentDateWithNextHour(cls):
         return cls.getCurrentDateWithHour().addSecs(60 * 60)
@@ -60,8 +56,22 @@ class DateTimeTools:
     def dateTimeToQDateTime(dateTime : datetime) -> QDateTime:
         return QDateTime(*[getattr(dateTime, attr) for attr in ("year", "month", "day", "hour", "minute", "second")])
     
-    def dateTimeToQTime(dateTime : datetime) -> QTime:
-        return QTime(*[getattr(dateTime, attr) for attr in ("hour", "minute")])
-    
     def dateAndTimeToDateTime(date : date, time : time) -> datetime:
         return datetime(date.year, date.month, date.day, time.hour, time.minute, time.second)
+
+@dataclass(init = True, repr = True)
+class TimeInterval:
+    start_time : datetime
+    end_time   : datetime
+    
+    def duration(self) -> timedelta:
+        return self.end_time - self.start_time
+    
+    def __and__(self, other : "TimeInterval"):
+        return self.intersects(other)
+    
+    def intersects(self, other : "TimeInterval"):
+        if self.end_time <= other.start_time or \
+            other.end_time <= self.start_time:
+            return False
+        return True

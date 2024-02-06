@@ -3,12 +3,15 @@ from PyQt5.QtCore import QAbstractTableModel, QModelIndex, QVariant
 from PyQt5.QtCore import Qt
 from src.Positions import Position
 
+class Column:
+    NAME     = 0
+    UID      = 1
+    MANPOWER = 2
+    COUNT    = 3
 class PositionsModel(QAbstractTableModel):
     
     def __init__(self):
         super().__init__()
-        self.setHeaderData(0, Qt.Horizontal, QVariant("שם"), role = Qt.UserRole)
-        self.setHeaderData(1, Qt.Horizontal, QVariant("סד\"כ"), role = Qt.UserRole)
         self.positions : List[Position] = []
     
     ##============================================================================##
@@ -17,12 +20,12 @@ class PositionsModel(QAbstractTableModel):
         self.beginInsertRows(QModelIndex(), len(self.positions), len(self.positions))
         self.positions.append(position)
         self.endInsertRows()
-        self.sort(0, Qt.AscendingOrder)
+        self.sort(Column.NAME, Qt.AscendingOrder)
     
     ##============================================================================##
     
     def remove(self, position : Position):
-        result = next(i for i, pos in enumerate(self.positions) if pos.uid == position.uid)
+        result = next(i for i, pos in enumerate(self.positions) if pos is position)
         self.removeRows(QModelIndex(), result, result)
     
     ##============================================================================##
@@ -38,7 +41,7 @@ class PositionsModel(QAbstractTableModel):
     ##============================================================================##
     
     def update(self, position : Position):
-        self.positions[next(i for i, pos in enumerate(self.positions) if pos.uid == position.uid)] = position
+        self.positions[next(i for i, pos in enumerate(self.positions) if pos is position)] = position
     
     ##============================================================================##
     
@@ -48,7 +51,7 @@ class PositionsModel(QAbstractTableModel):
     ##============================================================================##
     
     def columnCount(self, parent : QModelIndex):
-        return 3
+        return Column.COUNT
     
     ##============================================================================##
     
@@ -59,11 +62,11 @@ class PositionsModel(QAbstractTableModel):
     
     def data(self, index : QModelIndex, role : Qt.ItemDataRole):
         if role == Qt.DisplayRole:
-            if index.column() == 0:
+            if index.column() == Column.NAME:
                 return QVariant(self.positions[index.row()].name)
-            elif index.column() == 1:
+            elif index.column() == Column.UID:
                 return QVariant(self.positions[index.row()].uid)
-            elif index.column() == 2:
+            elif index.column() == Column.MANPOWER:
                 return QVariant(self.positions[index.row()].needed_manpower)
     
     ##============================================================================##
@@ -71,11 +74,11 @@ class PositionsModel(QAbstractTableModel):
     def headerData(self, column, orientation, role):
         if orientation == Qt.Horizontal:
             if role == Qt.DisplayRole:
-                if column == 0:
+                if column == Column.NAME:
                     return QVariant("שם")
-                elif column == 1:
+                elif column == Column.UID:
                     return QVariant("מס\"ד")
-                elif column == 2:
+                elif column == Column.MANPOWER:
                     return QVariant("סד\"כ")
     
     ##============================================================================##

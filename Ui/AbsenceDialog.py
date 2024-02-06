@@ -58,7 +58,7 @@ class Ui_AbsenceDialog(object):
 
     def retranslateUi(self, AbsenceDialog):
         _translate = QtCore.QCoreApplication.translate
-        AbsenceDialog.setWindowTitle(_translate("AbsenceDialog", "Dialog"))
+        AbsenceDialog.setWindowTitle(_translate("AbsenceDialog", "היעדרות חייל"))
         self.label_4.setText(_translate("AbsenceDialog", "תחילת היעדרות"))
         self.fromDateTime.setDisplayFormat(_translate("AbsenceDialog", "d/M/yyyy hh:mm"))
         self.label_5.setText(_translate("AbsenceDialog", "זמן סיום"))

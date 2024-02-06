@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>שבצ&quot;ק</string>
+   <string>ניהול מוצב</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -273,7 +273,7 @@
           </size>
          </property>
          <property name="text">
-          <string>פתח לוח שנה</string>
+          <string>פתח שיבוץ קרבי</string>
          </property>
         </widget>
        </item>

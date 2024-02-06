@@ -14,7 +14,7 @@ class Ui_SoldierDialog(object):
     def setupUi(self, SoldierDialog):
         SoldierDialog.setObjectName("SoldierDialog")
         SoldierDialog.setWindowModality(QtCore.Qt.WindowModal)
-        SoldierDialog.resize(623, 406)
+        SoldierDialog.resize(623, 444)
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(SoldierDialog)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.formLayout = QtWidgets.QFormLayout()

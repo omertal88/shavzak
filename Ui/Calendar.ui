@@ -6,26 +6,29 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>565</width>
-    <height>751</height>
+    <width>417</width>
+    <height>566</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>שיבוץ קרבי</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QCalendarWidget" name="calendarWidget">
       <property name="minimumDate">
        <date>
-        <year>2024</year>
+        <year>2023</year>
         <month>9</month>
         <day>14</day>
        </date>
       </property>
       <property name="firstDayOfWeek">
        <enum>Qt::Sunday</enum>
+      </property>
+      <property name="gridVisible">
+       <bool>true</bool>
       </property>
       <property name="verticalHeaderFormat">
        <enum>QCalendarWidget::NoVerticalHeader</enum>
@@ -38,19 +41,41 @@
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>משמרות</string>
+       <string>משימות</string>
       </property>
      </widget>
     </item>
     <item>
-     <widget class="QTableView" name="tableView">
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-     </widget>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QPushButton" name="addAssignmentButton">
+          <property name="text">
+           <string>הוסף</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="removeAssignmentButton">
+          <property name="text">
+           <string>הסר</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTableView" name="assignmentsView">
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
+        <property name="selectionBehavior">
+         <enum>QAbstractItemView::SelectRows</enum>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QLabel" name="label_2">
@@ -60,14 +85,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTableView" name="tableView_2">
-      <property name="selectionMode">
-       <enum>QAbstractItemView::SingleSelection</enum>
-      </property>
-      <property name="selectionBehavior">
-       <enum>QAbstractItemView::SelectRows</enum>
-      </property>
-     </widget>
+     <widget class="QListWidget" name="manpowerListWidget"/>
     </item>
    </layout>
   </widget>
@@ -76,7 +94,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>565</width>
+     <width>417</width>
      <height>22</height>
     </rect>
    </property>
@@ -86,23 +104,74 @@
  <resources/>
  <connections>
   <connection>
-   <sender>calendarWidget</sender>
-   <signal>clicked(QDate)</signal>
+   <sender>addAssignmentButton</sender>
+   <signal>clicked()</signal>
    <receiver>Calendar</receiver>
-   <slot>selectNewDate(QDate)</slot>
+   <slot>addAssignment()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>493</x>
-     <y>155</y>
+     <x>39</x>
+     <y>336</y>
     </hint>
     <hint type="destinationlabel">
-     <x>594</x>
-     <y>69</y>
+     <x>50</x>
+     <y>296</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>removeAssignmentButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Calendar</receiver>
+   <slot>removeAssignment()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>69</x>
+     <y>411</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>51</x>
+     <y>462</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>assignmentsView</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>Calendar</receiver>
+   <slot>editAssignment(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>297</x>
+     <y>345</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-76</x>
+     <y>281</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>calendarWidget</sender>
+   <signal>selectionChanged()</signal>
+   <receiver>Calendar</receiver>
+   <slot>reloadSelectedDate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>417</x>
+     <y>154</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>401</x>
+     <y>-55</y>
     </hint>
    </hints>
   </connection>
  </connections>
  <slots>
-  <slot>selectNewDate(QDate)</slot>
+  <slot>reloadSelectedDate()</slot>
+  <slot>addAssignment()</slot>
+  <slot>removeAssignment()</slot>
+  <slot>editAssignment(QModelIndex)</slot>
  </slots>
 </ui>

@@ -23,7 +23,7 @@ class ManpowerModel(QAbstractTableModel):
         self.sort(0, Qt.AscendingOrder)
     
     def remove(self, soldier : Soldier):
-        result = next(i for i, val in enumerate(self.soldiers) if self.soldiers[i].pn == soldier.pn)
+        result = next(i for i, val in enumerate(self.soldiers) if val.pn == soldier.pn)
         self.removeRows(QModelIndex(), result, result)
     
     ##============================================================================##

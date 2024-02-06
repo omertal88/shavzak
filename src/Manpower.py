@@ -6,7 +6,7 @@ from PyQt5.QtGui import QIntValidator
 from Ui.SoldierDialog import Ui_SoldierDialog
 from src.Absence import Absence, AbsenceDialog
 from src.AbsencesModel import AbsencesModel
-from src.Common import Role, SoldierProperty, DialogReturnCode
+from src.Common import Role, SoldierProperty, TimeInterval
 
 ##============================================================================##
 
@@ -62,7 +62,39 @@ class Soldier:
             absences=[]
         )
         return soldier
-
+    
+    ##============================================================================##
+    
+    def isOnShift(self, interval : TimeInterval, history : "Schedule"):
+        
+        for assignment in reversed(history.assignments):
+            if self in assignment.manpower:
+                assignmentInterval = TimeInterval(assignment.start_time, assignment.end_time)
+                if interval.intersects(assignmentInterval):
+                    return True
+        
+        return False
+    
+    ##============================================================================##
+    
+    def isAbsent(self, timeInterval : TimeInterval):
+        
+        for absence in self.absences:
+            if timeInterval.intersects(TimeInterval(absence.from_time, absence.until_time)):
+                return True
+        
+        # No intersection found.
+        return False
+    
+    ##============================================================================##
+    
+    def isAvailable(self, interval : TimeInterval, history : "Schedule"):
+        
+        if self.properties & SoldierProperty.MANUAL_ASSIGN or self.isAbsent(interval) or self.isOnShift(interval, history):
+            return False
+        
+        return True
+            
 ##============================================================================##
 
 class SoldierDialog(QDialog):
@@ -123,8 +155,7 @@ class SoldierDialog(QDialog):
         dialog = AbsenceDialog(self)
         dialog.ui.uidEdit.setText(str(self.currentAbsenceUid))
         dialog.show()
-        retval = DialogReturnCode(dialog.exec_())
-        if retval == DialogReturnCode.OK:
+        if dialog.exec_() == QDialog.Accepted:
             self.currentAbsenceUid += 1
             absence = Absence.make(dialog.ui)
             self.absencesModel.add(absence)
@@ -135,3 +166,4 @@ class SoldierDialog(QDialog):
         if len(self.ui.absencesView.selectedIndexes()):
             absence = self.absencesModel.absences[self.ui.absencesView.selectedIndexes()[0].row()]
             self.absencesModel.remove(absence)
+

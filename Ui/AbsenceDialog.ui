@@ -14,7 +14,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>היעדרות חייל</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
    <item row="1" column="0">

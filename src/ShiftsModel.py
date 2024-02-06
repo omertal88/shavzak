@@ -7,14 +7,10 @@ from src.Shifts import Shift
 
 class ShiftsModel(QAbstractTableModel):
     
-    def __init__(self, positionsModel):
+    def __init__(self, positionsModel): # TODO: Maybe just pass positions and not the model
         super().__init__()
         
         self.positionsModel : PositionsModel = positionsModel
-        
-        self.setHeaderData(0, Qt.Horizontal, QVariant("עמדה"), role = Qt.UserRole)
-        self.setHeaderData(1, Qt.Horizontal, QVariant("שם"), role = Qt.UserRole)
-        self.setHeaderData(2, Qt.Horizontal, QVariant("מס\"ד"), role = Qt.UserRole)
         self.shifts : List[Shift] = []
     
     ##============================================================================##
@@ -61,7 +57,7 @@ class ShiftsModel(QAbstractTableModel):
     def data(self, index : QModelIndex, role : Qt.ItemDataRole):
         if role == Qt.DisplayRole:
             if index.column() == 0:
-                return QVariant(self.positionsModel.uidToName(self.shifts[index.row()].position_uid))
+                return QVariant(self.positionsModel.uidToName(self.shifts[index.row()].position.uid))
             elif index.column() == 1:
                 return QVariant(self.shifts[index.row()].nickname)
             elif index.column() == 2:
