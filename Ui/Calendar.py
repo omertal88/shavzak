@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_Calendar(object):
     def setupUi(self, Calendar):
         Calendar.setObjectName("Calendar")
-        Calendar.resize(417, 566)
+        Calendar.resize(495, 566)
         self.centralwidget = QtWidgets.QWidget(Calendar)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -54,7 +54,7 @@ class Ui_Calendar(object):
         self.verticalLayout_2.addWidget(self.manpowerListWidget)
         Calendar.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(Calendar)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 417, 22))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 495, 22))
         self.menubar.setObjectName("menubar")
         Calendar.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(Calendar)

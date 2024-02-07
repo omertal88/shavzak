@@ -1,16 +1,19 @@
-from typing import List
+from typing import List, TYPE_CHECKING
 from dataclasses import dataclass
+from datetime import timedelta
 
 from PyQt5.QtWidgets import QWidget, QDialog
 from PyQt5.QtGui import QIntValidator
 from Ui.SoldierDialog import Ui_SoldierDialog
 from src.Absence import Absence, AbsenceDialog
 from src.AbsencesModel import AbsencesModel
-from src.Common import Role, SoldierProperty, TimeInterval
+from src.Common import Role, SoldierProperty, TimeInterval, hasProperty
+if TYPE_CHECKING:
+    from src.Schedule import Schedule
 
 ##============================================================================##
 
-@dataclass(init=True ,)
+@dataclass(init=True)
 class Soldier:
     pn : str
     name : str
@@ -50,6 +53,18 @@ class Soldier:
     
     ##============================================================================##
     
+    def update(self, other : "Soldier"):
+        self.pn = other.pn
+        self.name = other.name
+        self.platoon = other.platoon
+        self.telephone = other.telephone
+        self.roles = other.roles
+        self.comment = other.comment
+        self.absences = other.absences
+        self.properties = other.properties
+        
+    ##============================================================================##
+    
     @staticmethod
     def makeFromCsv(pn : int, name : str, platoon : str, telephone : str, comment : str):
         
@@ -65,12 +80,11 @@ class Soldier:
     
     ##============================================================================##
     
-    def isOnShift(self, interval : TimeInterval, history : "Schedule"):
+    def isOnShift(self, interval : TimeInterval, schedule : "Schedule"):
         
-        for assignment in reversed(history.assignments):
+        for assignment in reversed(schedule.assignments):
             if self in assignment.manpower:
-                assignmentInterval = TimeInterval(assignment.start_time, assignment.end_time)
-                if interval.intersects(assignmentInterval):
+                if interval.intersects(assignment.interval):
                     return True
         
         return False
@@ -88,13 +102,31 @@ class Soldier:
     
     ##============================================================================##
     
-    def isAvailable(self, interval : TimeInterval, history : "Schedule"):
+    def isAvailable(self, interval : TimeInterval, schedule : "Schedule"):
         
-        if self.properties & SoldierProperty.MANUAL_ASSIGN or self.isAbsent(interval) or self.isOnShift(interval, history):
+        if hasProperty(self.properties, SoldierProperty.MANUAL_ASSIGN) or self.isAbsent(interval) or self.isOnShift(interval, schedule):
             return False
         
         return True
+    
+    ##============================================================================##
+    
+    def getRestTimestForInterval(self, interval : TimeInterval, schedule : "Schedule"):
+        
+        restBeforeInterval = restAfterInterval = None
+        soldierAssignments = [assignment for assignment in schedule.assignments if self in assignment.manpower]
+        
+        for assignment in soldierAssignments:
+            assignmentRestTimeBefore = assignment.interval.start_time - interval.end_time # Rest time between end of `interval` and start of assignment
+            assignmentRestTimeAfter = interval.start_time - assignment.interval.end_time # Rest time between end of assignment and start of `interval`
             
+            if assignmentRestTimeAfter > timedelta() and (assignmentRestTimeAfter is None or assignmentRestTimeAfter < restBeforeInterval):
+                restBeforeInterval = assignmentRestTimeAfter
+            if assignmentRestTimeBefore > timedelta() and (assignmentRestTimeBefore is None or assignmentRestTimeBefore < restAfterInterval):
+                restAfterInterval = assignmentRestTimeBefore
+        
+        return restBeforeInterval, restAfterInterval
+    
 ##============================================================================##
 
 class SoldierDialog(QDialog):
@@ -166,4 +198,3 @@ class SoldierDialog(QDialog):
         if len(self.ui.absencesView.selectedIndexes()):
             absence = self.absencesModel.absences[self.ui.absencesView.selectedIndexes()[0].row()]
             self.absencesModel.remove(absence)
-

@@ -1,13 +1,14 @@
 import os
 import sys
 
+from datetime import timedelta
 from os.path import dirname, abspath
 from PyQt5.QtWidgets import QMainWindow, QDialog, QAction, QInputDialog, QMessageBox
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QTime
 from PyQt5.QtCore import QModelIndex, QDateTime
 from Ui.ShavzakWindow import Ui_Shavzak
 
-from src.Common import DateTimeTools
+from src.Common import DateTimeTools, TimeInterval
 from src.CsvImporter import importFromCsv
 from src.Manpower import SoldierDialog, Soldier, Absence
 from src.ManpowerModel import ManpowerModel
@@ -16,6 +17,7 @@ from src.ShiftsModel import ShiftsModel
 from src.Positions import PositionDialog, Position
 from src.Shifts import ShiftDialog, Shift
 from src.CalendarWindow import CalendarWindow
+from src.Permutation import generatePermutations
 from src.Serialization import SerializedData
 
 class ShavzakWindow(QMainWindow):
@@ -129,7 +131,8 @@ class ShavzakWindow(QMainWindow):
         
         if retval == QDialog.Accepted:
             newPosition = Position.make(dialog.ui)
-            self.positionsModel.update(newPosition)
+            self.positionsModel.positions[index.row()] = newPosition
+            # self.positionsModel.update(newPosition)
     
     ##============================================================================##
     
@@ -143,9 +146,39 @@ class ShavzakWindow(QMainWindow):
         retval : QDialog.DialogCode = self.openGenericDialog(dialog)
         
         if retval == QDialog.Accepted:
-            self.currentShiftUid += 1
-            shift = Shift.make(dialog.ui, self.positionsModel.positions)
-            self.shiftsModel.add(shift)
+            if dialog.ui.splitShiftCheck.isChecked():
+                # TODO: Limit shift time to 24 hours
+                dialog.ui.sundayCheck.setChecked(True)
+                dialog.ui.mondayCheck.setChecked(True)
+                dialog.ui.tuesdayCheck.setChecked(True)
+                dialog.ui.wednesdayCheck.setChecked(True)
+                dialog.ui.thursdayCheck.setChecked(True)
+                dialog.ui.fridayCheck.setChecked(True)
+                dialog.ui.saturdayCheck.setChecked(True)
+                startTime = dialog.ui.fromTime.time().toPyTime()
+                shiftDuration = timedelta(hours = dialog.ui.durationHourSpin.value(),
+                                          minutes = dialog.ui.durationMinuteSpin.value()) / dialog.ui.splitShiftSpin.value()
+                
+                for i in range(dialog.ui.splitShiftSpin.value()):
+                    
+                    carryTheOne = 0
+                    shiftTimeMinutes = int(startTime.minute + i * shiftDuration.total_seconds() / 60 % 60)
+                    if shiftTimeMinutes >= 60:
+                        shiftTimeMinutes %= 60
+                        carryTheOne = 1
+                    shiftTimeHours = int((startTime.hour + i * shiftDuration.total_seconds() / 60 / 60 + carryTheOne) % 24)
+                    dialog.ui.nicknameEdit.setText("%02d:%02d" % (shiftTimeHours, shiftTimeMinutes))
+                    dialog.ui.fromTime.setTime(QTime(shiftTimeHours, shiftTimeMinutes))
+                    dialog.ui.durationHourSpin.setValue(shiftDuration.total_seconds() / 60 / 60)
+                    dialog.ui.durationMinuteSpin.setValue(shiftDuration.total_seconds() / 60 % 60)
+                    
+                    self.currentShiftUid += 1
+                    shift = Shift.make(dialog.ui, self.positionsModel.positions)
+                    self.shiftsModel.add(shift)
+            else:
+                self.currentShiftUid += 1
+                shift = Shift.make(dialog.ui, self.positionsModel.positions)
+                self.shiftsModel.add(shift)
     
     ##============================================================================##
     
@@ -188,6 +221,14 @@ class ShavzakWindow(QMainWindow):
     def openCalendar(self):
         self.calendarWindow.show()
     
+    ##============================================================================##
+    
+    def calculatePermutations(self):
+        generatePermutations(self.calendarWindow.schedule, TimeInterval(self.ui.fromDateTime.dateTime().toPyDateTime(),
+                                                                        self.ui.untilDateTime.dateTime().toPyDateTime()),
+                             self.manpowerModel.soldiers,
+                             self.shiftsModel.shifts)
+        
     ##============================================================================##
     
     def importData(self):

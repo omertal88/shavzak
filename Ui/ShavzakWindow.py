@@ -178,6 +178,7 @@ class Ui_Shavzak(object):
         self.manpowerView.doubleClicked['QModelIndex'].connect(Shavzak.editSoldier)
         self.importFromCsvAction.triggered.connect(Shavzak.importFromCsv)
         self.pushButton.clicked.connect(Shavzak.openCalendar)
+        self.generateButton.clicked.connect(Shavzak.calculatePermutations)
         QtCore.QMetaObject.connectSlotsByName(Shavzak)
         Shavzak.setTabOrder(self.addSoldierButton, self.removeSoldierButton)
         Shavzak.setTabOrder(self.removeSoldierButton, self.addPositionButton)

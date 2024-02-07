@@ -538,6 +538,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>generateButton</sender>
+   <signal>clicked()</signal>
+   <receiver>Shavzak</receiver>
+   <slot>calculatePermutations()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>293</x>
+     <y>567</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>365</x>
+     <y>671</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addSoldier()</slot>
@@ -554,5 +570,6 @@
   <slot>exportData()</slot>
   <slot>importFromCsv()</slot>
   <slot>openCalendar()</slot>
+  <slot>calculatePermutations()</slot>
  </slots>
 </ui>

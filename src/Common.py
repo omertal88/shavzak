@@ -34,6 +34,9 @@ class Weekday(IntFlag):
     THURSDAY    = auto()
     FRIDAY      = auto()
     SATURDAY    = auto()
+    
+def hasProperty(properties : int, property : IntFlag):
+    return properties & property
 
 class DateTimeTools:
     
@@ -69,6 +72,9 @@ class TimeInterval:
     
     def __and__(self, other : "TimeInterval"):
         return self.intersects(other)
+    
+    def __str__(self):
+        return "%s -> %s" % (str(self.start_time), str(self.end_time))
     
     def intersects(self, other : "TimeInterval"):
         if self.end_time <= other.start_time or \

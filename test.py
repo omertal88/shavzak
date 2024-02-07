@@ -7,6 +7,7 @@ from src.Shifts import Shift
 from src.Absence import Absence
 from src.Assignment import Assignment
 from src.Schedule import Schedule
+from src.Permutation import manPosition
 
     
 soldier1 = Soldier("111", "John Smith", "3", "050-12345678", 0, comment="Good kid...",
@@ -31,14 +32,14 @@ position3 = Position(3, "Homogenous", 3, 0, 0)
 shift1 = Shift(1, "Test Shift1", position1,
                Weekday.SUNDAY | Weekday.MONDAY | Weekday.TUESDAY |
                Weekday.WEDNESDAY | Weekday.THURSDAY |
-               Weekday.FRIDAY | Weekday.SATURDAY, start_time = time(12, 0), duration = timedelta(hours=2), valid_from = datetime(2024, 2, 1), valid_until = None, single_shot = False)
+               Weekday.FRIDAY | Weekday.SATURDAY, start_time = time(12, 0), duration = timedelta(hours=2), valid_from = datetime(2024, 2, 1), valid_until = None)
 shift2 = shift2 = Shift(2, "Test Shift2", position1,
                Weekday.SUNDAY | Weekday.MONDAY | Weekday.TUESDAY |
                Weekday.WEDNESDAY | Weekday.THURSDAY |
-               Weekday.FRIDAY | Weekday.SATURDAY, start_time = time(16, 0), duration = timedelta(hours=2), valid_from = datetime(2024, 2, 1), valid_until = None, single_shot = False)
-assignment1 = Assignment(1, datetime(2024, 2, 1, 12, 0, 0), datetime(2024, 2, 1, 14, 0, 0), position1, manpower = [soldier2])
-assignment2 = Assignment(1, datetime(2024,2,25, 8, 0, 0), datetime(2024,2,25, 12, 0, 0), position1, manpower = [soldier2])
-assignment3 = Assignment(1, datetime(2024,2,26, 12, 0, 0), datetime(2024,2,26, 16, 0, 0), position1, manpower = [soldier2])
+               Weekday.FRIDAY | Weekday.SATURDAY, start_time = time(16, 0), duration = timedelta(hours=2), valid_from = datetime(2024, 2, 1), valid_until = None)
+assignment1 = Assignment(TimeInterval(datetime(2024, 2, 1, 12, 0, 0), datetime(2024, 2, 1, 14, 0, 0)), position1, manpower = [soldier2])
+assignment2 = Assignment(TimeInterval(datetime(2024,2,25, 8, 0, 0), datetime(2024,2,25, 12, 0, 0)), position1, manpower = [soldier2])
+assignment3 = Assignment(TimeInterval(datetime(2024,2,26, 12, 0, 0), datetime(2024,2,26, 16, 0, 0)), position1, manpower = [soldier2])
 schedule = Schedule()
 schedule.add(assignment1)
 schedule.add(assignment2)
@@ -63,16 +64,16 @@ class TestSoldierMethods(unittest.TestCase):
         self.assertEqual(soldier3.isAvailable(interval3, schedule), False)
     
     def test_scheduleFindNextShift(self):
-        self.assertEqual(Schedule.findNextShift(schedule, datetime(2024,2,20, 9, 0, 0), shifts=[shift1, shift2]), (shift1, datetime(2024,2,20, 12, 0)))
-        self.assertEqual(Schedule.findNextShift(schedule, datetime(2024,2,20, 13, 0, 0), shifts=[shift1, shift2]), (shift2, datetime(2024,2,20, 16, 0)))
-        self.assertEqual(Schedule.findNextShift(schedule, datetime(2024,2,19, 19, 0, 0), shifts=[shift1, shift2]), (shift1, datetime(2024,2,20, 12, 0)))
-        self.assertEqual(Schedule.findNextShift(schedule, datetime(2024, 2, 1, 14, 0, 0), shifts=[shift1, shift2]), (shift2, datetime(2024, 2, 1, 16, 0)))
-        self.assertNotEqual(Schedule.findNextShift(schedule, datetime(2024, 2, 26, 10, 0, 0), shifts=[shift1])[1], datetime(2024, 2, 26, 12, 0, 0))
+        self.assertEqual(schedule.findNextShift(datetime(2024,2,20, 9, 0, 0), shifts=[shift1, shift2]), (shift1, datetime(2024,2,20, 12, 0)))
+        self.assertEqual(schedule.findNextShift(datetime(2024,2,20, 13, 0, 0), shifts=[shift1, shift2]), (shift2, datetime(2024,2,20, 16, 0)))
+        self.assertEqual(schedule.findNextShift(datetime(2024,2,19, 19, 0, 0), shifts=[shift1, shift2]), (shift1, datetime(2024,2,20, 12, 0)))
+        self.assertEqual(schedule.findNextShift(datetime(2024, 2, 1, 14, 0, 0), shifts=[shift1, shift2]), (shift2, datetime(2024, 2, 1, 16, 0)))
+        self.assertNotEqual(schedule.findNextShift(datetime(2024, 2, 26, 10, 0, 0), shifts=[shift1])[1], datetime(2024, 2, 26, 12, 0, 0))
     
     def test_scheduleManPosition(self):
-        self.assertNotEqual(Schedule.manPosition(position2, [soldier1, soldier2, soldier3, soldier4, soldier6, soldier7]), None)
-        self.assertEqual(len(set([soldier.platoon for soldier in Schedule.manPosition(position3, [soldier1, soldier2, soldier3, soldier4, soldier5, soldier6])])), 1)
-        self.assertEqual(Schedule.manPosition(position3, [soldier1, soldier2, soldier4, soldier5]), None) # No way to man that position with these soldiers
+        self.assertNotEqual(manPosition(position2, [soldier1, soldier2, soldier3, soldier4, soldier6, soldier7]), None)
+        self.assertEqual(len(set([soldier.platoon for soldier in manPosition(position3, [soldier1, soldier2, soldier3, soldier4, soldier5, soldier6])])), 1)
+        self.assertEqual(manPosition(position3, [soldier1, soldier2, soldier4, soldier5]), None) # No way to man that position with these soldiers
     
 if __name__ == '__main__':
     unittest.main()

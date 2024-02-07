@@ -13,7 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_RolesWidget(object):
     def setupUi(self, RolesWidget):
         RolesWidget.setObjectName("RolesWidget")
-        RolesWidget.resize(335, 102)
+        RolesWidget.resize(370, 102)
         self.gridLayout = QtWidgets.QGridLayout(RolesWidget)
         self.gridLayout.setObjectName("gridLayout")
         self.platoonCommanderCheck = QtWidgets.QCheckBox(RolesWidget)
@@ -69,7 +69,7 @@ class Ui_RolesWidget(object):
 
     def retranslateUi(self, RolesWidget):
         _translate = QtCore.QCoreApplication.translate
-        RolesWidget.setWindowTitle(_translate("RolesWidget", "Form"))
+        RolesWidget.setWindowTitle(_translate("RolesWidget", "תפקידים"))
         self.platoonCommanderCheck.setText(_translate("RolesWidget", "מ\"מ / סמל"))
         self.squadCommanderCheck.setText(_translate("RolesWidget", "מ\"כ"))
         self.companyCommanderCheck.setText(_translate("RolesWidget", "מ\"פ / סמ\"פ"))

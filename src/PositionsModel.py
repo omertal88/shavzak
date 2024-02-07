@@ -41,7 +41,7 @@ class PositionsModel(QAbstractTableModel):
     ##============================================================================##
     
     def update(self, position : Position):
-        self.positions[next(i for i, pos in enumerate(self.positions) if pos is position)] = position
+        self.positions[next(i for i, pos in enumerate(self.positions) if pos == position)] = position
     
     ##============================================================================##
     

@@ -19,7 +19,6 @@ class Shift:
     duration : datetime.timedelta
     valid_from : datetime.datetime
     valid_until : Union[datetime.datetime,None]
-    single_shot : bool
 
     def make(ui : Ui_ShiftDialog, positions : List[Position]):
         shift = Shift(
@@ -38,8 +37,7 @@ class Shift:
             start_time = datetime.time(ui.fromTime.time().hour(), ui.fromTime.time().minute()),
             duration = datetime.timedelta(hours = ui.durationHourSpin.value(), minutes = ui.durationMinuteSpin.value()),
             valid_from = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.validFromDatetime),
-            valid_until = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.validUntilDatetime) if ui.validUntilCheck.isChecked() else None,
-            single_shot=False
+            valid_until = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.validUntilDatetime) if ui.validUntilCheck.isChecked() else None
         )
         
         return shift
@@ -54,7 +52,6 @@ class ShiftDialog(QDialog):
         
         self.ui.validFromDatetime.setDateTime(DateTimeTools.getCurrentDateWithHour())
         self.ui.validUntilDatetime.setDateTime(DateTimeTools.getCurrentDateWithHour())
-
 
         if shift is not None:
             self.ui.uidEdit.setText(str(shift.uid))
@@ -76,5 +73,7 @@ class ShiftDialog(QDialog):
                 self.ui.validUntilDatetime.setDateTime(shift.valid_until)
             else:
                 self.ui.validUntilCheck.setChecked(False)
+            self.ui.splitShiftCheck.setDisabled(True)
+            self.ui.splitShiftSpin.setDisabled(True)
             
             # self.ui.check

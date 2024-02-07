@@ -1,8 +1,14 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+from datetime import datetime
 from dataclasses import dataclass
 from PyQt5.QtWidgets import QDialog, QWidget
 
 from Ui.PositionDialog import Ui_NewPositionDialog
 from src.Common import Role, PositionProperty
+
+if TYPE_CHECKING:
+    from src.Schedule import Schedule
 
 @dataclass(init=True)
 class Position:
@@ -40,6 +46,20 @@ class Position:
         
         return position
     
+    ##============================================================================##
+    
+    def isAssigned(self, dateTime : datetime, schedule : Schedule):
+        # TODO: Fix this
+        for assignment in reversed(schedule.assignments):
+            if assignment.position is self:
+                if assignment.interval.start_time <= dateTime < assignment.interval.end_time:
+                    return True
+        
+        # Shift not found in history
+        return False
+
+##============================================================================##
+
 class PositionDialog(QDialog):
     
     def __init__(self, parent : QWidget, position : Position = None):

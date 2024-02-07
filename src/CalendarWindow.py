@@ -1,12 +1,13 @@
 from typing import List
-from PyQt5.QtWidgets import QMainWindow, QDialog
-from PyQt5.QtCore import Qt, QDate, QModelIndex
+from datetime import timedelta
+from PyQt5.QtWidgets import QMainWindow, QDialog, QMessageBox, QListWidgetItem
+from PyQt5.QtCore import Qt, QDate, QModelIndex, QDateTime, QTime
 from Ui.Calendar import Ui_Calendar
-from src.Common import DateTimeTools
+from src.Common import TimeInterval
 from src.Manpower import Soldier
 from src.Positions import Position
 from src.Assignment import Assignment, AssignmentDialog
-from src.AssignmentsModel import AssignmentsModel
+from src.AssignmentsModel import AssignmentsModel, Column
 from src.Schedule import Schedule
 
 class CalendarWindow(QMainWindow):
@@ -28,8 +29,9 @@ class CalendarWindow(QMainWindow):
         
         self.assignmentsModel = AssignmentsModel(positions)
         self.ui.assignmentsView.setModel(self.assignmentsModel)
-        self.ui.assignmentsView.setColumnWidth(0, 100)
-        self.ui.assignmentsView.setColumnWidth(1, 50)
+        self.ui.assignmentsView.setColumnWidth(Column.START_TIME, 120)
+        self.ui.assignmentsView.setColumnWidth(Column.END_TIME, 120)
+        self.ui.assignmentsView.horizontalHeader().setStretchLastSection(True)
         
         self.ui.assignmentsView.selectionModel().currentRowChanged.connect(self.selectNewAssignment)
     
@@ -38,10 +40,12 @@ class CalendarWindow(QMainWindow):
     def reloadSelectedDate(self):
         
         self.assignmentsModel.clear()
+        selectedDayInterval = TimeInterval(QDateTime(self.ui.calendarWidget.selectedDate(), QTime()).toPyDateTime(),
+                                           QDateTime(self.ui.calendarWidget.selectedDate(), QTime()).toPyDateTime() + timedelta(days=1))
         for assignment in self.schedule.assignments:
-            if assignment.start_time.date() == self.ui.calendarWidget.selectedDate().toPyDate():
+            if assignment.interval.intersects(selectedDayInterval):
                 self.assignmentsModel.add(assignment)
-    
+        
     ##============================================================================##
     
     def addAssignment(self):
@@ -52,24 +56,39 @@ class CalendarWindow(QMainWindow):
         for position in self.positions:
             dialog.ui.positionCombo.addItem(position.name, position)
         
-        dialog.ui.startDatetime.setDateTime(DateTimeTools.getCurrentDateWithNextHour())
-        dialog.ui.endDatetime.setDateTime(DateTimeTools.getCurrentDateWithNextHour())
+        dialog.ui.startDatetime.setDateTime(QDateTime(self.ui.calendarWidget.selectedDate(), QTime()))
+        dialog.ui.endDatetime.setDateTime(QDateTime(self.ui.calendarWidget.selectedDate(), QTime()))
         
         dialog.show()
         if dialog.exec_() == QDialog.Rejected:
             return
         
-        assignment = Assignment(uid = self.currentAssignmentUid,
-                                start_time = dialog.ui.startDatetime.dateTime().toPyDateTime(),
-                                end_time   = dialog.ui.endDatetime.dateTime().toPyDateTime(),
-                                position   = dialog.ui.positionCombo.currentData(Qt.UserRole),
-                                manpower   = [dialog.ui.soldiersListWidget.item(idx).data(Qt.UserRole) for idx in range(dialog.ui.soldiersListWidget.count())]
-        )
+        assignment = Assignment.make(dialog.ui)
+        
+        if not self.validateAssignment(assignment):
+            return
+            
         self.currentAssignmentUid += 1
         
         self.schedule.add(assignment)
         self.reloadSelectedDate()
     
+    ##============================================================================##
+    
+    def validateAssignment(self, assignment : Assignment) -> bool:
+        
+        criticalFailure, failedTests = assignment.isInvalid()
+        if failedTests:
+            if criticalFailure:
+                QMessageBox.critical(self, "הוספת משימה", "אזהרת שיבוץ:\n%s" % "\n".join(failedTests), QMessageBox.Ok)
+                return False
+            
+            response = QMessageBox.warning(self, "הוספת משימה", "אזהרת שיבוץ:\n%s\n\nאשר כדי להמשיך בכל זאת" % "\n".join(failedTests), QMessageBox.Ok | QMessageBox.Cancel)
+            if response == QMessageBox.Cancel:
+                return False
+        
+        return True
+        
     ##============================================================================##
     
     def removeAssignment(self):
@@ -97,14 +116,24 @@ class CalendarWindow(QMainWindow):
         
         dialog.ui.positionCombo.setCurrentText(assignment.position.name)
         
-        dialog.ui.startDatetime.setDateTime(assignment.start_time)
-        dialog.ui.endDatetime.setDateTime(assignment.end_time)
+        dialog.ui.startDatetime.setDateTime(assignment.interval.start_time)
+        dialog.ui.endDatetime.setDateTime(assignment.interval.end_time)
+        
+        for soldier in assignment.manpower:
+            soldierItem = QListWidgetItem("%s (%s)" % (soldier.name, soldier.platoon), dialog.ui.soldiersListWidget)
+            soldierItem.setData(Qt.UserRole, soldier)
+            dialog.ui.soldiersListWidget.addItem(soldierItem)
         
         dialog.show()
         if dialog.exec_() == QDialog.Rejected:
             return
+
+        newAssignment = Assignment.make(dialog.ui)
+        if not self.validateAssignment(newAssignment):
+            return
         
-        self.assignmentsModel.update(assignment)
+        assignment.update(newAssignment)
+        self.reloadSelectedDate()
 
     ##============================================================================##
     

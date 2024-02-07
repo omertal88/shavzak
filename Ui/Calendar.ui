@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>417</width>
+    <width>495</width>
     <height>566</height>
    </rect>
   </property>
@@ -94,7 +94,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>417</width>
+     <width>495</width>
      <height>22</height>
     </rect>
    </property>
@@ -111,7 +111,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>39</x>
-     <y>336</y>
+     <y>273</y>
     </hint>
     <hint type="destinationlabel">
      <x>50</x>
@@ -127,7 +127,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>69</x>
-     <y>411</y>
+     <y>324</y>
     </hint>
     <hint type="destinationlabel">
      <x>51</x>
@@ -146,7 +146,7 @@
      <y>345</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-76</x>
+     <x>0</x>
      <y>281</y>
     </hint>
    </hints>
@@ -158,12 +158,12 @@
    <slot>reloadSelectedDate()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>417</x>
+     <x>407</x>
      <y>154</y>
     </hint>
     <hint type="destinationlabel">
      <x>401</x>
-     <y>-55</y>
+     <y>0</y>
     </hint>
    </hints>
   </connection>

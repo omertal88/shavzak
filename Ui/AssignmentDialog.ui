@@ -25,10 +25,18 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QDateTimeEdit" name="startDatetime"/>
+    <widget class="QDateTimeEdit" name="startDatetime">
+     <property name="displayFormat">
+      <string>d/M/yy hh:mm</string>
+     </property>
+    </widget>
    </item>
    <item row="6" column="1">
-    <widget class="QDateTimeEdit" name="endDatetime"/>
+    <widget class="QDateTimeEdit" name="endDatetime">
+     <property name="displayFormat">
+      <string>d/M/yy hh:mm</string>
+     </property>
+    </widget>
    </item>
    <item row="8" column="1">
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -38,14 +46,14 @@
      <item>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="assignSoldierButton">
          <property name="text">
           <string>שבץ חייל</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_2">
+        <widget class="QPushButton" name="unassignSoldierButton">
          <property name="text">
           <string>הסר חייל</string>
          </property>
@@ -129,7 +137,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>assignSoldierButton</sender>
    <signal>clicked()</signal>
    <receiver>AssignmentDialog</receiver>
    <slot>addAssignee()</slot>
@@ -145,7 +153,7 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton_2</sender>
+   <sender>unassignSoldierButton</sender>
    <signal>clicked()</signal>
    <receiver>AssignmentDialog</receiver>
    <slot>removeAssignee()</slot>

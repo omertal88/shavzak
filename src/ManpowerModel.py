@@ -39,13 +39,20 @@ class ManpowerModel(QAbstractTableModel):
     ##============================================================================##
     
     def update(self, soldier : Soldier):
-        self.soldiers[next(i for i, sol in enumerate(self.soldiers) if sol.pn == soldier.pn)] = soldier
-
+        foundSoldier = self.soldiers[next(i for i, sol in enumerate(self.soldiers) if sol.pn == soldier.pn)]
+        foundSoldier.update(soldier)
+    
+    ##============================================================================##
+    
     def rowCount(self, parent : QModelIndex):
         return len(self.soldiers)
     
+    ##============================================================================##
+    
     def columnCount(self, parent : QModelIndex):
         return Column.COUNT
+    
+    ##============================================================================##
     
     def data(self, index : QModelIndex, role : Qt.ItemDataRole):
         if role == Qt.DisplayRole:
@@ -56,7 +63,9 @@ class ManpowerModel(QAbstractTableModel):
                 return QVariant(soldier.platoon)
             elif index.column() == Column.TELEPHONE:
                 return QVariant(soldier.telephone)
-        
+    
+    ##============================================================================##
+    
     def sort(self, column : int, order : Qt.SortOrder):
         # if column == Column.PLATOON:
         sorter = lambda x: "%s%s" % (x.platoon, x.name)
@@ -64,7 +73,9 @@ class ManpowerModel(QAbstractTableModel):
             # sorter = lambda x: x.name
             
         self.soldiers.sort(key = sorter, reverse = order == Qt.DescendingOrder)
-
+    
+    ##============================================================================##
+    
     def headerData(self, column, orientation, role):
         if orientation == Qt.Horizontal:
             if role == Qt.DisplayRole:
@@ -74,7 +85,9 @@ class ManpowerModel(QAbstractTableModel):
                     return QVariant("מחלקה")
                 elif column == Column.TELEPHONE:
                     return QVariant("טלפון")
-
+    
+    ##============================================================================##
+    
     def clear(self):
         self.beginRemoveRows(QModelIndex(), 0, len(self.soldiers) - 1)
         self.soldiers.clear()

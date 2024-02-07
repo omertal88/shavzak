@@ -4,9 +4,9 @@ from src.Positions import Position
 from src.Assignment import Assignment
 
 class Column:
-    POSITION   = 0
-    START_TIME = 1
-    END_TIME   = 2
+    START_TIME = 0
+    END_TIME   = 1
+    POSITION   = 2
     COUNT      = 3
     
 class AssignmentsModel(QAbstractTableModel):
@@ -24,21 +24,6 @@ class AssignmentsModel(QAbstractTableModel):
         self.assignments.append(assignment)
         self.endInsertRows()
         self.sort(Column.START_TIME, Qt.AscendingOrder)
-    
-    ##============================================================================##
-    
-    def update(self, newAssignment : Assignment):
-        oldAssignment = next(ass for ass in self.assignments if ass.uid == newAssignment.uid)
-        oldAssignment.start_time = newAssignment.start_time
-        oldAssignment.end_time = newAssignment.end_time
-        oldAssignment.position = newAssignment.position
-        oldAssignment.manpower = newAssignment.manpower
-    
-    ##============================================================================##
-    
-    def remove(self, assignment : Assignment):
-        result = next(i for i, ass in enumerate(self.assignments) if ass.uid == assignment.uid)
-        self.removeRows(QModelIndex(), result, result)
     
     ##============================================================================##
     
@@ -67,9 +52,9 @@ class AssignmentsModel(QAbstractTableModel):
             if index.column() == Column.POSITION:
                 return QVariant(self.assignments[index.row()].position.name)
             elif index.column() == Column.START_TIME:
-                return QVariant(self.assignments[index.row()].start_time.strftime("%d/%m/%y %H:%M"))
+                return QVariant(self.assignments[index.row()].interval.start_time.strftime("%d/%m/%y %H:%M"))
             elif index.column() == Column.END_TIME:
-                return QVariant(self.assignments[index.row()].end_time.strftime("%d/%m/%y %H:%M"))
+                return QVariant(self.assignments[index.row()].interval.end_time.strftime("%d/%m/%y %H:%M"))
     
     ##============================================================================##
     
