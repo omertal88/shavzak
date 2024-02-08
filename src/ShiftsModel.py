@@ -24,7 +24,7 @@ class ShiftsModel(QAbstractTableModel):
     ##============================================================================##
     
     def remove(self, shift : Shift):
-        result = next(i for i, sh in enumerate(self.shifts) if sh.uid == shift.uid)
+        result = next(i for i, sh in enumerate(self.shifts) if sh == shift)
         self.removeRows(QModelIndex(), result, result)
     
     ##============================================================================##
@@ -40,7 +40,9 @@ class ShiftsModel(QAbstractTableModel):
     ##============================================================================##
     
     def update(self, shift : Shift):
-        self.shifts[next(i for i, sh in enumerate(self.shifts) if sh.uid == shift.uid)] = shift
+        
+        foundShift = self.shifts[next(i for i, sh in enumerate(self.shifts) if sh == shift)]
+        foundShift.update(shift)
     
     ##============================================================================##
     
@@ -50,7 +52,7 @@ class ShiftsModel(QAbstractTableModel):
     ##============================================================================##
     
     def columnCount(self, parent : QModelIndex):
-        return 3
+        return 2
     
     ##============================================================================##
     
@@ -60,8 +62,6 @@ class ShiftsModel(QAbstractTableModel):
                 return QVariant(self.positionsModel.uidToName(self.shifts[index.row()].position.uid))
             elif index.column() == 1:
                 return QVariant(self.shifts[index.row()].nickname)
-            elif index.column() == 2:
-                return QVariant(self.shifts[index.row()].uid)
     
     ##============================================================================##
     
@@ -72,8 +72,6 @@ class ShiftsModel(QAbstractTableModel):
                     return QVariant("עמדה")
                 elif column == 1:
                     return QVariant("שם")
-                elif column == 2:
-                    return QVariant("מס\"ד")
     
     ##============================================================================##
     

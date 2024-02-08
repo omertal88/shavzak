@@ -10,7 +10,7 @@ from src.Assignment import Assignment, AssignmentDialog
 from src.AssignmentsModel import AssignmentsModel, Column
 from src.Schedule import Schedule
 
-class CalendarWindow(QMainWindow):
+class Calendar(QMainWindow):
     
     def __init__(self, parent, soldiers, positions):
         
@@ -40,6 +40,8 @@ class CalendarWindow(QMainWindow):
     def reloadSelectedDate(self):
         
         self.assignmentsModel.clear()
+        self.ui.manpowerListWidget.clear()
+        
         selectedDayInterval = TimeInterval(QDateTime(self.ui.calendarWidget.selectedDate(), QTime()).toPyDateTime(),
                                            QDateTime(self.ui.calendarWidget.selectedDate(), QTime()).toPyDateTime() + timedelta(days=1))
         for assignment in self.schedule.assignments:

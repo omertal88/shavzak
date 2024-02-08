@@ -319,14 +319,19 @@
   </action>
  </widget>
  <tabstops>
+  <tabstop>manpowerView</tabstop>
   <tabstop>addSoldierButton</tabstop>
   <tabstop>removeSoldierButton</tabstop>
+  <tabstop>positionsView</tabstop>
   <tabstop>addPositionButton</tabstop>
   <tabstop>removePositionButton</tabstop>
+  <tabstop>shiftsView</tabstop>
   <tabstop>addShiftButton</tabstop>
   <tabstop>removeShiftButton</tabstop>
   <tabstop>fromDateTime</tabstop>
+  <tabstop>untilDateTime</tabstop>
   <tabstop>generateButton</tabstop>
+  <tabstop>pushButton</tabstop>
  </tabstops>
  <resources/>
  <connections>

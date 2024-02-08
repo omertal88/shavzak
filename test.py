@@ -29,21 +29,28 @@ position1 = Position(1, "Shin Gimel", 1, 0, 0)
 position2 = Position(2, "Officer Position", 1, Role.COMPANY_COMMANDER, 0)
 position3 = Position(3, "Homogenous", 3, 0, 0)
 
-shift1 = Shift(1, "Test Shift1", position1,
+shift1 = Shift("Test Shift1", position1,
                Weekday.SUNDAY | Weekday.MONDAY | Weekday.TUESDAY |
                Weekday.WEDNESDAY | Weekday.THURSDAY |
                Weekday.FRIDAY | Weekday.SATURDAY, start_time = time(12, 0), duration = timedelta(hours=2), valid_from = datetime(2024, 2, 1), valid_until = None)
-shift2 = shift2 = Shift(2, "Test Shift2", position1,
+shift2 = shift2 = Shift("Test Shift2", position1,
                Weekday.SUNDAY | Weekday.MONDAY | Weekday.TUESDAY |
                Weekday.WEDNESDAY | Weekday.THURSDAY |
                Weekday.FRIDAY | Weekday.SATURDAY, start_time = time(16, 0), duration = timedelta(hours=2), valid_from = datetime(2024, 2, 1), valid_until = None)
 assignment1 = Assignment(TimeInterval(datetime(2024, 2, 1, 12, 0, 0), datetime(2024, 2, 1, 14, 0, 0)), position1, manpower = [soldier2])
 assignment2 = Assignment(TimeInterval(datetime(2024,2,25, 8, 0, 0), datetime(2024,2,25, 12, 0, 0)), position1, manpower = [soldier2])
 assignment3 = Assignment(TimeInterval(datetime(2024,2,26, 12, 0, 0), datetime(2024,2,26, 16, 0, 0)), position1, manpower = [soldier2])
+assignment4 = Assignment(TimeInterval(datetime(2024,2,28, 12, 0, 0), datetime(2024,2,28, 16, 0, 0)), position1, manpower = [soldier2])  # Testing soldier rest-assignment ratio
+assignment5 = Assignment(TimeInterval(datetime(2024,2,29, 8, 0, 0), datetime(2024,2,29, 12, 0, 0)), position1, manpower = [soldier2])  # Testing soldier rest-assignment ratio
+assignment6 = Assignment(TimeInterval(datetime(2024,2,29, 20, 0, 0), datetime(2024,3,1, 0, 0, 0)), position1, manpower = [soldier2])  # Testing soldier rest-assignment ratio
+
 schedule = Schedule()
 schedule.add(assignment1)
 schedule.add(assignment2)
 schedule.add(assignment3)
+schedule.add(assignment4)
+schedule.add(assignment5)
+# schedule.assignments.sort(key = lambda x : x.interval.start_time)
 
 class TestSoldierMethods(unittest.TestCase):
     def test_isSoldierAbsent(self):
@@ -74,6 +81,13 @@ class TestSoldierMethods(unittest.TestCase):
         self.assertNotEqual(manPosition(position2, [soldier1, soldier2, soldier3, soldier4, soldier6, soldier7]), None)
         self.assertEqual(len(set([soldier.platoon for soldier in manPosition(position3, [soldier1, soldier2, soldier3, soldier4, soldier5, soldier6])])), 1)
         self.assertEqual(manPosition(position3, [soldier1, soldier2, soldier4, soldier5]), None) # No way to man that position with these soldiers
+        
+    # def test_soldierRestAssignmentRatio(self):
+        # self.assertEqual(soldier2.calculateRestToAssignmentRatio(schedule, TimeInterval(datetime(2024,2,28, 12, 0, 0), datetime(2024,2,28, 16, 0, 0))), float('inf'))
+        # self.assertEqual(soldier2.calculateRestToAssignmentRatio(schedule, TimeInterval(datetime(2024,2,28, 8, 0, 0), datetime(2024,2,28, 12, 0, 0))), float('inf'))
+        # self.assertEqual(soldier2.calculateRestToAssignmentRatio(schedule, TimeInterval(datetime(2024,2,28, 12, 0, 0), datetime(2024,2,28, 20, 0, 0))), float('inf'))
+        # self.assertEqual(soldier2.calculateRestToAssignmentRatio(schedule, TimeInterval(datetime(2024,2,28, 12, 0, 0), datetime(2024,2,29, 12, 0, 0))), 4.0)
+        # self.assertEqual(soldier2.calculateRestToAssignmentRatio(schedule, TimeInterval(datetime(2024,2,28, 12, 0, 0), datetime(2024,3,1, 0, 0, 0))), 4.0)
     
 if __name__ == '__main__':
     unittest.main()

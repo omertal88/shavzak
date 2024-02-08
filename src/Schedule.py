@@ -49,7 +49,8 @@ class Schedule:
                     continue
                 
                 if shift.position.isAssigned(shiftTime, self):
-                    break
+                    iterDateTime += timedelta(days=1)
+                    continue
                 
                 # Candidate found
                 if nearestShift is None or nearestShiftTimeDelta > timeToShift:

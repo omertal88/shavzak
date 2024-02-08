@@ -180,13 +180,18 @@ class Ui_Shavzak(object):
         self.pushButton.clicked.connect(Shavzak.openCalendar)
         self.generateButton.clicked.connect(Shavzak.calculatePermutations)
         QtCore.QMetaObject.connectSlotsByName(Shavzak)
+        Shavzak.setTabOrder(self.manpowerView, self.addSoldierButton)
         Shavzak.setTabOrder(self.addSoldierButton, self.removeSoldierButton)
-        Shavzak.setTabOrder(self.removeSoldierButton, self.addPositionButton)
+        Shavzak.setTabOrder(self.removeSoldierButton, self.positionsView)
+        Shavzak.setTabOrder(self.positionsView, self.addPositionButton)
         Shavzak.setTabOrder(self.addPositionButton, self.removePositionButton)
-        Shavzak.setTabOrder(self.removePositionButton, self.addShiftButton)
+        Shavzak.setTabOrder(self.removePositionButton, self.shiftsView)
+        Shavzak.setTabOrder(self.shiftsView, self.addShiftButton)
         Shavzak.setTabOrder(self.addShiftButton, self.removeShiftButton)
         Shavzak.setTabOrder(self.removeShiftButton, self.fromDateTime)
-        Shavzak.setTabOrder(self.fromDateTime, self.generateButton)
+        Shavzak.setTabOrder(self.fromDateTime, self.untilDateTime)
+        Shavzak.setTabOrder(self.untilDateTime, self.generateButton)
+        Shavzak.setTabOrder(self.generateButton, self.pushButton)
 
     def retranslateUi(self, Shavzak):
         _translate = QtCore.QCoreApplication.translate

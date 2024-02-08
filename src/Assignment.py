@@ -91,11 +91,16 @@ class AssignmentDialog(QDialog):
         self.soldiers = soldiers
 
     def addAssignee(self):
-        print (1)
         dialog = AssigneeDialog(self)
+        
+        assignedSoldiers = []
+        for row in range(self.ui.soldiersListWidget.count()):
+            soldier = self.ui.soldiersListWidget.item(row).data(Qt.UserRole)
+            assignedSoldiers.append(soldier)
         
         # Populate soldiers list
         for soldier in self.soldiers:
+            if soldier in assignedSoldiers: continue
             soldierItem = QListWidgetItem("%s (%s)" % (soldier.name, soldier.platoon), dialog.ui.soldiersListWidget)
             soldierItem.setData(Qt.UserRole, soldier)
             dialog.ui.soldiersListWidget.addItem(soldierItem)
@@ -108,10 +113,11 @@ class AssignmentDialog(QDialog):
         if not items:
             return
 
-        selectedSoldier : Soldier = items[0].data(Qt.UserRole)
-        soldierItem = QListWidgetItem("%s (%s)" % (selectedSoldier.name, selectedSoldier.platoon), self.ui.soldiersListWidget)
-        soldierItem.setData(Qt.UserRole, selectedSoldier)
-        self.ui.soldiersListWidget.addItem(soldierItem)
+        for item in items:
+            selectedSoldier : Soldier = item.data(Qt.UserRole)
+            soldierItem = QListWidgetItem("%s (%s)" % (selectedSoldier.name, selectedSoldier.platoon), self.ui.soldiersListWidget)
+            soldierItem.setData(Qt.UserRole, selectedSoldier)
+            self.ui.soldiersListWidget.addItem(soldierItem)
     
     def removeAssignee(self):
         self.ui.soldiersListWidget.takeItem(self.ui.soldiersListWidget.selectedIndexes()[0].row())

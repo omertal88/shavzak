@@ -18,7 +18,7 @@ class Ui_AssigneeDialog(object):
         self.verticalLayout = QtWidgets.QVBoxLayout(AssigneeDialog)
         self.verticalLayout.setObjectName("verticalLayout")
         self.soldiersListWidget = QtWidgets.QListWidget(AssigneeDialog)
-        self.soldiersListWidget.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
+        self.soldiersListWidget.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
         self.soldiersListWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectItems)
         self.soldiersListWidget.setObjectName("soldiersListWidget")
         self.verticalLayout.addWidget(self.soldiersListWidget)

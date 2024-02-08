@@ -1,4 +1,4 @@
-from typing import List, TYPE_CHECKING
+from typing import List, Union, Tuple, TYPE_CHECKING
 from dataclasses import dataclass
 from datetime import timedelta
 
@@ -7,8 +7,9 @@ from PyQt5.QtGui import QIntValidator
 from Ui.SoldierDialog import Ui_SoldierDialog
 from src.Absence import Absence, AbsenceDialog
 from src.AbsencesModel import AbsencesModel
-from src.Common import Role, SoldierProperty, TimeInterval, hasProperty
+from src.Common import Role, SoldierProperty, PositionProperty, TimeInterval, hasProperty
 if TYPE_CHECKING:
+    from src.Assignment import Assignment
     from src.Schedule import Schedule
 
 ##============================================================================##
@@ -111,7 +112,7 @@ class Soldier:
     
     ##============================================================================##
     
-    def getRestTimestForInterval(self, interval : TimeInterval, schedule : "Schedule"):
+    def getRestTimestForInterval(self, interval : TimeInterval, schedule : "Schedule") -> Tuple[Union[timedelta, None],Union[timedelta, None]]:
         
         restBeforeInterval = restAfterInterval = None
         soldierAssignments = [assignment for assignment in schedule.assignments if self in assignment.manpower]
@@ -120,12 +121,41 @@ class Soldier:
             assignmentRestTimeBefore = assignment.interval.start_time - interval.end_time # Rest time between end of `interval` and start of assignment
             assignmentRestTimeAfter = interval.start_time - assignment.interval.end_time # Rest time between end of assignment and start of `interval`
             
-            if assignmentRestTimeAfter > timedelta() and (assignmentRestTimeAfter is None or assignmentRestTimeAfter < restBeforeInterval):
+            if assignmentRestTimeAfter > timedelta() and (restBeforeInterval is None or assignmentRestTimeAfter < restBeforeInterval):
                 restBeforeInterval = assignmentRestTimeAfter
-            if assignmentRestTimeBefore > timedelta() and (assignmentRestTimeBefore is None or assignmentRestTimeBefore < restAfterInterval):
+            if assignmentRestTimeBefore > timedelta() and (restAfterInterval is None or assignmentRestTimeBefore < restAfterInterval):
                 restAfterInterval = assignmentRestTimeBefore
         
         return restBeforeInterval, restAfterInterval
+    
+    ##============================================================================##
+    
+    def calculateRestToAssignmentRatio(self, schedule : "Schedule", interval : TimeInterval) -> float: 
+        
+        assignments : List[Assignment] = []
+        
+        for assignment in schedule.assignments:
+
+            # TODO: Go back to this criteria
+            if self in assignment.manpower and \
+              interval.contains(assignment.interval.start_time, include_start_point = True): # and
+            #   not assignment.position.properties & PositionProperty.SPACING_NEEDED:
+                
+                assignments.append(assignment)
+    
+        if not len(assignments):
+            # In case of just 1 assignment we don't know the rest duration
+            return float('inf')
+        
+        assignments.sort(key = lambda x: x.interval.start_time)  # Should be sorted already but just in case
+        
+        # Correction in order to make sure that `interval` begins with an assignment
+        interval.start_time = assignments[0].interval.start_time
+        
+        totalAssignmentTime : timedelta = sum([assignment.interval.duration() for assignment in assignments], timedelta())
+        totalRestTime       : timedelta = interval.duration() - totalAssignmentTime
+
+        return float(totalRestTime.total_seconds()) / float(totalAssignmentTime.total_seconds())
     
 ##============================================================================##
 

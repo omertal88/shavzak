@@ -1,6 +1,6 @@
 from __future__ import annotations
 from typing import TYPE_CHECKING
-from datetime import datetime
+from datetime import datetime, timedelta
 from dataclasses import dataclass
 from PyQt5.QtWidgets import QDialog, QWidget
 
@@ -17,6 +17,7 @@ class Position:
     needed_manpower : int
     needed_roles : int # bit field (Role)
     properties : int # bit field (PositionProperty)
+    required_spacing : timedelta = timedelta()
 
     @staticmethod
     def make(ui : Ui_NewPositionDialog):
@@ -39,9 +40,11 @@ class Position:
             properties = (
                 PositionProperty.MIX_PLATOONS    * ui.mixPlatoonsCheck.isChecked()    |
                 PositionProperty.NOT_PHYSICAL    * ui.notPhysicalCheck.isChecked()    |
-                PositionProperty.NO_REST_NEEDED  * ui.noRestCheck.isChecked()         |
+                PositionProperty.SPACING_NEEDED  * ui.spacingNeededCheck.isChecked()         |
                 PositionProperty.NOT_COMMANDER   * ui.notCommanderCheck.isChecked()
-            )
+            ),
+            required_spacing = timedelta(hours = ui.spacingHourSpin.value(),
+                                         minutes = ui.spacingMinuteSpin.value()) if ui.spacingNeededCheck.isChecked() else timedelta()
         )
         
         return position
@@ -52,7 +55,7 @@ class Position:
         # TODO: Fix this
         for assignment in reversed(schedule.assignments):
             if assignment.position is self:
-                if assignment.interval.start_time <= dateTime < assignment.interval.end_time:
+                if assignment.interval.contains(dateTime, include_start_point = True):
                     return True
         
         # Shift not found in history
@@ -90,5 +93,7 @@ class PositionDialog(QDialog):
             # Properties
             self.ui.mixPlatoonsCheck.setChecked(position.properties & PositionProperty.MIX_PLATOONS)
             self.ui.notPhysicalCheck.setChecked(position.properties & PositionProperty.NOT_PHYSICAL)
-            self.ui.noRestCheck.setChecked(position.properties & PositionProperty.NO_REST_NEEDED)
+            self.ui.spacingNeededCheck.setChecked(position.properties & PositionProperty.SPACING_NEEDED)
+            self.ui.spacingHourSpin.setValue(position.required_spacing.total_seconds() / 60 / 60)
+            self.ui.spacingMinuteSpin.setValue(position.required_spacing.total_seconds() / 60 % 60)
             self.ui.notCommanderCheck.setChecked(position.properties & PositionProperty.NOT_COMMANDER)

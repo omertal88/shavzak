@@ -20,7 +20,7 @@ class Role(IntFlag):
 class PositionProperty(IntFlag):
     MIX_PLATOONS       = auto()
     NOT_PHYSICAL       = auto()
-    NO_REST_NEEDED     = auto()
+    SPACING_NEEDED     = auto()
     NOT_COMMANDER      = auto()
     
 class SoldierProperty(IntFlag):
@@ -81,3 +81,18 @@ class TimeInterval:
             other.end_time <= self.start_time:
             return False
         return True
+    
+    def contains(self, dateTime : datetime, include_start_point = False, include_end_point = False):
+        return (self.start_time < dateTime < self.end_time) or \
+            (include_start_point and dateTime == self.start_time) or \
+            (include_end_point and dateTime == self.end_time)
+    
+    def extend(self, other : "TimeInterval"):
+        self.start_time = min(self.start_time, other.start_time)
+        self.end_time   = max(self.end_time, other.end_time)
+    
+    def __lt__(self, other : "TimeInterval"):
+        return self.end_time < other.start_time
+    
+    def __gt__(self, other : "TimeInterval"):
+        return self.start_time > other.end_time

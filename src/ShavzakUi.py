@@ -16,7 +16,7 @@ from src.PositionsModel import PositionsModel
 from src.ShiftsModel import ShiftsModel
 from src.Positions import PositionDialog, Position
 from src.Shifts import ShiftDialog, Shift
-from src.CalendarWindow import CalendarWindow
+from src.Calendar import Calendar
 from src.Permutation import generatePermutations
 from src.Serialization import SerializedData
 
@@ -30,7 +30,6 @@ class ShavzakWindow(QMainWindow):
         self.ui.setupUi(self)
         
         self.currentPositionUid = 1
-        self.currentShiftUid = 1
         
         nextHourDateTime = DateTimeTools.getCurrentDateWithNextHour()
         self.ui.fromDateTime.setDateTime(nextHourDateTime)
@@ -49,7 +48,7 @@ class ShavzakWindow(QMainWindow):
         self.ui.shiftsView.selectionModel().currentRowChanged.connect(self.shiftSelectionChanged)
         
         self.ui.manpowerView.setColumnWidth(0, 130)
-        self.ui.manpowerView.setColumnWidth(1, 60)
+        self.ui.manpowerView.setColumnWidth(1, 50)
         self.ui.manpowerView.horizontalHeader().setStretchLastSection(True)
         
         self.ui.positionsView.setColumnWidth(0, 100)
@@ -57,9 +56,7 @@ class ShavzakWindow(QMainWindow):
         self.ui.positionsView.setColumnWidth(2, 40)
         self.ui.positionsView.horizontalHeader().setStretchLastSection(True)
         
-        self.ui.shiftsView.setColumnWidth(0, 100)
-        self.ui.shiftsView.setColumnWidth(1, 70)
-        self.ui.shiftsView.setColumnWidth(2, 40)
+        self.ui.shiftsView.setColumnWidth(0, 140)
         self.ui.shiftsView.horizontalHeader().setStretchLastSection(True)
         
         self.exitAction = QAction(self)
@@ -67,8 +64,8 @@ class ShavzakWindow(QMainWindow):
         self.exitAction.triggered.connect(self.promptExit)
         self.addAction(self.exitAction)
 
-        self.calendarWindow = CalendarWindow(self, self.manpowerModel.soldiers, self.positionsModel.positions)
-        self.calendarWindow.hide()
+        self.calendar = Calendar(self, self.manpowerModel.soldiers, self.positionsModel.positions)
+        self.calendar.hide()
         
 
     ##============================================================================##
@@ -138,7 +135,6 @@ class ShavzakWindow(QMainWindow):
     
     def addShift(self):
         dialog = ShiftDialog(self)
-        dialog.ui.uidEdit.setText(str(self.currentShiftUid))
         dialog.ui.positionCombo.addItems([x.name for x in self.positionsModel.positions])
         dialog.ui.positionCombo.setCurrentText(self.positionsModel.positions[self.ui.positionsView.selectedIndexes()[0].row()].name)
         dialog.ui.validFromDatetime = DateTimeTools.getCurrentDateWithHour()
@@ -172,11 +168,9 @@ class ShavzakWindow(QMainWindow):
                     dialog.ui.durationHourSpin.setValue(shiftDuration.total_seconds() / 60 / 60)
                     dialog.ui.durationMinuteSpin.setValue(shiftDuration.total_seconds() / 60 % 60)
                     
-                    self.currentShiftUid += 1
                     shift = Shift.make(dialog.ui, self.positionsModel.positions)
                     self.shiftsModel.add(shift)
             else:
-                self.currentShiftUid += 1
                 shift = Shift.make(dialog.ui, self.positionsModel.positions)
                 self.shiftsModel.add(shift)
     
@@ -219,15 +213,27 @@ class ShavzakWindow(QMainWindow):
     ##============================================================================##
     
     def openCalendar(self):
-        self.calendarWindow.show()
+        self.calendar.show()
     
     ##============================================================================##
     
     def calculatePermutations(self):
-        generatePermutations(self.calendarWindow.schedule, TimeInterval(self.ui.fromDateTime.dateTime().toPyDateTime(),
-                                                                        self.ui.untilDateTime.dateTime().toPyDateTime()),
-                             self.manpowerModel.soldiers,
-                             self.shiftsModel.shifts)
+        
+        permutations = generatePermutations(self.calendar.schedule, TimeInterval(self.ui.fromDateTime.dateTime().toPyDateTime(),
+                                                                                 self.ui.untilDateTime.dateTime().toPyDateTime()),
+                                            self.manpowerModel.soldiers,
+                                            self.shiftsModel.shifts, maxIterations = 10000)
+        
+        if permutations:
+            QMessageBox.information(self, "פרמוטטור", "הפעולה הסתיימה בהצלחה.", QMessageBox.Ok)
+            self.calendar.schedule = permutations[0].schedule
+            print("std = %.2f" % permutations[0].restAssignmentRatioStd)
+            for soldier in self.manpowerModel.soldiers:
+                print("%s -> %d assignments" % (soldier.name, len([assignment for assignment in permutations[0].assignments if soldier in assignment.manpower])))
+            
+        else:
+            QMessageBox.critical(self, "פרמוטטור", "הפעולה נכשלה.", QMessageBox.Ok)
+            
         
     ##============================================================================##
     
@@ -241,11 +247,10 @@ class ShavzakWindow(QMainWindow):
             self.manpowerModel.clear()
             self.positionsModel.clear()
             self.shiftsModel.clear()
-            self.calendarWindow.clear()
-            self.calendarWindow.schedule = data.schedule
+            self.calendar.clear()
+            self.calendar.schedule = data.schedule
             
             self.currentPositionUid = 1
-            self.currentShiftUid = 1
             
             for soldier in data.soldiers:
                 self.manpowerModel.add(soldier)
@@ -254,7 +259,6 @@ class ShavzakWindow(QMainWindow):
                 self.currentPositionUid += 1
             for shift in data.shifts:
                 self.shiftsModel.add(shift)
-                self.currentShiftUid += 1
     
     ##============================================================================##
     
@@ -267,7 +271,7 @@ class ShavzakWindow(QMainWindow):
             soldiers = self.manpowerModel.soldiers,
             positions = self.positionsModel.positions,
             shifts = self.shiftsModel.shifts,
-            schedule = self.calendarWindow.schedule
+            schedule = self.calendar.schedule
         )
         data.dump(path)
     

@@ -11,7 +11,6 @@ from Ui.ShiftDialog import Ui_ShiftDialog
 
 @dataclass(init=True)
 class Shift:
-    uid : int
     nickname : str
     position : Position
     days : int
@@ -22,7 +21,6 @@ class Shift:
 
     def make(ui : Ui_ShiftDialog, positions : List[Position]):
         shift = Shift(
-            uid = int(ui.uidEdit.text()),
             nickname = ui.nicknameEdit.text(),
             position = positions[ui.positionCombo.currentIndex()],
             days = (
@@ -41,6 +39,18 @@ class Shift:
         )
         
         return shift
+    
+    def update(self, other : "Shift"):
+        self.nickname = other.nickname
+        self.position = other.position
+        self.days = other.days
+        self.start_time = other.start_time
+        self.duration = other.duration
+        self.valid_from = other.valid_from
+        self.valid_until = other.valid_until
+
+##============================================================================##
+
 class ShiftDialog(QDialog):
     
     def __init__(self, parent : QWidget, shift : Shift = None):
@@ -54,7 +64,6 @@ class ShiftDialog(QDialog):
         self.ui.validUntilDatetime.setDateTime(DateTimeTools.getCurrentDateWithHour())
 
         if shift is not None:
-            self.ui.uidEdit.setText(str(shift.uid))
             self.ui.nicknameEdit.setText(shift.nickname)
             self.ui.sundayCheck.setChecked(shift.days & Weekday.SUNDAY)
             self.ui.mondayCheck.setChecked(shift.days & Weekday.MONDAY)
