@@ -95,7 +95,7 @@ class Soldier:
     def isAbsent(self, timeInterval : TimeInterval):
         
         for absence in self.absences:
-            if timeInterval.intersects(TimeInterval(absence.from_time, absence.until_time)):
+            if timeInterval.intersects(absence.interval):
                 return True
         
         # No intersection found.

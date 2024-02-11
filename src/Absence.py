@@ -1,21 +1,23 @@
 from datetime import datetime
 from dataclasses import dataclass
 from Ui.AbsenceDialog import Ui_AbsenceDialog
-from src.Common import DateTimeTools
+from src.Common import DateTimeTools, TimeInterval
 from PyQt5.QtWidgets import QDialog
 
 @dataclass(init=True)
 class Absence:
     uid        : int
-    from_time  : datetime
-    until_time : datetime
+    interval   : TimeInterval
     comment    : str
     
     @staticmethod
     def make(ui : Ui_AbsenceDialog):
         absence = Absence(
             uid = int(ui.uidEdit.text()),
-            from_time = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.fromDateTime.dateTime()),
+            interval = TimeInterval(
+                DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.fromDateTime.dateTime()),
+                DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.untilDateTime.dateTime())
+            ),
             until_time = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.untilDateTime.dateTime()),
             comment = ui.commentEdit.text()
         )

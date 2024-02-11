@@ -222,14 +222,17 @@ class ShavzakWindow(QMainWindow):
         permutations = generatePermutations(self.calendar.schedule, TimeInterval(self.ui.fromDateTime.dateTime().toPyDateTime(),
                                                                                  self.ui.untilDateTime.dateTime().toPyDateTime()),
                                             self.manpowerModel.soldiers,
-                                            self.shiftsModel.shifts, maxIterations = 10000)
+                                            self.shiftsModel.shifts, maxIterations = 1)
         
         if permutations:
             QMessageBox.information(self, "פרמוטטור", "הפעולה הסתיימה בהצלחה.", QMessageBox.Ok)
-            self.calendar.schedule = permutations[0].schedule
+            
+            for assignment in permutations[0].assignments:
+                self.calendar.schedule.add(assignment)
             print("std = %.2f" % permutations[0].restAssignmentRatioStd)
             for soldier in self.manpowerModel.soldiers:
-                print("%s -> %d assignments" % (soldier.name, len([assignment for assignment in permutations[0].assignments if soldier in assignment.manpower])))
+                print("%s -> %d assignments (%.1f hours)" % (soldier.name, len([assignment for assignment in permutations[0].schedule.assignments if soldier in assignment.manpower]),
+                                                                         sum([assignment.interval.duration().total_seconds() / 3600 for assignment in permutations[0].schedule.assignments if soldier in assignment.manpower])))
             
         else:
             QMessageBox.critical(self, "פרמוטטור", "הפעולה נכשלה.", QMessageBox.Ok)

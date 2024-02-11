@@ -62,6 +62,11 @@ class Assignment:
     
     ##============================================================================##
     
+    def isManned(self):
+        return len(self.manpower)
+    
+    ##============================================================================##
+    
     def isInvalid(self) -> Tuple[bool, List[str]]:
         """ Returns the a list of failed criteria when present """
         failedTests = []

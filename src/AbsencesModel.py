@@ -58,9 +58,9 @@ class AbsencesModel(QAbstractTableModel):
         if role == Qt.DisplayRole:
             absence : Absence = self.absences[index.row()]
             if index.column() == Column.FROM_TIME:
-                return QVariant(DateTimeTools.dateTimeToQDateTime(absence.from_time).toString("dd/MM/yyyy hh:mm"))
+                return QVariant(DateTimeTools.dateTimeToQDateTime(absence.interval.start_time).toString("dd/MM/yyyy hh:mm"))
             elif index.column() == Column.UNTIL_TIME:
-                return QVariant(DateTimeTools.dateTimeToQDateTime(absence.until_time).toString("dd/MM/yyyy hh:mm"))
+                return QVariant(DateTimeTools.dateTimeToQDateTime(absence.interval.end_time).toString("dd/MM/yyyy hh:mm"))
             elif index.column() == Column.COMMENT:
                 return QVariant(absence.comment)
     
