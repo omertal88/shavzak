@@ -14,6 +14,9 @@ class Ui_Shavzak(object):
     def setupUi(self, Shavzak):
         Shavzak.setObjectName("Shavzak")
         Shavzak.resize(744, 711)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icon/Res/soldier.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        Shavzak.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(Shavzak)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -228,3 +231,4 @@ class Ui_Shavzak(object):
         self.exportAction.setText(_translate("Shavzak", "שמור נתונים לקובץ"))
         self.importFromCsvAction.setText(_translate("Shavzak", "ייבא כ\"א מקובץ CSV"))
         self.exportToCsvAction.setText(_translate("Shavzak", "יצא כ\"אלקובץ CSV"))
+from Ui import resources_rc

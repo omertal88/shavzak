@@ -56,7 +56,7 @@ def exportToXlsx(path : str, schedule : Schedule, interval : TimeInterval):
         worksheet.right_to_left()
 
         positionToCell : Dict[str, Cell] = {}
-        for assignment in dateToAssignments[iterDate]:
+        for assignment in dateToAssignments.get(iterDate, []):
             
             if assignment.position.name not in positionToCell:
                 worksheet.write(1, currentColumn, assignment.position.name, positions_format)

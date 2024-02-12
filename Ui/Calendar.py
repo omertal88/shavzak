@@ -14,6 +14,9 @@ class Ui_Calendar(object):
     def setupUi(self, Calendar):
         Calendar.setObjectName("Calendar")
         Calendar.resize(495, 566)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(":/icon/Res/soldier.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        Calendar.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(Calendar)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -75,3 +78,4 @@ class Ui_Calendar(object):
         self.addAssignmentButton.setText(_translate("Calendar", "הוסף"))
         self.removeAssignmentButton.setText(_translate("Calendar", "הסר"))
         self.label_2.setText(_translate("Calendar", "כוח אדם"))
+from Ui import resources_rc
