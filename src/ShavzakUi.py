@@ -3,13 +3,14 @@ import sys
 
 from datetime import timedelta
 from os.path import dirname, abspath
-from PyQt5.QtWidgets import QMainWindow, QDialog, QAction, QInputDialog, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QDialog, QAction, QInputDialog, QFileDialog, QMessageBox
 from PyQt5.QtCore import Qt, QTime
 from PyQt5.QtCore import QModelIndex, QDateTime
 from Ui.ShavzakWindow import Ui_Shavzak
 
 from src.Common import DateTimeTools, TimeInterval
-from src.CsvImporter import importFromCsv
+from src.Csv import importFromCsv, exportToCsv
+from src.Xlsx import exportToXlsx
 from src.Manpower import SoldierDialog, Soldier, Absence
 from src.ManpowerModel import ManpowerModel
 from src.PositionsModel import PositionsModel
@@ -128,8 +129,7 @@ class ShavzakWindow(QMainWindow):
         
         if retval == QDialog.Accepted:
             newPosition = Position.make(dialog.ui)
-            self.positionsModel.positions[index.row()] = newPosition
-            # self.positionsModel.update(newPosition)
+            self.positionsModel.positions[index.row()].update(newPosition)
     
     ##============================================================================##
     
@@ -222,17 +222,18 @@ class ShavzakWindow(QMainWindow):
         permutations = generatePermutations(self.calendar.schedule, TimeInterval(self.ui.fromDateTime.dateTime().toPyDateTime(),
                                                                                  self.ui.untilDateTime.dateTime().toPyDateTime()),
                                             self.manpowerModel.soldiers,
-                                            self.shiftsModel.shifts, maxIterations = 1)
+                                            self.shiftsModel.shifts, maxIterations = 10)
         
         if permutations:
             QMessageBox.information(self, "פרמוטטור", "הפעולה הסתיימה בהצלחה.", QMessageBox.Ok)
             
             for assignment in permutations[0].assignments:
                 self.calendar.schedule.add(assignment)
-            print("std = %.2f" % permutations[0].restAssignmentRatioStd)
-            for soldier in self.manpowerModel.soldiers:
-                print("%s -> %d assignments (%.1f hours)" % (soldier.name, len([assignment for assignment in permutations[0].schedule.assignments if soldier in assignment.manpower]),
-                                                                         sum([assignment.interval.duration().total_seconds() / 3600 for assignment in permutations[0].schedule.assignments if soldier in assignment.manpower])))
+            
+            print("std = %.4f" % permutations[0].restAssignmentRatioStd)
+            # for soldier in self.manpowerModel.soldiers:
+            #     print("%s -> %d assignments (%.1f hours)" % (soldier.name, len([assignment for assignment in permutations[0].schedule.assignments if soldier in assignment.manpower]),
+            #                                                              sum([assignment.interval.duration().total_seconds() / 3600 for assignment in permutations[0].schedule.assignments if soldier in assignment.manpower])))
             
         else:
             QMessageBox.critical(self, "פרמוטטור", "הפעולה נכשלה.", QMessageBox.Ok)
@@ -241,8 +242,8 @@ class ShavzakWindow(QMainWindow):
     ##============================================================================##
     
     def importData(self):
-        path, accepted = QInputDialog.getText(self, "ייבא נתונים", "אנא הכנס נתיב לקובץ השמור", text = "%s" % os.path.join(dirname(abspath(sys.argv[0])), "shavzak.dat"))
-        if not accepted:
+        path, _ = QFileDialog.getOpenFileName(self, "ייבא נתונים", directory = dirname(abspath(sys.argv[0])), filter = "*.dat")
+        if not path:
             return
         
         if os.path.exists(path):
@@ -266,8 +267,8 @@ class ShavzakWindow(QMainWindow):
     ##============================================================================##
     
     def exportData(self):
-        path, accepted = QInputDialog.getText(self, "ייצא נתונים", "אנא הכנס נתיב לשמירת הקובץ", text = "%s" % os.path.join(dirname(abspath(sys.argv[0])), "shavzak.dat"))
-        if not accepted:
+        path, _ = QFileDialog.getSaveFileName(self, "ייצא נתונים", directory = dirname(abspath(sys.argv[0])), filter = "*.dat")
+        if not path:
             return
         
         data : SerializedData = SerializedData(
@@ -281,8 +282,8 @@ class ShavzakWindow(QMainWindow):
     ##============================================================================##
     
     def importFromCsv(self):
-        path, accepted = QInputDialog.getText(self, "ייבא נתונים", "אנא הכנס נתיב לקובץ הידני", text = "%s" % os.path.join(dirname(abspath(sys.argv[0])), "soldiers.csv"))
-        if not accepted:
+        path, _ = QFileDialog.getOpenFileName(self, "יבוא כוח-אדם", directory = dirname(abspath(sys.argv[0])), filter = "*.csv")
+        if not path:
             return
         
         if os.path.exists(path):
@@ -290,6 +291,26 @@ class ShavzakWindow(QMainWindow):
             for soldier in soldiers:
                 self.manpowerModel.add(soldier)
     
+    ##===========================================================================##
+    
+    def exportToCsv(self):
+        path, _ = QFileDialog.getSaveFileName(self, "יצא כוח-אדם", directory = dirname(abspath(sys.argv[0])), filter = "*.csv")
+        
+        if not path:
+            return
+        
+        soldiers = self.manpowerModel.soldiers
+        exportToCsv(path, soldiers)
+
+    def exportToXlsx(self):
+        path, _ = QFileDialog.getSaveFileName(self, "ייצוא לאקסל", directory = dirname(abspath(sys.argv[0])), filter = "*.xlsx")
+        
+        if not path:
+            return
+        
+        exportToXlsx(path, self.calendar.schedule, TimeInterval(self.ui.fromDateTime.dateTime().toPyDateTime(),
+                                                                self.ui.untilDateTime.dateTime().toPyDateTime()))
+        
     ##============================================================================##
     
     def promptExit(self):

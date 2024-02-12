@@ -95,6 +95,9 @@ class PermutationSoldier(object):
     
     def calculateRatioSinceLastAssignment(self, currentTime : datetime):
         
+        if not self.lastAssignment:
+            return 1.0
+        
         workTime = self.lastAssignment.interval.duration()
         
         return 1.0 - workTime.total_seconds() / TimeInterval(self.lastAssignment.interval.start_time, currentTime).duration().total_seconds()
@@ -126,7 +129,6 @@ class Permutation(object):
         self.assignments : List[Assignment] = []
         self.workAssignmentRatioStd : float = 1.0
         self.unassignedSoldiers = List[Soldier]
-        # self.soldiersAssignmentRatios : List[Tuple[Soldier, float]] = [(soldier, float('inf')) for soldier in soldiers]
         
     def __bool__(self):
         return len(self.assignments) != 0
@@ -169,7 +171,8 @@ def generatePermutations(schedule : Schedule, interval : TimeInterval,
     pool = Pool()
     
     # TODO: Check if we actually need ro pass `interval` now that we have `assignments`
-    results = pool.starmap(generatePermutation, [(schedule, interval, permutationSoldiers, assignments)] * maxIterations)
+    # results = pool.starmap(generatePermutation, [(schedule, interval, permutationSoldiers, assignments)] * maxIterations)
+    results = [generatePermutation(schedule, interval, permutationSoldiers, assignments)]
     permutations = [permutation for permutation in results if permutation is not None]
     
     permutations.sort(key = lambda permutation: (len(permutation.unassignedSoldiers), permutation.restAssignmentRatioStd))
@@ -179,9 +182,12 @@ def generatePermutations(schedule : Schedule, interval : TimeInterval,
 def findAllDesiredAssignmentsWithinInterval(schedule : Schedule, interval : TimeInterval, shifts : List[Shift]):
     assignments = []
     
+    copySchedule = deepcopy(schedule)
+    # print("All assignments:\n", copySchedule.assignments)
+    
     iterTime : datetime = interval.start_time
     while True:
-        nextShift, nextShiftTime = schedule.findNextShift(iterTime, shifts)
+        nextShift, nextShiftTime = copySchedule.findNextShift(iterTime, shifts)
 
         if nextShift is None or nextShiftTime >= interval.end_time:
             break
@@ -189,7 +195,8 @@ def findAllDesiredAssignmentsWithinInterval(schedule : Schedule, interval : Time
         nextShiftInterval = TimeInterval(nextShiftTime, nextShiftTime + nextShift.duration)
         assignment = Assignment(nextShiftInterval, nextShift.position, [])
         
-        schedule.assignments.append(assignment)
+        # schedule.assignments.append(assignment)
+        copySchedule.add(assignment)
         assignments.append(assignment)
         
         iterTime = nextShiftTime
@@ -204,6 +211,7 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
     success = True
     permutation = Permutation(schedule)  # Creates a copy of `schedule``
     permutationSoldiers = copy(soldiers)
+    schedule = permutation.schedule # Overwrite input argument `schedule`. We don't ever want to use the original object anymore.
 
     # Start permutations...
     for assignment in assignments:
@@ -215,7 +223,7 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
             success = False
             break
         
-        print("Manned soldier for assignment %s: %s" % (assignment.position.name, ",".join(["%s" % s.name for s in mannedSoldiers])))
+        # print("Manned soldier for assignment %s: %s" % (assignment.position.name, ",".join(["%s" % s.name for s in mannedSoldiers])))
         assignment.manpower = mannedSoldiers
         permutation.schedule.add(assignment)
         permutation.assignments.append(assignment)
@@ -295,8 +303,8 @@ def getNextGroupOfSoldiersByRatio(soldiers : List[PermutationSoldier], currentTi
     soldiersAndRatios = [(soldier, soldier.calculateRatioWithinInterval(TimeInterval(currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS), currentTime))) for soldier in soldiers]
     
     sortedSoldiersAndRatios = sorted(soldiersAndRatios, key = lambda item: item[1], reverse=True)
-    print("Interval: %s -> %s" % (currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS), currentTime))
-    print(sortedSoldiersAndRatios)
+    # print("Interval: %s -> %s" % (currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS), currentTime))
+    # print(sortedSoldiersAndRatios)
     
     lastSoldierAndRatioIdx = 0
     for soldierAndRatioIdx in range(1, len(sortedSoldiersAndRatios)):
@@ -315,7 +323,7 @@ def getNextGroupOfSoldiersByRatio(soldiers : List[PermutationSoldier], currentTi
             
             tuples.sort(key = lambda x: x[0], reverse=True)
             for tup in tuples:
-                print("Yielding group with ratio %.2f with soldiers: %s" % (tup[0], [s.soldier.name for s in tup[1]]))
+                # print("Yielding group with ratio %.2f with soldiers: %s" % (tup[0], [s.soldier.name for s in tup[1]]))
                 yield tup[1]
                 
             # yield [sortedSoldiersAndRatios[i][0] for i in range(lastSoldierAndRatioIdx, soldierAndRatioIdx)]
@@ -332,9 +340,9 @@ def getNextGroupOfSoldiersByRatio(soldiers : List[PermutationSoldier], currentTi
     
     tuples.sort(key = lambda x: x[0], reverse=True)
     for tup in tuples:
-        print("Yielding group with ratio %.2f with soldiers: %s" % (tup[0], [s.soldier.name for s in tup[1]]))
+        # print("Yielding group with ratio %.2f with soldiers: %s" % (tup[0], [s.soldier.name for s in tup[1]]))
         yield tup[1]
-        
+    
     
     # print("Ratio = %.2f", sortedSoldiersAndRatios[soldierAndRatioIdx][1])
     

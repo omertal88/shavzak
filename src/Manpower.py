@@ -67,13 +67,15 @@ class Soldier:
     ##============================================================================##
     
     @staticmethod
-    def makeFromCsv(pn : int, name : str, platoon : str, telephone : str, comment : str):
+    def makeFromCsv(pn : int, name : str, platoon : str, roles : int, telephone : str, properties : int, comment : str):
         
         soldier = Soldier(
             pn = pn,
             name = name,
             platoon = platoon,
+            roles = roles,
             telephone = telephone,
+            properties = properties,
             comment = comment,
             absences=[]
         )

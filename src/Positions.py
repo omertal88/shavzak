@@ -51,10 +51,19 @@ class Position:
     
     ##============================================================================##
     
+    def update(self, position : "Position"):
+        self.name = position.name
+        self.needed_manpower = position.needed_manpower
+        self.needed_roles = position.needed_roles
+        self.properties = position.properties
+        self.required_spacing = position.required_spacing
+    
+    ##============================================================================##
+    
     def isAssigned(self, dateTime : datetime, schedule : Schedule):
         # TODO: Fix this
         for assignment in reversed(schedule.assignments):
-            if assignment.position is self:
+            if assignment.position == self:
                 if assignment.interval.contains(dateTime, include_start_point = True):
                     return True
         

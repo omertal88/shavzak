@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>961</width>
-    <height>635</height>
+    <width>744</width>
+    <height>711</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -120,10 +120,6 @@
           </item>
          </layout>
         </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
          <widget class="QLabel" name="label_3">
           <property name="text">
@@ -243,6 +239,19 @@
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>ייצא לאקסל</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </item>
        <item>
@@ -287,7 +296,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>961</width>
+     <width>744</width>
      <height>23</height>
     </rect>
    </property>
@@ -297,7 +306,9 @@
     </property>
     <addaction name="importAction"/>
     <addaction name="exportAction"/>
+    <addaction name="separator"/>
     <addaction name="importFromCsvAction"/>
+    <addaction name="exportToCsvAction"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -314,7 +325,12 @@
   </action>
   <action name="importFromCsvAction">
    <property name="text">
-    <string>טען מקובץ CSV</string>
+    <string>ייבא כ&quot;א מקובץ CSV</string>
+   </property>
+  </action>
+  <action name="exportToCsvAction">
+   <property name="text">
+    <string>יצא כ&quot;אלקובץ CSV</string>
    </property>
   </action>
  </widget>
@@ -325,7 +341,6 @@
   <tabstop>positionsView</tabstop>
   <tabstop>addPositionButton</tabstop>
   <tabstop>removePositionButton</tabstop>
-  <tabstop>shiftsView</tabstop>
   <tabstop>addShiftButton</tabstop>
   <tabstop>removeShiftButton</tabstop>
   <tabstop>fromDateTime</tabstop>
@@ -342,8 +357,8 @@
    <slot>addSoldier()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>73</x>
-     <y>474</y>
+     <x>85</x>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -358,8 +373,8 @@
    <slot>removeSoldier()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>317</x>
-     <y>482</y>
+     <x>366</x>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -374,8 +389,8 @@
    <slot>addPosition()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>477</x>
-     <y>482</y>
+     <x>551</x>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
      <x>0</x>
@@ -390,8 +405,8 @@
    <slot>removePosition()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>632</x>
-     <y>482</y>
+     <x>731</x>
+     <y>292</y>
     </hint>
     <hint type="destinationlabel">
      <x>624</x>
@@ -406,8 +421,8 @@
    <slot>addShift()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>792</x>
-     <y>482</y>
+     <x>551</x>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
      <x>626</x>
@@ -422,8 +437,8 @@
    <slot>removeShift()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>948</x>
-     <y>482</y>
+     <x>731</x>
+     <y>558</y>
     </hint>
     <hint type="destinationlabel">
      <x>636</x>
@@ -454,8 +469,8 @@
    <slot>editShift()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>949</x>
-     <y>231</y>
+     <x>732</x>
+     <y>525</y>
     </hint>
     <hint type="destinationlabel">
      <x>531</x>
@@ -518,8 +533,8 @@
    <slot>importFromCsv()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>184</x>
-     <y>445</y>
+     <x>-1</x>
+     <y>-1</y>
     </hint>
     <hint type="destinationlabel">
      <x>298</x>
@@ -534,11 +549,11 @@
    <slot>openCalendar()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>863</x>
-     <y>556</y>
+     <x>722</x>
+     <y>667</y>
     </hint>
     <hint type="destinationlabel">
-     <x>999</x>
+     <x>743</x>
      <y>538</y>
     </hint>
    </hints>
@@ -550,12 +565,44 @@
    <slot>calculatePermutations()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>293</x>
-     <y>567</y>
+     <x>338</x>
+     <y>666</y>
     </hint>
     <hint type="destinationlabel">
      <x>365</x>
      <y>671</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exportToCsvAction</sender>
+   <signal>triggered()</signal>
+   <receiver>Shavzak</receiver>
+   <slot>exportToCsv()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>371</x>
+     <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_2</sender>
+   <signal>clicked()</signal>
+   <receiver>Shavzak</receiver>
+   <slot>exportToXlsx()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>368</x>
+     <y>625</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>335</x>
+     <y>761</y>
     </hint>
    </hints>
   </connection>
@@ -576,5 +623,7 @@
   <slot>importFromCsv()</slot>
   <slot>openCalendar()</slot>
   <slot>calculatePermutations()</slot>
+  <slot>exportToCsv()</slot>
+  <slot>exportToXlsx()</slot>
  </slots>
 </ui>
