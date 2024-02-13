@@ -17,13 +17,13 @@ Please feel free to suggest features and bug fixes through pull requests.
 13. Implement `Required spacing` for specific positions to ensure some positions get a minimal break regardless of ratios (those positions will have the calculateRatio functions only look back until returning from those positions) - same as with absence.
 14. Don't allow soldiers to begin a new assignment if they just finished one (unless it's a `no rest needed` one)
 15. Some UI validations. For example: Gray-out the `run` button if no positions and shifts are present.
-16. When assigning a soldier - we should also take in consideration the future assignments (those assigned manually for example)
 
 ## Done
 2. Fix UI bug where an assignment appears twice in the calendar - FIXED
 3. Export assignments to Excel Sheet (within some time interval) - DONE
 6. Fix bug where updating positions doesn't also update the corresponding shifts  - FIXED
 7. Export soldiers to CSV (For easily updating roles and stuff) - DONE
+16. When assigning a soldier - we should also take in consideration the future assignments (those assigned manually for example) - DONE
 
 # Apendix
 ## Assignment Algorithm

@@ -18,7 +18,6 @@ LAST_ASSIGNMENTS_HISTORY_HOURS = 48
 
 class PermutationSoldier(object):
     
-    
     def __init__(self, soldier : Soldier, schedule : Schedule):
         
         self.soldier = soldier
@@ -51,6 +50,22 @@ class PermutationSoldier(object):
     
     def __repr__(self):
         return "%s" % self.soldier.name
+    
+    ##============================================================================##
+    
+    def calculateRatioWithinIntervalWithRespectToFutureAssignments(self, interval : TimeInterval, schedule : Schedule):
+        
+        # First we'll find the last assignment of the soldier.
+        for assignment in reversed(schedule.assignments):
+            if assignment.interval.start_time < interval.end_time:
+                break
+            
+            if self.soldier in assignment.manpower:
+                print("Found assignee in future task: %s :: %s" % (self.soldier.name, assignment.position.name))
+                interval = TimeInterval(interval.start_time, assignment.interval.end_time)
+                break
+            
+        return self.calculateRatioWithinInterval(interval)
     
     ##============================================================================##
     
@@ -218,7 +233,7 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
         availableSoldiers = [permutationSoldier for permutationSoldier in permutationSoldiers if permutationSoldier.soldier.isAvailable(assignment.interval, schedule)]
         
         # soldiersAndRatios = calculateAndSortRatios(schedule, availableSoldiers, interval)
-        mannedSoldiers = manAssignment(assignment, availableSoldiers)
+        mannedSoldiers = manAssignment(assignment, availableSoldiers, schedule)
         if mannedSoldiers is None:
             success = False
             break
@@ -244,7 +259,7 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
         
 ##============================================================================##
 
-def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier]) -> Union[List[Soldier],None]:
+def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier], schedule : Schedule) -> Union[List[Soldier],None]:
     
     mannedSoldiers : List[Soldier] = []
     platoonBound = False
@@ -271,7 +286,7 @@ def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier]) 
     #             soldiers.remove(randomSoldier)
     
     soldiersGroup = []
-    soldiersGroupIter = getNextGroupOfSoldiersByRatio(soldiers, assignment.interval.start_time)
+    soldiersGroupIter = getNextGroupOfSoldiersByRatio(soldiers, assignment.interval.start_time, schedule)
     
     while position.needed_manpower != len(mannedSoldiers):
         if not len(soldiersGroup):
@@ -295,12 +310,12 @@ def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier]) 
 
 ##============================================================================##
 
-def getNextGroupOfSoldiersByRatio(soldiers : List[PermutationSoldier], currentTime : datetime):
+def getNextGroupOfSoldiersByRatio(soldiers : List[PermutationSoldier], currentTime : datetime, schedule : Schedule):
     
     # TODO: Improve code readability!!!! This function is written terribly.
     assert len(soldiers)
     
-    soldiersAndRatios = [(soldier, soldier.calculateRatioWithinInterval(TimeInterval(currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS), currentTime))) for soldier in soldiers]
+    soldiersAndRatios = [(soldier, soldier.calculateRatioWithinIntervalWithRespectToFutureAssignments(TimeInterval(currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS), currentTime), schedule)) for soldier in soldiers]
     
     sortedSoldiersAndRatios = sorted(soldiersAndRatios, key = lambda item: item[1], reverse=True)
     # print("Interval: %s -> %s" % (currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS), currentTime))
