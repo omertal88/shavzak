@@ -107,7 +107,10 @@ def exportToXlsx(path : str, schedule : Schedule, interval : TimeInterval):
             
             positionToCell[assignment.position.name] = Cell(cell.row + i + 2, cell.col)
             
-        worksheet.merge_range(0, 0, 0, currentColumn-1, "שיבוץ קרבי ליום %s" % iterDate.strftime("%d/%m/%y"), merge_format)
+        if currentColumn > 1:
+            worksheet.merge_range(0, 0, 0, currentColumn-1, "שיבוץ קרבי ליום %s" % iterDate.strftime("%d/%m/%y"), merge_format)
+        else:
+            worksheet.write(0, 0, "שיבוץ קרבי ליום %s" % iterDate.strftime("%d/%m/%y"), merge_format)
         
         iterDate += timedelta(days=1)
 

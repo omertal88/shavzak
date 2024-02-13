@@ -170,8 +170,6 @@ class SoldierDialog(QDialog):
         self.ui = Ui_SoldierDialog()
         self.ui.setupUi(self)
         
-        self.currentAbsenceUid : int = 1
-        
         self.absencesModel = AbsencesModel()
         self.ui.absencesView.setModel(self.absencesModel)
         self.ui.absencesView.setColumnWidth(0, 130)
@@ -205,22 +203,15 @@ class SoldierDialog(QDialog):
             
             self.ui.manualAssignCheck.setChecked(soldier.properties & SoldierProperty.MANUAL_ASSIGN)
             
-            currentAbsenceUid = 1
             for absence in soldier.absences:
-                if currentAbsenceUid <= absence.uid:
-                    currentAbsenceUid = absence.uid + 1
                 self.absencesModel.add(absence)
             
-            self.currentAbsenceUid = currentAbsenceUid
-
     ##============================================================================##
     
     def addAbsence(self):
         dialog = AbsenceDialog(self)
-        dialog.ui.uidEdit.setText(str(self.currentAbsenceUid))
         dialog.show()
         if dialog.exec_() == QDialog.Accepted:
-            self.currentAbsenceUid += 1
             absence = Absence.make(dialog.ui)
             self.absencesModel.add(absence)
     

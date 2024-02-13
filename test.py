@@ -11,7 +11,7 @@ from src.Permutation import manAssignment
 
     
 soldier1 = Soldier("111", "John Smith", "3", "050-12345678", 0, comment="Good kid...",
-                    absences=[Absence(1, TimeInterval(datetime(2024, 2, 6), datetime(2024, 2, 8)), "Spring break")])
+                    absences=[Absence(TimeInterval(datetime(2024, 2, 6), datetime(2024, 2, 8)), "Spring break")])
 soldier2 = Soldier("112", "Muhammad Chang", "3", "052-12345678", 0, comment="Tries his best...")
 soldier3 = Soldier("113", "Rak Lo Bibi", "3", "053-12345678", 0, comment="oh boy...", properties = SoldierProperty.MANUAL_ASSIGN)
 soldier4 = Soldier("114", "Rak Lo Bibi2", "2", "053-12345678", 0, comment="oh boy...")

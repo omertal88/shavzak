@@ -24,7 +24,7 @@ class Position:
         position = Position(
             uid = int(ui.uidEdit.text()),
             name = ui.positionNameEdit.text(),
-            needed_manpower = int(ui.manpowerEdit.text()),
+            needed_manpower = ui.manpowerSpin.value(),
             needed_roles = (
                 Role.COMPANY_COMMANDER  * ui.rolesWidget.companyCommanderCheck.isChecked()     |
                 Role.PLATOON_COMMANDER  * ui.rolesWidget.platoonCommanderCheck.isChecked()     |
@@ -84,7 +84,7 @@ class PositionDialog(QDialog):
         if position is not None:
             self.ui.uidEdit.setText(str(position.uid))
             self.ui.positionNameEdit.setText(position.name)
-            self.ui.manpowerEdit.setText(str(position.needed_manpower))
+            self.ui.manpowerSpin.setValue(position.needed_manpower)
             
             # Roles
             self.ui.rolesWidget.companyCommanderCheck.setChecked(position.needed_roles & Role.COMPANY_COMMANDER)

@@ -14,6 +14,7 @@ from src.Assignment import Assignment
 from src.Schedule import Schedule
 
 NO_ASSIGNMENT_RATIO = 1.0
+NOT_AVAILABLE_RATIO = 0.0
 LAST_ASSIGNMENTS_HISTORY_HOURS = 48
 
 class PermutationSoldier(object):
@@ -32,9 +33,9 @@ class PermutationSoldier(object):
             if soldier in assignment.manpower:
                 if not assignment.interval.start_time in self.assignments:
                     self.assignments[assignment.interval.start_time.date()] = []
-                    
+        
                 self.assignments[assignment.interval.start_time.date()].append(assignment)
-
+    
     ##============================================================================##
 
     def addAssignment(self, assignment : Assignment):
@@ -61,7 +62,6 @@ class PermutationSoldier(object):
                 break
             
             if self.soldier in assignment.manpower:
-                print("Found assignee in future task: %s :: %s" % (self.soldier.name, assignment.position.name))
                 interval = TimeInterval(interval.start_time, assignment.interval.end_time)
                 break
             
@@ -71,7 +71,22 @@ class PermutationSoldier(object):
     
     def calculateRatioWithinInterval(self, interval : TimeInterval):
         
+        interval = copy(interval)
+        
+        # We want to begin measurement when the first assignment started.
+        if self.assignments:
+            firstAssignment = self.assignments[sorted(self.assignments.keys())[0]][0]  # Get the first assignment from the first date in the dict.
+            if interval.start_time - timedelta(hours = LAST_ASSIGNMENTS_HISTORY_HOURS) < firstAssignment.interval.start_time:
+                interval.start_time = firstAssignment.interval.start_time
+            
         totalWorkTime = timedelta()
+        
+        for absence in self.soldier.absences:
+            if interval.start_time < absence.interval.end_time:
+                interval.start_time = absence.interval.end_time
+
+        if not interval:
+            return NO_ASSIGNMENT_RATIO
         
         iterDate = interval.start_time.date()
         while iterDate <= interval.end_time.date():
@@ -81,7 +96,23 @@ class PermutationSoldier(object):
                 continue
             
             for assignment in self.assignments[iterDate]:
-                
+                # This entire part needs refactoring!
+                if assignment.position.properties & PositionProperty.SPACING_NEEDED:
+                    if timedelta() <= interval.end_time - assignment.interval.end_time < assignment.position.required_spacing:
+                        # Not assignable in this interval
+                        return NOT_AVAILABLE_RATIO
+                    
+                    # We need to check if we can find an assignment that started after that assignment, but ended beore current time.
+                    # That assignment's start time is the correct interval start time (measurement start)
+                    nextAssignment = self.findLastAssignmentAfterTime(assignment.interval.end_time)
+                    if not nextAssignment:
+                        return NO_ASSIGNMENT_RATIO
+                    
+                    if interval.contains(nextAssignment.interval.start_time):
+                        
+                        totalWorkTime = timedelta()
+                        interval.start_time = nextAssignment.interval.start_time
+                            
                 if assignment.interval.intersects(interval):
                     assignmentRelevantInterval = TimeInterval(
                         start_time = assignment.interval.start_time if interval.contains(assignment.interval.start_time) else interval.start_time,
@@ -96,6 +127,19 @@ class PermutationSoldier(object):
         
         return ratio
     
+    ##============================================================================##
+    
+    def findLastAssignmentAfterTime(self, dateTime : datetime) -> Union[Assignment, None]:
+        
+        assignmentsDates = sorted(self.assignments.keys())
+        
+        for iterDate in assignmentsDates:
+            for assignment in self.assignments[iterDate]:
+                if assignment.interval.start_time > dateTime:
+                    return assignment
+        
+        return None
+
     ##============================================================================##
     
     # def calculateAccumulatedRatio(self, currentTime : datetime):
@@ -315,7 +359,13 @@ def getNextGroupOfSoldiersByRatio(soldiers : List[PermutationSoldier], currentTi
     # TODO: Improve code readability!!!! This function is written terribly.
     assert len(soldiers)
     
-    soldiersAndRatios = [(soldier, soldier.calculateRatioWithinIntervalWithRespectToFutureAssignments(TimeInterval(currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS), currentTime), schedule)) for soldier in soldiers]
+    # The measuring time is either last 48 hours, or the point where assignments started (like when arriving to a new post)
+    # if schedule.assignments:
+        # startMeasureTime = max(currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS), schedule.assignments[0].interval.start_time)
+    # else:
+    startMeasureTime = currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS)
+        
+    soldiersAndRatios = [(soldier, soldier.calculateRatioWithinIntervalWithRespectToFutureAssignments(TimeInterval(startMeasureTime, currentTime), schedule)) for soldier in soldiers]
     
     sortedSoldiersAndRatios = sorted(soldiersAndRatios, key = lambda item: item[1], reverse=True)
     # print("Interval: %s -> %s" % (currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS), currentTime))

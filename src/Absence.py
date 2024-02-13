@@ -6,19 +6,16 @@ from PyQt5.QtWidgets import QDialog
 
 @dataclass(init=True)
 class Absence:
-    uid        : int
     interval   : TimeInterval
     comment    : str
     
     @staticmethod
     def make(ui : Ui_AbsenceDialog):
         absence = Absence(
-            uid = int(ui.uidEdit.text()),
             interval = TimeInterval(
                 DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.fromDateTime.dateTime()),
                 DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.untilDateTime.dateTime())
             ),
-            until_time = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.untilDateTime.dateTime()),
             comment = ui.commentEdit.text()
         )
         return absence

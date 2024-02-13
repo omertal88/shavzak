@@ -53,9 +53,6 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="manpowerEdit"/>
-     </item>
      <item row="3" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
@@ -160,6 +157,13 @@
        </layout>
       </widget>
      </item>
+     <item row="2" column="1">
+      <widget class="QSpinBox" name="manpowerSpin">
+       <property name="minimum">
+        <number>1</number>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -184,11 +188,15 @@
  </customwidgets>
  <tabstops>
   <tabstop>positionNameEdit</tabstop>
-  <tabstop>manpowerEdit</tabstop>
+  <tabstop>manpowerSpin</tabstop>
   <tabstop>rolesWidget</tabstop>
   <tabstop>mixPlatoonsCheck</tabstop>
   <tabstop>notPhysicalCheck</tabstop>
   <tabstop>uidEdit</tabstop>
+  <tabstop>notCommanderCheck</tabstop>
+  <tabstop>spacingNeededCheck</tabstop>
+  <tabstop>spacingHourSpin</tabstop>
+  <tabstop>spacingMinuteSpin</tabstop>
  </tabstops>
  <resources/>
  <connections>

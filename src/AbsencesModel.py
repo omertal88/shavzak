@@ -29,7 +29,7 @@ class AbsencesModel(QAbstractTableModel):
     ##============================================================================##
     
     def remove(self, absence : Absence):
-        result = next(i for i, abs in enumerate(self.absences) if abs.uid == absence.uid)
+        result = next(i for i, abs in enumerate(self.absences) if abs == absence)
         self.removeRows(QModelIndex(), result, result)
     
     ##============================================================================##
@@ -79,5 +79,5 @@ class AbsencesModel(QAbstractTableModel):
     ##============================================================================##
         
     def sort(self, column : int, order : Qt.SortOrder):
-        sorter : Callable[[Absence], datetime] = lambda x: x.from_time
+        sorter : Callable[[Absence], datetime] = lambda x: x.interval.start_time
         self.absences.sort(key = sorter)

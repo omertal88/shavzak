@@ -96,3 +96,6 @@ class TimeInterval:
     
     def __gt__(self, other : "TimeInterval"):
         return self.start_time > other.end_time
+    
+    def __bool__(self):
+        return self.start_time < self.end_time
