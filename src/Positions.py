@@ -38,10 +38,10 @@ class Position:
                 Role.HAMAL_RUNNER       * ui.rolesWidget.hamalRunnerCheck.isChecked()     |
                 Role.DRIVER             * ui.rolesWidget.driverCheck.isChecked()),
             properties = (
-                PositionProperty.MIX_PLATOONS    * ui.mixPlatoonsCheck.isChecked()    |
-                PositionProperty.NOT_PHYSICAL    * ui.notPhysicalCheck.isChecked()    |
-                PositionProperty.SPACING_NEEDED  * ui.spacingNeededCheck.isChecked()         |
-                PositionProperty.NOT_COMMANDER   * ui.notCommanderCheck.isChecked()
+                PositionProperty.ORGANIC_PLATOONS  * ui.organicPlatoonsCheck.isChecked()    |
+                PositionProperty.NOT_PHYSICAL      * ui.notPhysicalCheck.isChecked()    |
+                PositionProperty.SPACING_NEEDED    * ui.spacingNeededCheck.isChecked()         |
+                PositionProperty.NOT_COMMANDER     * ui.notCommanderCheck.isChecked()
             ),
             required_spacing = timedelta(hours = ui.spacingHourSpin.value(),
                                          minutes = ui.spacingMinuteSpin.value()) if ui.spacingNeededCheck.isChecked() else timedelta()
@@ -100,7 +100,7 @@ class PositionDialog(QDialog):
             self.ui.rolesWidget.driverCheck.setChecked(position.needed_roles & Role.DRIVER)
 
             # Properties
-            self.ui.mixPlatoonsCheck.setChecked(position.properties & PositionProperty.MIX_PLATOONS)
+            self.ui.organicPlatoonsCheck.setChecked(position.properties & PositionProperty.ORGANIC_PLATOONS)
             self.ui.notPhysicalCheck.setChecked(position.properties & PositionProperty.NOT_PHYSICAL)
             self.ui.spacingNeededCheck.setChecked(position.properties & PositionProperty.SPACING_NEEDED)
             self.ui.spacingHourSpin.setValue(position.required_spacing.total_seconds() / 60 / 60)

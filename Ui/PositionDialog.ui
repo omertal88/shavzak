@@ -84,9 +84,9 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QCheckBox" name="mixPlatoonsCheck">
+        <widget class="QCheckBox" name="organicPlatoonsCheck">
          <property name="text">
-          <string>ערבוב מחלקות</string>
+          <string>מחלקות אורגניות</string>
          </property>
         </widget>
        </item>
@@ -190,7 +190,7 @@
   <tabstop>positionNameEdit</tabstop>
   <tabstop>manpowerSpin</tabstop>
   <tabstop>rolesWidget</tabstop>
-  <tabstop>mixPlatoonsCheck</tabstop>
+  <tabstop>organicPlatoonsCheck</tabstop>
   <tabstop>notPhysicalCheck</tabstop>
   <tabstop>uidEdit</tabstop>
   <tabstop>notCommanderCheck</tabstop>

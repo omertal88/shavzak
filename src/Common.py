@@ -18,7 +18,7 @@ class Role(IntFlag):
     DRIVER             = auto()
     
 class PositionProperty(IntFlag):
-    MIX_PLATOONS       = auto()
+    ORGANIC_PLATOONS   = auto()
     NOT_PHYSICAL       = auto()
     SPACING_NEEDED     = auto()
     NOT_COMMANDER      = auto()

@@ -1,4 +1,5 @@
 from copy import copy
+from collections import Counter
 from itertools import islice, groupby
 from statistics import stdev
 from random import choice
@@ -6,7 +7,7 @@ from copy import deepcopy
 from typing import List, Union, Dict, Tuple, Callable
 from datetime import datetime, timedelta, date
 from multiprocessing.pool import Pool
-from src.Common import Role, TimeInterval, SoldierProperty, PositionProperty
+from src.Common import Role, TimeInterval, SoldierProperty, PositionProperty, hasProperty
 from src.Manpower import Soldier
 from src.Positions import Position
 from src.Shifts import Shift
@@ -155,8 +156,10 @@ class PermutationSoldier(object):
     def calculateRatioSinceLastAssignment(self, currentTime : datetime):
         
         if not self.lastAssignment:
-            return 1.0
+            return NO_ASSIGNMENT_RATIO
         
+        elif self.lastAssignment.interval.start_time == currentTime:
+            return NOT_AVAILABLE_RATIO
         workTime = self.lastAssignment.interval.duration()
         
         return 1.0 - workTime.total_seconds() / TimeInterval(self.lastAssignment.interval.start_time, currentTime).duration().total_seconds()
@@ -276,7 +279,6 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
     for assignment in assignments:
         availableSoldiers = [permutationSoldier for permutationSoldier in permutationSoldiers if permutationSoldier.soldier.isAvailable(assignment.interval, schedule)]
         
-        # soldiersAndRatios = calculateAndSortRatios(schedule, availableSoldiers, interval)
         mannedSoldiers = manAssignment(assignment, availableSoldiers, schedule)
         if mannedSoldiers is None:
             success = False
@@ -330,6 +332,8 @@ def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier], 
     #             soldiers.remove(randomSoldier)
     
     soldiersGroup = []
+    candidates = []
+        
     soldiersGroupIter = getNextGroupOfSoldiersByRatio(soldiers, assignment.interval.start_time, schedule)
     
     while position.needed_manpower != len(mannedSoldiers):
@@ -341,17 +345,89 @@ def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier], 
                 raise ValueError("Failed to man position %s for interval: %s -> %s" % (position.name, assignment.interval.start_time, assignment.interval.end_time))
         
         randomSoldier = choice(soldiersGroup)
-        mannedSoldiers.append(randomSoldier.soldier)
         
-        if not position.properties & PositionProperty.MIX_PLATOONS and not platoonBound:
-            platoonBound = True
-            soldiers = [soldier for soldier in soldiers if soldier.soldier.platoon == randomSoldier.soldier.platoon]
-
-        randomSoldier.addAssignment(assignment)
+        candidates.append(randomSoldier)
         soldiersGroup.remove(randomSoldier)
         
-    return mannedSoldiers
+        manpower = getMannableSoldiersFromCandidates(position, candidates)
+        
+        if not manpower:
+            continue
+        
+        for soldier in manpower:
+            soldier.addAssignment(assignment)
+            
+        mannedSoldiers.extend(manpower)
+        
+        # randomSoldier.addAssignment(assignment)
+        
+        # if not position.properties & PositionProperty.ORGANIC_PLATOONS and not platoonBound:
+        #     platoonBound = True
+        #     soldiers = [soldier for soldier in soldiers if soldier.soldier.platoon == randomSoldier.soldier.platoon]
 
+        
+    return [permutationSoldier.soldier for permutationSoldier in mannedSoldiers]
+    
+    ##============================================================================##
+    
+def getMannableSoldiersFromCandidates(position : Position, candidates : List[PermutationSoldier]):
+    
+    if hasProperty(position.properties, PositionProperty.ORGANIC_PLATOONS):
+        platoons : Dict[str, List[PermutationSoldier]] = {}
+        
+        # Split to platoons
+        for candidate in candidates:
+            platoons.setdefault(candidate.soldier.platoon, []).append(candidate)
+        
+        for platoon in platoons.values():
+            
+            manpower = canCandidatesManPosition(position, platoon)
+            if manpower:
+                return manpower
+    
+    else:
+        manpower = canCandidatesManPosition(position, candidates)
+        if manpower:
+            return manpower
+    
+##============================================================================##
+    
+def canCandidatesManPosition(position : Position, candidates : List[PermutationSoldier]) -> Union[None, List[PermutationSoldier]]:
+    
+    if len(candidates) < position.needed_manpower:
+        return None
+    
+    candidates = copy(candidates)
+    
+    mannableCandidates : List[PermutationSoldier] = []
+    for role in Role:
+        foundRole = False
+        if hasProperty(position.needed_roles, role): # This role is needed
+            for candidate in candidates:
+                if hasProperty(candidate.soldier.roles, role) and candidate not in mannableCandidates:
+                    mannableCandidates.append(candidate)
+                    candidates.remove(candidate)
+                    foundRole = True
+                    break
+            
+            if not foundRole:
+                return None
+
+    while position.needed_manpower > len(mannableCandidates):
+        if not candidates:
+            return None
+        
+        mannableCandidates.append(candidates.pop(0))
+        
+    return mannableCandidates
+    
+    
+    # TODO: Currently hard coded commanders.
+    
+    
+    # mannableCandidates : List[PermutationSoldier] = filteredSoldiers
+    
+    
 ##============================================================================##
 
 def getNextGroupOfSoldiersByRatio(soldiers : List[PermutationSoldier], currentTime : datetime, schedule : Schedule):
