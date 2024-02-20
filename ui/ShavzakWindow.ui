@@ -30,7 +30,14 @@
          </widget>
         </item>
         <item>
-         <widget class="QListWidget" name="manpowerList"/>
+         <widget class="QListView" name="manpowerView">
+          <property name="editTriggers">
+           <set>QAbstractItemView::NoEditTriggers</set>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_2">
@@ -68,7 +75,26 @@
          </widget>
         </item>
         <item>
-         <widget class="QListWidget" name="positionsList"/>
+         <widget class="QTableView" name="positionsView">
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
+          </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
+          <attribute name="horizontalHeaderMinimumSectionSize">
+           <number>20</number>
+          </attribute>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -106,12 +132,22 @@
          </widget>
         </item>
         <item>
-         <widget class="QListWidget" name="shiftsList"/>
+         <widget class="QTableView" name="shiftsView">
+          <attribute name="horizontalHeaderMinimumSectionSize">
+           <number>20</number>
+          </attribute>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
           <item>
            <widget class="QPushButton" name="addShiftButton">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="text">
              <string>הוסף</string>
             </property>
@@ -220,16 +256,15 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <tabstops>
-  <tabstop>manpowerList</tabstop>
+  <tabstop>manpowerView</tabstop>
   <tabstop>addSoldierButton</tabstop>
   <tabstop>removeSoldierButton</tabstop>
-  <tabstop>positionsList</tabstop>
   <tabstop>addPositionButton</tabstop>
   <tabstop>removePositionButton</tabstop>
-  <tabstop>shiftsList</tabstop>
   <tabstop>addShiftButton</tabstop>
   <tabstop>removeShiftButton</tabstop>
   <tabstop>fromDateTime</tabstop>
+  <tabstop>durationEdit</tabstop>
   <tabstop>generateButton</tabstop>
  </tabstops>
  <resources/>
@@ -331,82 +366,50 @@
    </hints>
   </connection>
   <connection>
-   <sender>manpowerList</sender>
+   <sender>manpowerView</sender>
    <signal>doubleClicked(QModelIndex)</signal>
    <receiver>Shavzak</receiver>
-   <slot>addNewSoldier()</slot>
+   <slot>editSoldier()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>56</x>
-     <y>170</y>
+     <x>96</x>
+     <y>220</y>
     </hint>
     <hint type="destinationlabel">
-     <x>-50</x>
-     <y>168</y>
+     <x>-113</x>
+     <y>190</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>positionsList</sender>
+   <sender>positionsView</sender>
    <signal>doubleClicked(QModelIndex)</signal>
    <receiver>Shavzak</receiver>
    <slot>editPosition()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>312</x>
-     <y>120</y>
+     <x>284</x>
+     <y>113</y>
     </hint>
     <hint type="destinationlabel">
-     <x>320</x>
-     <y>-64</y>
+     <x>304</x>
+     <y>-58</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>shiftsList</sender>
+   <sender>shiftsView</sender>
    <signal>doubleClicked(QModelIndex)</signal>
    <receiver>Shavzak</receiver>
    <slot>editShift()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>528</x>
-     <y>174</y>
+     <x>516</x>
+     <y>173</y>
     </hint>
     <hint type="destinationlabel">
-     <x>640</x>
-     <y>191</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>manpowerList</sender>
-   <signal>currentRowChanged(int)</signal>
-   <receiver>Shavzak</receiver>
-   <slot>selectionChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>71</x>
-     <y>231</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-35</x>
-     <y>164</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>positionsList</sender>
-   <signal>currentRowChanged(int)</signal>
-   <receiver>Shavzak</receiver>
-   <slot>selectionChanged()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>351</x>
-     <y>258</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>618</x>
-     <y>243</y>
+     <x>531</x>
+     <y>-85</y>
     </hint>
    </hints>
   </connection>
@@ -421,6 +424,6 @@
   <slot>addNewShift()</slot>
   <slot>removeShift()</slot>
   <slot>editShift()</slot>
-  <slot>selectionChanged()</slot>
+  <slot>selectionChanged(QModelIndex)</slot>
  </slots>
 </ui>

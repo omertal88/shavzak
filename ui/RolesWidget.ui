@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>RolesWidget</class>
+ <widget class="QWidget" name="RolesWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>331</width>
+    <height>102</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QCheckBox" name="officerCheck">
+     <property name="text">
+      <string>מ&quot;מ / סמל</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QCheckBox" name="commanderCheck">
+     <property name="text">
+      <string>מפקד</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QCheckBox" name="sharpshooterCheck">
+     <property name="text">
+      <string>קלע</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QCheckBox" name="grenadeLauncherCheck">
+     <property name="text">
+      <string>מטול</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <widget class="QCheckBox" name="medicCheck">
+     <property name="text">
+      <string>חובש</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QCheckBox" name="sniperCheck">
+     <property name="text">
+      <string>צלף</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QCheckBox" name="signallerCheck">
+     <property name="text">
+      <string>קשר</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QCheckBox" name="hamalistCheck">
+     <property name="text">
+      <string>חמ&quot;ליסט</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QCheckBox" name="hamalRunnerCheck">
+     <property name="text">
+      <string>רץ חמ&quot;ל</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QCheckBox" name="driverCheck">
+     <property name="text">
+      <string>נהג</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>officerCheck</tabstop>
+  <tabstop>commanderCheck</tabstop>
+  <tabstop>sharpshooterCheck</tabstop>
+  <tabstop>grenadeLauncherCheck</tabstop>
+  <tabstop>medicCheck</tabstop>
+  <tabstop>sniperCheck</tabstop>
+  <tabstop>signallerCheck</tabstop>
+  <tabstop>hamalistCheck</tabstop>
+  <tabstop>hamalRunnerCheck</tabstop>
+  <tabstop>driverCheck</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>

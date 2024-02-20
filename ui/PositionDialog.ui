@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>587</width>
-    <height>231</height>
+    <height>261</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,108 +16,41 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
+     <item row="1" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>שם העמדה</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
+     <item row="1" column="1">
       <widget class="QLineEdit" name="positionNameEdit"/>
      </item>
-     <item row="1" column="0">
+     <item row="2" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>סד&quot;כ נדרש</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="2" column="1">
       <widget class="QLineEdit" name="manpowerEdit"/>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>בעלי תפקידים</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="officerCheck">
-         <property name="text">
-          <string>מ&quot;מ / סמל</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QCheckBox" name="hamalistCheck">
-         <property name="text">
-          <string>חמ&quot;ליסט</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="sniperCheck">
-         <property name="text">
-          <string>צלף</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QCheckBox" name="grenadeLauncherCheck">
-         <property name="text">
-          <string>מטול</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QCheckBox" name="sharpshooterCheck">
-         <property name="text">
-          <string>קלע</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QCheckBox" name="commanderCheck">
-         <property name="text">
-          <string>מפקד</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QCheckBox" name="signallerCheck">
-         <property name="text">
-          <string>קשר</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="medicCheck">
-         <property name="text">
-          <string>חובש</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="hamalRunnerCheck">
-         <property name="text">
-          <string>רץ חמ&quot;ל</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>מאפיינים</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="1" column="1">
         <widget class="QCheckBox" name="notPhysicalCheck">
@@ -140,7 +73,38 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="notCommanderCheck">
+         <property name="text">
+          <string>לא מפקד</string>
+         </property>
+        </widget>
+       </item>
       </layout>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>מזהה עמדה</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="uidEdit">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="RolesWidget" name="rolesWidget" native="true">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -156,21 +120,23 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>RolesWidget</class>
+   <extends>QWidget</extends>
+   <header>ui.Promoted.RolesWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>positionNameEdit</tabstop>
   <tabstop>manpowerEdit</tabstop>
-  <tabstop>officerCheck</tabstop>
-  <tabstop>commanderCheck</tabstop>
-  <tabstop>sharpshooterCheck</tabstop>
-  <tabstop>grenadeLauncherCheck</tabstop>
-  <tabstop>medicCheck</tabstop>
-  <tabstop>sniperCheck</tabstop>
-  <tabstop>signallerCheck</tabstop>
-  <tabstop>hamalistCheck</tabstop>
-  <tabstop>hamalRunnerCheck</tabstop>
+  <tabstop>rolesWidget</tabstop>
   <tabstop>mixPlatoonsCheck</tabstop>
   <tabstop>notPhysicalCheck</tabstop>
   <tabstop>noRestCheck</tabstop>
+  <tabstop>notCommanderCheck</tabstop>
+  <tabstop>uidEdit</tabstop>
  </tabstops>
  <resources/>
  <connections>
@@ -181,8 +147,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>257</x>
-     <y>221</y>
+     <x>266</x>
+     <y>251</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -197,8 +163,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>325</x>
-     <y>221</y>
+     <x>334</x>
+     <y>251</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

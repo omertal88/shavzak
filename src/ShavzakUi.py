@@ -1,11 +1,16 @@
 from typing import Tuple, Union
 from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem
 from PyQt5.QtWidgets import QAction
+from PyQt5.QtCore import QModelIndex
 from ui.ShavzakWindow import Ui_Shavzak
 
 from src.Common import DialogReturnCode
 from src.Manpower import SoldierDialog, Soldier, Absence
+from src.ManpowerModel import ManpowerModel
+from src.PositionsModel import PositionsModel
+from src.ShiftsModel import ShiftsModel
 from src.Positions import PositionDialog, Position
+from src.Shifts import ShiftDialog, Shift
 
 class ShavzakWindow(QMainWindow):
     
@@ -16,8 +21,30 @@ class ShavzakWindow(QMainWindow):
         self.ui = Ui_Shavzak()
         self.ui.setupUi(self)
         
-        self.soldiers = list()
-        self.positions = list()
+        self.currentPositionUid = 1
+        self.currentShiftUid = 1
+        
+        self.manpowerModel = ManpowerModel()
+        self.positionsModel = PositionsModel()
+        self.shiftsModel = ShiftsModel()
+        
+        self.ui.manpowerView.setModel(self.manpowerModel)
+        self.ui.positionsView.setModel(self.positionsModel)
+        self.ui.shiftsView.setModel(self.shiftsModel)
+        
+        self.ui.manpowerView.selectionModel().currentRowChanged.connect(self.soldierSelectionChanged)
+        self.ui.positionsView.selectionModel().currentRowChanged.connect(self.positionSelectionChanged)
+        self.ui.shiftsView.selectionModel().currentRowChanged.connect(self.shiftSelectionChanged)
+        
+        self.ui.positionsView.setColumnWidth(0, 100)
+        self.ui.positionsView.setColumnWidth(1, 40)
+        self.ui.positionsView.setColumnWidth(2, 40)
+        self.ui.positionsView.horizontalHeader().setStretchLastSection(True)
+        
+        self.ui.shiftsView.setColumnWidth(0, 100)
+        self.ui.shiftsView.setColumnWidth(1, 40)
+        self.ui.shiftsView.setColumnWidth(2, 40)
+        self.ui.shiftsView.horizontalHeader().setStretchLastSection(True)
         
         self.exitAction = QAction(self)
         self.exitAction.setShortcut("Esc")
@@ -33,34 +60,66 @@ class ShavzakWindow(QMainWindow):
         retval : DialogReturnCode = self.openGenericDialog(dialog)
         
         if retval == DialogReturnCode.OK:
-            soldier = Soldier.makeSoldier(dialog.ui)
-            newSoldierListItem = QListWidgetItem(self.ui.manpowerList)
-            newSoldierListItem.setText("%s (%s)" % (soldier.name, soldier.platoon))
+            soldier = Soldier.make(dialog.ui)
+            self.manpowerModel.add(soldier)
             
-            self.soldiers.append(soldier)
-        
     def removeSoldier(self):
-        self.ui.manpowerList.takeItem(self.ui.manpowerList.currentRow())
+        for soldier in self.ui.manpowerView.selectionModel().selectedRows():
+            self.manpowerModel.remove(self.manpowerModel.soldiers[soldier.row()])
     
-    def editSoldier(self):
-        pass
+    def editSoldier(self, index : QModelIndex):
+        soldier = self.manpowerModel.soldiers[index.row()]
+        dialog = SoldierDialog(self, soldier)
+        retval = self.openGenericDialog(dialog)
+        
+        if retval == DialogReturnCode.OK:
+            newSoldier = Soldier.make(dialog.ui)
+            self.manpowerModel.update(newSoldier)
+    
     def addNewPosition(self):
         dialog = PositionDialog(self)
+        dialog.ui.uidEdit.setText(str(self.currentPositionUid))
         retval : DialogReturnCode = self.openGenericDialog(dialog)
-        # TODO: Continue tomorrow :)
+        
+        if retval == DialogReturnCode.OK:
+            self.currentPositionUid += 1
+            position = Position.make(dialog.ui)
+            self.positionsModel.add(position)
 
     def removePosition(self):
-        pass
-    def editPosition(self):
-        pass
+        for position in self.ui.positionsView.selectionModel().selectedRows():
+            self.positionsModel.remove(self.positionsModel.positions[position.row()])
+
+    def editPosition(self, index : QModelIndex):
+        position = self.positionsModel.positions[index.row()]
+        dialog = PositionDialog(self, position)
+        retval = self.openGenericDialog(dialog)
+        
+        if retval == DialogReturnCode.OK:
+            newPosition = Position.make(dialog.ui)
+            self.positionsModel.update(newPosition)
+        
     def addNewShift(self):
-        pass
+        dialog = ShiftDialog(self)
+        dialog.ui.uidEdit.setText(str(self.currentShiftUid))
+        retval : DialogReturnCode = self.openGenericDialog(dialog)
+        
+        if retval == DialogReturnCode.OK:
+            self.currentShiftUid += 1
+            shift = Shift.make(dialog.ui)
+            self.shiftsModel.add(shift)
+
     def removeShift(self):
         pass
     def editShift(self):
         pass
     
-    def selectionChanged(self):
-        self.ui.removeSoldierButton.setEnabled(self.ui.manpowerList.currentItem() is not None)
-        self.ui.removePositionButton.setEnabled(self.ui.positionsList.currentItem() is not None)
-        self.ui.removeShiftButton.setEnabled(self.ui.positionsList.currentItem() is not None)
+    def soldierSelectionChanged(self, current : QModelIndex, previous : QModelIndex):
+        self.ui.removeSoldierButton.setEnabled(current.row() != -1)
+        
+    def positionSelectionChanged(self, current : QModelIndex, previous : QModelIndex):
+        self.ui.removePositionButton.setEnabled(current.row() != -1)
+        self.ui.addShiftButton.setEnabled(current.row() != -1)
+    
+    def shiftSelectionChanged(self, current : QModelIndex, previous : QModelIndex):
+        self.ui.removeShiftButton.setEnabled(current.row() != -1)

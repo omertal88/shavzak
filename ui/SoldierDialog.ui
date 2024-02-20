@@ -64,73 +64,6 @@
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="1">
-        <widget class="QCheckBox" name="commanderCheck">
-         <property name="text">
-          <string>מפקד</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QCheckBox" name="sharpshooterCheck">
-         <property name="text">
-          <string>קלע</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QCheckBox" name="medicCheck">
-         <property name="text">
-          <string>חובש</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="QCheckBox" name="officerCheck">
-         <property name="text">
-          <string>מ&quot;מ / סמל</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QCheckBox" name="signallerCheck">
-         <property name="text">
-          <string>קשר</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QCheckBox" name="grenLauncherCheck">
-         <property name="text">
-          <string>מטול</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="sniperCheck">
-         <property name="text">
-          <string>צלף</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QCheckBox" name="hamalistCheck">
-         <property name="text">
-          <string>חמ&quot;ליסט</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QCheckBox" name="hamalRunnerCheck">
-         <property name="text">
-          <string>רץ חמ&quot;ל</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
      <item row="5" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
@@ -183,6 +116,13 @@
      <item row="3" column="1">
       <widget class="QLineEdit" name="telephoneEdit"/>
      </item>
+     <item row="4" column="1">
+      <widget class="RolesWidget" name="rolesWidget" native="true">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -197,23 +137,23 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>RolesWidget</class>
+   <extends>QWidget</extends>
+   <header>ui.Promoted.RolesWidget.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>pnEdit</tabstop>
   <tabstop>soldierNameEdit</tabstop>
   <tabstop>platoonCombo</tabstop>
   <tabstop>telephoneEdit</tabstop>
-  <tabstop>officerCheck</tabstop>
-  <tabstop>commanderCheck</tabstop>
-  <tabstop>sharpshooterCheck</tabstop>
-  <tabstop>grenLauncherCheck</tabstop>
-  <tabstop>medicCheck</tabstop>
-  <tabstop>sniperCheck</tabstop>
-  <tabstop>signallerCheck</tabstop>
+  <tabstop>rolesWidget</tabstop>
   <tabstop>listWidget</tabstop>
   <tabstop>addAbsenceButton</tabstop>
   <tabstop>removeAbsenceButton</tabstop>
-  <tabstop>hamalistCheck</tabstop>
-  <tabstop>hamalRunnerCheck</tabstop>
  </tabstops>
  <resources/>
  <connections>
