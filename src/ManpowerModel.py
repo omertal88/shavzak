@@ -1,9 +1,15 @@
 from typing import List
-from PyQt5.QtCore import QAbstractListModel, QModelIndex, QVariant
+from enum import Enum
+from PyQt5.QtCore import QAbstractTableModel, QModelIndex, QVariant
 from PyQt5.QtCore import Qt
 from src.Manpower import Soldier
 
-class ManpowerModel(QAbstractListModel):
+class Column:
+    NAME     = 0
+    PLATOON  = 1
+    COUNT    = 2
+
+class ManpowerModel(QAbstractTableModel):
     
     def __init__(self):
         super().__init__()
@@ -27,11 +33,34 @@ class ManpowerModel(QAbstractListModel):
     def rowCount(self, parent : QModelIndex):
         return len(self.soldiers)
     
+    def columnCount(self, parent : QModelIndex):
+        return Column.COUNT
+    
     def data(self, index : QModelIndex, role : Qt.ItemDataRole):
         if role == Qt.DisplayRole:
             soldier = self.soldiers[index.row()]
-            return QVariant("%s (%s)" % (soldier.name, soldier.platoon))
+            if index.column() == Column.NAME:
+                return QVariant(soldier.name)
+            elif index.column() == Column.PLATOON:
+                return QVariant(soldier.platoon)
         
     def sort(self, column : int, order : Qt.SortOrder):
-        sorter = lambda x: "%s%s" % (x.platoon, x.name)
-        self.soldiers.sort(key = sorter)
+        if column == Column.PLATOON:
+            sorter = lambda x: "%s%s" % (x.platoon, x.name)
+        else:
+            sorter = lambda x: x.name
+            
+        self.soldiers.sort(key = sorter, reverse = order == Qt.DescendingOrder)
+
+    def headerData(self, column, orientation, role):
+        if orientation == Qt.Horizontal:
+            if role == Qt.DisplayRole:
+                if column == Column.NAME:
+                    return QVariant("שם")
+                elif column == Column.PLATOON:
+                    return QVariant("מחלקה")
+
+    def clear(self):
+        self.beginRemoveRows(QModelIndex(), 0, len(self.soldiers) - 1)
+        self.soldiers.clear()
+        self.endRemoveRows()

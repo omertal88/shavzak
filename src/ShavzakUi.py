@@ -1,8 +1,11 @@
-from typing import Tuple, Union
-from PyQt5.QtWidgets import QMainWindow, QDialog, QListWidgetItem
-from PyQt5.QtWidgets import QAction
-from PyQt5.QtCore import QModelIndex
-from ui.ShavzakWindow import Ui_Shavzak
+import os
+import sys
+
+from os.path import dirname, abspath
+from PyQt5.QtWidgets import QMainWindow, QDialog, QAction, QInputDialog
+from PyQt5.QtCore import Qt
+from PyQt5.QtCore import QModelIndex, QDateTime
+from Ui.ShavzakWindow import Ui_Shavzak
 
 from src.Common import DialogReturnCode
 from src.Manpower import SoldierDialog, Soldier, Absence
@@ -11,6 +14,7 @@ from src.PositionsModel import PositionsModel
 from src.ShiftsModel import ShiftsModel
 from src.Positions import PositionDialog, Position
 from src.Shifts import ShiftDialog, Shift
+from src.Serialization import SerializedData
 
 class ShavzakWindow(QMainWindow):
     
@@ -24,6 +28,11 @@ class ShavzakWindow(QMainWindow):
         self.currentPositionUid = 1
         self.currentShiftUid = 1
         
+        self.ui.fromDateTime.setDateTime(QDateTime(
+            *[getattr(QDateTime.currentDateTime().date(), attr)() for attr in ("year", "month", "day")],
+            QDateTime.currentDateTime().time().hour(), 0, 0).addSecs(60 * 60))
+        self.ui.untilDateTime.setDateTime(self.ui.fromDateTime.dateTime().addDays(1))
+        
         self.manpowerModel = ManpowerModel()
         self.positionsModel = PositionsModel()
         self.shiftsModel = ShiftsModel(self.positionsModel)
@@ -35,6 +44,10 @@ class ShavzakWindow(QMainWindow):
         self.ui.manpowerView.selectionModel().currentRowChanged.connect(self.soldierSelectionChanged)
         self.ui.positionsView.selectionModel().currentRowChanged.connect(self.positionSelectionChanged)
         self.ui.shiftsView.selectionModel().currentRowChanged.connect(self.shiftSelectionChanged)
+        
+        self.ui.manpowerView.setColumnWidth(0, 130)
+        self.ui.manpowerView.setColumnWidth(1, 20)
+        self.ui.manpowerView.horizontalHeader().setStretchLastSection(True)
         
         self.ui.positionsView.setColumnWidth(0, 100)
         self.ui.positionsView.setColumnWidth(1, 40)
@@ -125,3 +138,33 @@ class ShavzakWindow(QMainWindow):
     
     def shiftSelectionChanged(self, current : QModelIndex, previous : QModelIndex):
         self.ui.removeShiftButton.setEnabled(current.row() != -1)
+
+    def importData(self):
+        path, accepted = QInputDialog.getText(self, "ייבא נתונים", "אנא הכנס נתיב לקובץ השמור", text = "%s" % os.path.join(dirname(abspath(sys.argv[0])), "shavzak.dat"))
+        if not accepted:
+            return
+        
+        if os.path.exists(path):
+            data : SerializedData = SerializedData.load(path)
+            self.manpowerModel.clear()
+            self.positionsModel.clear()
+            self.shiftsModel.clear()
+            
+            for soldier in data.soldiers:
+                self.manpowerModel.add(soldier)
+            for position in data.positions:
+                self.positionsModel.add(position)
+            for shift in data.shifts:
+                self.shiftsModel.add(shift)
+    
+    def exportData(self):
+        path, accepted = QInputDialog.getText(self, "ייצא נתונים", "אנא הכנס נתיב לשמירת הקובץ", text = "%s" % os.path.join(dirname(abspath(sys.argv[0])), "shavzak.dat"))
+        if not accepted:
+            return
+        
+        data : SerializedData = SerializedData(
+            soldiers = self.manpowerModel.soldiers,
+            positions = self.positionsModel.positions,
+            shifts = self.shiftsModel.shifts
+        )
+        data.dump(path)

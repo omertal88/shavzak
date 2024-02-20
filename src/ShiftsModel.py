@@ -56,3 +56,8 @@ class ShiftsModel(QAbstractTableModel):
                     return QVariant("שם")
                 elif column == 2:
                     return QVariant("מס\"ד")
+
+    def clear(self):
+        self.beginRemoveRows(QModelIndex(), 0, len(self.shifts))
+        self.shifts.clear()
+        self.endRemoveRows()

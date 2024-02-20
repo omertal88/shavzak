@@ -53,3 +53,8 @@ class PositionsModel(QAbstractTableModel):
                     return QVariant("מס\"ד")
                 elif column == 2:
                     return QVariant("סד\"כ")
+
+    def clear(self):
+        self.beginRemoveRows(QModelIndex(), 0, len(self.positions))
+        self.positions.clear()
+        self.endRemoveRows()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/PositionDialog.ui'
+# Form implementation generated from reading ui file 'Ui/PositionDialog.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.1
 #
@@ -94,4 +94,4 @@ class Ui_NewPositionDialog(object):
         self.noRestCheck.setText(_translate("NewPositionDialog", "אין צורך במנוחה"))
         self.notCommanderCheck.setText(_translate("NewPositionDialog", "לא מפקד"))
         self.label_5.setText(_translate("NewPositionDialog", "מזהה עמדה"))
-from ui.Promoted.RolesWidget import RolesWidget
+from Ui.Promoted.RolesWidget import RolesWidget

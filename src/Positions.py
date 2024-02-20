@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from PyQt5.QtWidgets import QDialog, QWidget
 
-from ui.PositionDialog import Ui_NewPositionDialog
+from Ui.PositionDialog import Ui_NewPositionDialog
 from src.Common import Role, PositionProperty
 
 @dataclass(init=True)
@@ -19,16 +19,17 @@ class Position:
             name = ui.positionNameEdit.text(),
             needed_manpower = int(ui.manpowerEdit.text()),
             needed_roles = (
-                Role.OFFICER          * ui.rolesWidget.officerCheck.isChecked()         |
-                Role.COMMANDER        * ui.rolesWidget.commanderCheck.isChecked()       |
-                Role.SHARPSHOOTER     * ui.rolesWidget.sharpshooterCheck.isChecked()    |
-                Role.GRENADE_LAUNCHER * ui.rolesWidget.grenadeLauncherCheck.isChecked() |
-                Role.MEDIC            * ui.rolesWidget.medicCheck.isChecked()           |
-                Role.SNIPER           * ui.rolesWidget.sniperCheck.isChecked()          |
-                Role.SIGNALLER        * ui.rolesWidget.signallerCheck.isChecked()       |
-                Role.HALAMIST         * ui.rolesWidget.hamalistCheck.isChecked()        |
-                Role.HAMAL_RUNNER     * ui.rolesWidget.hamalRunnerCheck.isChecked()     |
-                Role.DRIVER           * ui.rolesWidget.driverCheck.isChecked()),
+                Role.COMPANY_COMMANDER  * ui.rolesWidget.companyCommanderCheck.isChecked()     |
+                Role.PLATOON_COMMANDER  * ui.rolesWidget.platoonCommanderCheck.isChecked()     |
+                Role.SQUAD_COMMANDER    * ui.rolesWidget.squadCommanderCheck.isChecked()  |
+                Role.SHARPSHOOTER       * ui.rolesWidget.sharpshooterCheck.isChecked()    |
+                Role.GRENADE_LAUNCHER   * ui.rolesWidget.grenadeLauncherCheck.isChecked() |
+                Role.MEDIC              * ui.rolesWidget.medicCheck.isChecked()           |
+                Role.SNIPER             * ui.rolesWidget.sniperCheck.isChecked()          |
+                Role.SIGNALLER          * ui.rolesWidget.signallerCheck.isChecked()       |
+                Role.HALAMIST           * ui.rolesWidget.hamalistCheck.isChecked()        |
+                Role.HAMAL_RUNNER       * ui.rolesWidget.hamalRunnerCheck.isChecked()     |
+                Role.DRIVER             * ui.rolesWidget.driverCheck.isChecked()),
             properties = (
                 PositionProperty.MIX_PLATOONS    * ui.mixPlatoonsCheck.isChecked()    |
                 PositionProperty.NOT_PHYSICAL    * ui.notPhysicalCheck.isChecked()    |
@@ -55,8 +56,9 @@ class PositionDialog(QDialog):
             self.ui.manpowerEdit.setText(str(position.needed_manpower))
             
             # Roles
-            self.ui.rolesWidget.officerCheck.setChecked(position.needed_roles & Role.OFFICER)
-            self.ui.rolesWidget.commanderCheck.setChecked(position.needed_roles & Role.COMMANDER)
+            self.ui.rolesWidget.companyCommanderCheck.setChecked(position.needed_roles & Role.COMPANY_COMMANDER)
+            self.ui.rolesWidget.platoonCommanderCheck.setChecked(position.needed_roles & Role.PLATOON_COMMANDER)
+            self.ui.rolesWidget.squadCommanderCheck.setChecked(position.needed_roles & Role.SQUAD_COMMANDER)
             self.ui.rolesWidget.sharpshooterCheck.setChecked(position.needed_roles & Role.SHARPSHOOTER)
             self.ui.rolesWidget.grenadeLauncherCheck.setChecked(position.needed_roles & Role.GRENADE_LAUNCHER)
             self.ui.rolesWidget.medicCheck.setChecked(position.needed_roles & Role.MEDIC)

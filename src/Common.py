@@ -6,8 +6,9 @@ class DialogReturnCode(Enum):
     OK     = 1
 
 class Role(IntFlag):
-    OFFICER            = auto()
-    COMMANDER          = auto()
+    COMPANY_COMMANDER  = auto()
+    PLATOON_COMMANDER  = auto()
+    SQUAD_COMMANDER    = auto()
     SHARPSHOOTER       = auto()
     GRENADE_LAUNCHER   = auto()
     MEDIC              = auto()

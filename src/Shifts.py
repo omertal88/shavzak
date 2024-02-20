@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from PyQt5.QtWidgets import QDialog, QWidget
 
 from src.Common import Weekday
-from ui.ShiftDialog import Ui_ShiftDialog
+from Ui.ShiftDialog import Ui_ShiftDialog
 
 @dataclass(init=True)
 class Shift:

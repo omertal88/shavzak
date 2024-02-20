@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui/SoldierDialog.ui'
+# Form implementation generated from reading ui file 'Ui/SoldierDialog.ui'
 #
 # Created by: PyQt5 UI code generator 5.14.1
 #
@@ -105,4 +105,4 @@ class Ui_SoldierDialog(object):
         self.removeAbsenceButton.setText(_translate("SoldierDialog", "הסר היעדרות"))
         self.label_5.setText(_translate("SoldierDialog", "מ.א"))
         self.label_6.setText(_translate("SoldierDialog", "מספר טלפון"))
-from ui.Promoted.RolesWidget import RolesWidget
+from Ui.Promoted.RolesWidget import RolesWidget

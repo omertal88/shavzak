@@ -30,13 +30,16 @@
          </widget>
         </item>
         <item>
-         <widget class="QListView" name="manpowerView">
-          <property name="editTriggers">
-           <set>QAbstractItemView::NoEditTriggers</set>
+         <widget class="QTableView" name="manpowerView">
+          <property name="selectionMode">
+           <enum>QAbstractItemView::SingleSelection</enum>
           </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
           </property>
+          <attribute name="horizontalHeaderMinimumSectionSize">
+           <number>20</number>
+          </attribute>
          </widget>
         </item>
         <item>
@@ -197,7 +200,7 @@
         <rect>
          <x>10</x>
          <y>40</y>
-         <width>341</width>
+         <width>354</width>
          <height>62</height>
         </rect>
        </property>
@@ -212,19 +215,23 @@
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QDateTimeEdit" name="fromDateTime"/>
+           <widget class="QDateTimeEdit" name="fromDateTime">
+            <property name="displayFormat">
+             <string>d/M/yyyy hh:mm</string>
+            </property>
+           </widget>
           </item>
           <item row="1" column="0">
            <widget class="QLabel" name="label_5">
             <property name="text">
-             <string>משך זמן</string>
+             <string>שעת סיום</string>
             </property>
            </widget>
           </item>
           <item row="1" column="1">
-           <widget class="QTimeEdit" name="durationEdit">
+           <widget class="QDateTimeEdit" name="untilDateTime">
             <property name="displayFormat">
-             <string>h:mm</string>
+             <string>d/M/yyyy hh:mm</string>
             </property>
            </widget>
           </item>
@@ -258,11 +265,28 @@
      <height>22</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="importAction"/>
+    <addaction name="exportAction"/>
+   </widget>
+   <addaction name="menuFile"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="importAction">
+   <property name="text">
+    <string>טען נתונים מקובץ</string>
+   </property>
+  </action>
+  <action name="exportAction">
+   <property name="text">
+    <string>שמור נתונים לקובץ</string>
+   </property>
+  </action>
  </widget>
  <tabstops>
-  <tabstop>manpowerView</tabstop>
   <tabstop>addSoldierButton</tabstop>
   <tabstop>removeSoldierButton</tabstop>
   <tabstop>addPositionButton</tabstop>
@@ -270,7 +294,6 @@
   <tabstop>addShiftButton</tabstop>
   <tabstop>removeShiftButton</tabstop>
   <tabstop>fromDateTime</tabstop>
-  <tabstop>durationEdit</tabstop>
   <tabstop>generateButton</tabstop>
  </tabstops>
  <resources/>
@@ -372,22 +395,6 @@
    </hints>
   </connection>
   <connection>
-   <sender>manpowerView</sender>
-   <signal>doubleClicked(QModelIndex)</signal>
-   <receiver>Shavzak</receiver>
-   <slot>editSoldier()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>96</x>
-     <y>220</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>-113</x>
-     <y>190</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>positionsView</sender>
    <signal>doubleClicked(QModelIndex)</signal>
    <receiver>Shavzak</receiver>
@@ -419,6 +426,54 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>importAction</sender>
+   <signal>triggered()</signal>
+   <receiver>Shavzak</receiver>
+   <slot>importData()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exportAction</sender>
+   <signal>triggered()</signal>
+   <receiver>Shavzak</receiver>
+   <slot>exportData()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>manpowerView</sender>
+   <signal>doubleClicked(QModelIndex)</signal>
+   <receiver>Shavzak</receiver>
+   <slot>editSoldier()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>83</x>
+     <y>208</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>-83</x>
+     <y>203</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addSoldier()</slot>
@@ -431,5 +486,7 @@
   <slot>removeShift()</slot>
   <slot>editShift()</slot>
   <slot>selectionChanged(QModelIndex)</slot>
+  <slot>importData()</slot>
+  <slot>exportData()</slot>
  </slots>
 </ui>
