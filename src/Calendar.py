@@ -29,7 +29,7 @@ class Calendar(QMainWindow):
         self.currentAssignmentUid = 1
         self.schedule = Schedule()
         
-        self.assignmentsModel = AssignmentsModel(positions)
+        self.assignmentsModel = AssignmentsModel()
         self.ui.assignmentsView.setModel(self.assignmentsModel)
         self.ui.assignmentsView.setColumnWidth(Column.START_TIME, 120)
         self.ui.assignmentsView.setColumnWidth(Column.END_TIME, 120)
@@ -103,8 +103,11 @@ class Calendar(QMainWindow):
             return
         
         row = rows[0].row()
+        
+        assignment = self.assignmentsModel.assignments[row]
         self.assignmentsModel.removeRows(QModelIndex(), row, row)
-        self.schedule.assignments.pop(row)
+        
+        self.schedule.assignments.remove(assignment)
         
     ##============================================================================##
     

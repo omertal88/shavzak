@@ -292,7 +292,9 @@ class ShavzakWindow(QMainWindow):
         
         soldiers = self.manpowerModel.soldiers
         exportToCsv(path, soldiers)
-
+    
+    ##============================================================================##
+    
     def exportToXlsx(self):
         path, _ = QFileDialog.getSaveFileName(self, "ייצוא לאקסל", directory = dirname(abspath(sys.argv[0])), filter = "*.xlsx")
         

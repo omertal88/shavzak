@@ -11,10 +11,9 @@ class Column:
     
 class AssignmentsModel(QAbstractTableModel):
     
-    def __init__(self, positions):
+    def __init__(self):
         super().__init__()
 
-        self.positions : List[Position] = positions
         self.assignments : List[Assignment] = []
     
     ##============================================================================##
@@ -74,8 +73,3 @@ class AssignmentsModel(QAbstractTableModel):
         self.beginRemoveRows(QModelIndex(), 0, len(self.assignments) - 1)
         self.assignments.clear()
         self.endRemoveRows()
-    
-    ##============================================================================##
-    
-    def uidToPosition(self, uid : int):
-        return next(position for position in self.positions if position.uid == uid)

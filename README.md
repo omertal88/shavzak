@@ -5,6 +5,9 @@ Author: Omer Tal (jaclawi@gmail.com).
 
 Please feel free to suggest features and bug fixes through pull requests.
 
+## Open Issues
+Exported Xlsx sheets don't contain the assignments that started at some previous day, but still active in the current day.
+
 ## To-Do
 4. Handle special roles.
 5. Binding shifts to one-another (Maybe it needs to be binding positions instead of shifts)
@@ -13,8 +16,8 @@ Please feel free to suggest features and bug fixes through pull requests.
 10. Manual assignments - add ability to split assignment (like with shifts).
 11. UI improvement - Checkbox for splitting shift - if not checked - should disable the spinbox.
 12. Split shifts - spinbox should be limitted to 24 hours.
-14. Don't allow soldiers to begin a new assignment if they just finished one (unless it's a `no rest needed` one)
-15. Some UI validations. For example: Gray-out the `run` button if no positions and shifts are present.
+14. Don't allow soldiers to begin a new assignment if they just finished one (unless it's a `no rest needed` one) (Not sure about that one)
+15. Some UI validations. For example: Gray-out the `run` button if no Soldiers, positions or shifts are present.
 
 ## Done
 1. Handle absences when calculating ratios (absence should reset ratio to 1.0). 
@@ -24,6 +27,7 @@ Please feel free to suggest features and bug fixes through pull requests.
 7. Export soldiers to CSV (For easily updating roles and stuff) - DONE
 13. Implement `Required spacing` for specific positions to ensure some positions get a minimal break regardless of ratios (those positions will have the calculateRatio functions only look back until returning from those positions) - same as with absence. - DONE
 16. When assigning a soldier - we should also take in consideration the future assignments (those assigned manually for example) - DONE
+
 
 # Apendix
 ## Assignment Algorithm
