@@ -286,7 +286,7 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
             lambda soldier, assignment: soldier.soldier.isAvailable(assignment.interval, schedule) and \
                 hasProperty(soldier.soldier.properties, SoldierProperty.NO_PHYSICAL) <= hasProperty(assignment.position.properties, PositionProperty.NOT_PHYSICAL)
             
-        availableSoldiers = [permutationSoldier for permutationSoldier in permutationSoldiers if assigneeFilterFunction]
+        availableSoldiers = [permutationSoldier for permutationSoldier in permutationSoldiers if assigneeFilterFunction(permutationSoldier, assignment)]
         
         mannedSoldiers = manAssignment(assignment, availableSoldiers, schedule)
         if mannedSoldiers is None:
