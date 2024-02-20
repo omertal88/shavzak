@@ -46,6 +46,7 @@ class Shift:
         self.days = other.days
         self.start_time = other.start_time
         self.duration = other.duration
+        print(other.duration)
         self.valid_from = other.valid_from
         self.valid_until = other.valid_until
 
@@ -74,8 +75,8 @@ class ShiftDialog(QDialog):
             self.ui.saturdayCheck.setChecked(shift.days & Weekday.SATURDAY)
             
             self.ui.fromTime.setTime(shift.start_time)
-            self.ui.durationHourSpin.setValue(int(shift.duration.seconds / 3600))
-            self.ui.durationMinuteSpin.setValue(int(shift.duration.seconds % 3600 / 60))
+            self.ui.durationHourSpin.setValue(int(shift.duration.total_seconds() / 3600))
+            self.ui.durationMinuteSpin.setValue(int(shift.duration.total_seconds() % 3600 / 60))
             self.ui.validFromDatetime.setDateTime(shift.valid_from)
             if shift.valid_until is not None:
                 self.ui.validUntilCheck.setChecked(True)
@@ -102,9 +103,9 @@ class ShiftDialog(QDialog):
 
                 splittedShiftDuration = datetime.timedelta(hours = self.ui.durationHourSpin.value(), minutes = self.ui.durationMinuteSpin.value()) / self.ui.splitShiftSpin.value()
                 lastShiftStartHour = (self.ui.fromTime.time().minute() + (splittedShiftDuration * (self.ui.splitShiftSpin.value() - 1)).total_seconds() / 60) / 60 + self.ui.fromTime.time().hour()
+                
                 if lastShiftStartHour >= 24: # Exceeds to next day
                     QMessageBox.critical(self, "הוספת משמרת", "לא ניתן לפצל משמרת כאשר אחד המופעים מתחיל ביום הבא", QMessageBox.Ok)
                     return
-                
                 
         return super().done(ret)

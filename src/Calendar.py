@@ -21,9 +21,11 @@ class Calendar(QMainWindow):
         self.ui.calendarWidget.setSelectedDate(QDate.currentDate())
         self.ui.calendarWidget.showToday()
         
+        self.addAction(self.ui.actionExit)
+        
         self.soldiers  : List[Soldier] = soldiers
         self.positions : List[Position] = positions
-
+        
         self.currentAssignmentUid = 1
         self.schedule = Schedule()
         

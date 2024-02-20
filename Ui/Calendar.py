@@ -65,12 +65,15 @@ class Ui_Calendar(object):
         self.statusbar = QtWidgets.QStatusBar(Calendar)
         self.statusbar.setObjectName("statusbar")
         Calendar.setStatusBar(self.statusbar)
+        self.actionExit = QtWidgets.QAction(Calendar)
+        self.actionExit.setObjectName("actionExit")
 
         self.retranslateUi(Calendar)
         self.addAssignmentButton.clicked.connect(Calendar.addAssignment)
         self.removeAssignmentButton.clicked.connect(Calendar.removeAssignment)
         self.assignmentsView.doubleClicked['QModelIndex'].connect(Calendar.editAssignment)
         self.calendarWidget.selectionChanged.connect(Calendar.reloadSelectedDate)
+        self.actionExit.triggered.connect(Calendar.close)
         QtCore.QMetaObject.connectSlotsByName(Calendar)
 
     def retranslateUi(self, Calendar):
@@ -80,4 +83,6 @@ class Ui_Calendar(object):
         self.addAssignmentButton.setText(_translate("Calendar", "הוסף"))
         self.removeAssignmentButton.setText(_translate("Calendar", "הסר"))
         self.label_2.setText(_translate("Calendar", "כוח אדם"))
+        self.actionExit.setText(_translate("Calendar", "Exit"))
+        self.actionExit.setShortcut(_translate("Calendar", "Esc"))
 from Ui import resources_rc

@@ -143,14 +143,6 @@ class ShavzakWindow(QMainWindow):
         
         if retval == QDialog.Accepted:
             if dialog.ui.splitShiftCheck.isChecked():
-                # TODO: Limit shift time to 24 hours
-                dialog.ui.sundayCheck.setChecked(True)
-                dialog.ui.mondayCheck.setChecked(True)
-                dialog.ui.tuesdayCheck.setChecked(True)
-                dialog.ui.wednesdayCheck.setChecked(True)
-                dialog.ui.thursdayCheck.setChecked(True)
-                dialog.ui.fridayCheck.setChecked(True)
-                dialog.ui.saturdayCheck.setChecked(True)
                 startTime = dialog.ui.fromTime.time().toPyTime()
                 shiftDuration = timedelta(hours = dialog.ui.durationHourSpin.value(),
                                           minutes = dialog.ui.durationMinuteSpin.value()) / dialog.ui.splitShiftSpin.value()
@@ -191,8 +183,7 @@ class ShavzakWindow(QMainWindow):
         
         if retval == QDialog.Accepted:
             newshift = Shift.make(dialog.ui, self.positionsModel.positions)
-            self.shiftsModel.update(newshift)
-
+            self.shiftsModel.shifts[index.row()].update(newshift)
     
     ##============================================================================##
     
