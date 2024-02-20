@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>SoldierDialog</class>
  <widget class="QDialog" name="SoldierDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>623</width>
-    <height>373</height>
+    <height>406</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,23 +20,33 @@
    <item>
     <layout class="QFormLayout" name="formLayout">
      <item row="1" column="0">
+      <widget class="QLabel" name="label_5">
+       <property name="text">
+        <string>מ.א</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="pnEdit"/>
+     </item>
+     <item row="2" column="0">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>שם החייל</string>
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
+     <item row="2" column="1">
       <widget class="QLineEdit" name="soldierNameEdit"/>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>מחלקה</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QComboBox" name="platoonCombo">
        <item>
         <property name="text">
@@ -58,30 +71,70 @@
       </widget>
      </item>
      <item row="4" column="0">
+      <widget class="QLabel" name="label_6">
+       <property name="text">
+        <string>מספר טלפון</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QLineEdit" name="telephoneEdit"/>
+     </item>
+     <item row="5" column="0">
       <widget class="QLabel" name="label_3">
        <property name="text">
         <string>תפקיד</string>
        </property>
       </widget>
      </item>
+     <item row="5" column="1">
+      <widget class="RolesWidget" name="rolesWidget" native="true">
+       <property name="focusPolicy">
+        <enum>Qt::TabFocus</enum>
+       </property>
+      </widget>
+     </item>
      <item row="6" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>הערות</string>
+       </property>
+      </widget>
+     </item>
+     <item row="6" column="1">
+      <widget class="QLineEdit" name="commentEdit"/>
+     </item>
+     <item row="7" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>היעדרויות</string>
        </property>
       </widget>
      </item>
-     <item row="6" column="1">
+     <item row="7" column="1">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QListWidget" name="listWidget"/>
+        <widget class="QTableView" name="absencesView">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>140</height>
+          </size>
+         </property>
+         <property name="selectionMode">
+          <enum>QAbstractItemView::SingleSelection</enum>
+         </property>
+         <property name="selectionBehavior">
+          <enum>QAbstractItemView::SelectRows</enum>
+         </property>
+        </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
           <widget class="QPushButton" name="addAbsenceButton">
            <property name="text">
-            <string>הוסיף היעדרות</string>
+            <string>הוסף היעדרות</string>
            </property>
           </widget>
          </item>
@@ -96,42 +149,23 @@
        </item>
       </layout>
      </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_5">
+     <item row="8" column="0">
+      <widget class="QLabel" name="label_8">
        <property name="text">
-        <string>מ.א</string>
+        <string>מאפיינים</string>
        </property>
       </widget>
      </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="pnEdit"/>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_6">
-       <property name="text">
-        <string>מספר טלפון</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QLineEdit" name="telephoneEdit"/>
-     </item>
-     <item row="4" column="1">
-      <widget class="RolesWidget" name="rolesWidget" native="true">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0">
-      <widget class="QLabel" name="label_7">
-       <property name="text">
-        <string>הערות</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="1">
-      <widget class="QLineEdit" name="commentEdit"/>
+     <item row="8" column="1">
+      <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="manualAssignCheck">
+         <property name="text">
+          <string>שיבוץ ידני בלבד</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>
@@ -162,7 +196,6 @@
   <tabstop>telephoneEdit</tabstop>
   <tabstop>rolesWidget</tabstop>
   <tabstop>commentEdit</tabstop>
-  <tabstop>listWidget</tabstop>
   <tabstop>addAbsenceButton</tabstop>
   <tabstop>removeAbsenceButton</tabstop>
  </tabstops>
@@ -176,7 +209,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>257</x>
-     <y>355</y>
+     <y>388</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -192,7 +225,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>325</x>
-     <y>355</y>
+     <y>388</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
@@ -200,5 +233,41 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>addAbsenceButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SoldierDialog</receiver>
+   <slot>addAbsence()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>300</x>
+     <y>321</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>622</x>
+     <y>253</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>removeAbsenceButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SoldierDialog</receiver>
+   <slot>removeAbsence()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>553</x>
+     <y>323</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>622</x>
+     <y>295</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
+ <slots>
+  <slot>addAbsence()</slot>
+  <slot>removeAbsence()</slot>
+ </slots>
 </ui>

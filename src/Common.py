@@ -1,5 +1,6 @@
 from enum import Enum, IntFlag, auto
-from PyQt5.QtCore import QDateTime
+from datetime import datetime, date, time
+from PyQt5.QtCore import QDateTime, QTime
 class DialogReturnCode(Enum):
     
     CANCEL = 0
@@ -9,6 +10,7 @@ class Role(IntFlag):
     COMPANY_COMMANDER  = auto()
     PLATOON_COMMANDER  = auto()
     SQUAD_COMMANDER    = auto()
+    RIFLEMAN           = auto()
     SHARPSHOOTER       = auto()
     GRENADE_LAUNCHER   = auto()
     MEDIC              = auto()
@@ -23,6 +25,9 @@ class PositionProperty(IntFlag):
     NOT_PHYSICAL       = auto()
     NO_REST_NEEDED     = auto()
     NOT_COMMANDER      = auto()
+    
+class SoldierProperty(IntFlag):
+    MANUAL_ASSIGN      = auto()
 
 class Weekday(IntFlag):
     SUNDAY      = auto()
@@ -44,3 +49,19 @@ class DateTimeTools:
     @classmethod
     def getCurrentDateWithNextHour(cls):
         return cls.getCurrentDateWithHour().addSecs(60 * 60)
+    
+    @staticmethod
+    def qDateTimeToDateTimeNoSeconds(qDateTime : QDateTime) -> datetime:
+        return datetime(
+                *[getattr(qDateTime.date(), x)() for x in ("year", "month", "day")],
+                *[getattr(qDateTime.time(), x)() for x in ("hour", "minute")]
+        )
+    
+    def dateTimeToQDateTime(dateTime : datetime) -> QDateTime:
+        return QDateTime(*[getattr(dateTime, attr) for attr in ("year", "month", "day", "hour", "minute", "second")])
+    
+    def dateTimeToQTime(dateTime : datetime) -> QTime:
+        return QTime(*[getattr(dateTime, attr) for attr in ("hour", "minute")])
+    
+    def dateAndTimeToDateTime(date : date, time : time) -> datetime:
+        return datetime(date.year, date.month, date.day, time.hour, time.minute, time.second)

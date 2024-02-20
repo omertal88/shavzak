@@ -2,7 +2,7 @@ import os
 import sys
 
 from os.path import dirname, abspath
-from PyQt5.QtWidgets import QMainWindow, QDialog, QAction, QInputDialog
+from PyQt5.QtWidgets import QMainWindow, QDialog, QAction, QInputDialog, QMessageBox
 from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QModelIndex, QDateTime
 from Ui.ShavzakWindow import Ui_Shavzak
@@ -15,6 +15,7 @@ from src.PositionsModel import PositionsModel
 from src.ShiftsModel import ShiftsModel
 from src.Positions import PositionDialog, Position
 from src.Shifts import ShiftDialog, Shift
+from src.CalendarWindow import CalendarWindow
 from src.Serialization import SerializedData
 
 class ShavzakWindow(QMainWindow):
@@ -25,6 +26,9 @@ class ShavzakWindow(QMainWindow):
         
         self.ui = Ui_Shavzak()
         self.ui.setupUi(self)
+        
+        self.calendarWindow = CalendarWindow(self)
+        self.calendarWindow.hide()
         
         self.currentPositionUid = 1
         self.currentShiftUid = 1
@@ -61,7 +65,7 @@ class ShavzakWindow(QMainWindow):
         
         self.exitAction = QAction(self)
         self.exitAction.setShortcut("Esc")
-        self.exitAction.triggered.connect(self.close)
+        self.exitAction.triggered.connect(self.promptExit)
         self.addAction(self.exitAction)
     
     ##============================================================================##
@@ -145,12 +149,22 @@ class ShavzakWindow(QMainWindow):
     ##============================================================================##
     
     def removeShift(self):
-        pass
+        for shift in self.ui.shiftsView.selectionModel().selectedRows():
+            self.shiftsModel.remove(self.shiftsModel.shifts[shift.row()])
     
     ##============================================================================##
     
-    def editShift(self):
-        pass
+    def editShift(self, index : QModelIndex):
+        shift = self.shiftsModel.shifts[index.row()]
+        dialog = ShiftDialog(self, shift)
+        dialog.ui.positionCombo.addItems([x.name for x in self.positionsModel.positions])
+        dialog.ui.positionCombo.setCurrentText(next(x.name for x in self.positionsModel.positions if x.uid == shift.position_uid))
+        retval = self.openGenericDialog(dialog)
+        
+        if retval == DialogReturnCode.OK:
+            newshift = Shift.make(dialog.ui, [x.uid for x in self.positionsModel.positions])
+            self.shiftsModel.update(newshift)
+
     
     ##============================================================================##
     
@@ -167,6 +181,11 @@ class ShavzakWindow(QMainWindow):
     
     def shiftSelectionChanged(self, current : QModelIndex, previous : QModelIndex):
         self.ui.removeShiftButton.setEnabled(current.row() != -1)
+    
+    ##============================================================================##
+    
+    def openCalendar(self):
+        self.calendarWindow.show()
     
     ##============================================================================##
     
@@ -218,3 +237,10 @@ class ShavzakWindow(QMainWindow):
             soldiers = importFromCsv(path)
             for soldier in soldiers:
                 self.manpowerModel.add(soldier)
+    
+    ##============================================================================##
+    
+    def promptExit(self):
+        ret = QMessageBox.question(self, "יציאה", "האם אתה בטוח שברצונך לסגור את הכלי?\nשינויים שלא נשמרו ימחקו", QMessageBox.Yes | QMessageBox.No)
+        if ret == QMessageBox.Yes:
+            self.close()

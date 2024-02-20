@@ -13,7 +13,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_ShiftDialog(object):
     def setupUi(self, ShiftDialog):
         ShiftDialog.setObjectName("ShiftDialog")
-        ShiftDialog.resize(496, 359)
+        ShiftDialog.setWindowModality(QtCore.Qt.WindowModal)
+        ShiftDialog.resize(496, 390)
         self.verticalLayout = QtWidgets.QVBoxLayout(ShiftDialog)
         self.verticalLayout.setObjectName("verticalLayout")
         self.formLayout = QtWidgets.QFormLayout()
@@ -170,5 +171,7 @@ class Ui_ShiftDialog(object):
         self.stickToShiftCombo.setItemText(0, _translate("ShiftDialog", "ללא הצמדה"))
         self.label_8.setText(_translate("ShiftDialog", "החל מ-"))
         self.label_9.setText(_translate("ShiftDialog", "עד ל-"))
+        self.validFromDatetime.setDisplayFormat(_translate("ShiftDialog", "d/M/yy hh:mm"))
+        self.validUntilDatetime.setDisplayFormat(_translate("ShiftDialog", "d/M/yy hh:mm"))
         self.label_10.setText(_translate("ShiftDialog", "מזהה משמרת"))
         self.label_11.setText(_translate("ShiftDialog", "כינוי משמרת"))

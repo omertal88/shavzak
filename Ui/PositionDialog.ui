@@ -2,6 +2,9 @@
 <ui version="4.0">
  <class>NewPositionDialog</class>
  <widget class="QDialog" name="NewPositionDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>

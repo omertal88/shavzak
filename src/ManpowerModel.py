@@ -23,11 +23,21 @@ class ManpowerModel(QAbstractTableModel):
         self.sort(0, Qt.AscendingOrder)
     
     def remove(self, soldier : Soldier):
-        self.beginRemoveRows(QModelIndex(), 0, len(self.soldiers))
         result = next(i for i, val in enumerate(self.soldiers) if self.soldiers[i].pn == soldier.pn)
-        self.soldiers.pop(result)
-        self.endRemoveRows()
+        self.removeRows(QModelIndex(), result, result)
+    
+    ##============================================================================##
+    
+    def removeRows(self, parent : QModelIndex, first : int, last : int):
+        self.beginRemoveRows(QModelIndex(), first, last)
         
+        for i in range(first,last + 1):
+            self.soldiers.pop(i)
+            
+        self.endRemoveRows()
+    
+    ##============================================================================##
+    
     def update(self, soldier : Soldier):
         self.soldiers[next(i for i, sol in enumerate(self.soldiers) if sol.pn == soldier.pn)] = soldier
 

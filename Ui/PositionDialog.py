@@ -13,6 +13,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_NewPositionDialog(object):
     def setupUi(self, NewPositionDialog):
         NewPositionDialog.setObjectName("NewPositionDialog")
+        NewPositionDialog.setWindowModality(QtCore.Qt.WindowModal)
         NewPositionDialog.resize(587, 261)
         self.verticalLayout = QtWidgets.QVBoxLayout(NewPositionDialog)
         self.verticalLayout.setObjectName("verticalLayout")

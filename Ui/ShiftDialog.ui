@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>ShiftDialog</class>
  <widget class="QDialog" name="ShiftDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>496</width>
-    <height>359</height>
+    <height>390</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -203,10 +206,18 @@
       </widget>
      </item>
      <item row="7" column="1">
-      <widget class="QDateTimeEdit" name="validFromDatetime"/>
+      <widget class="QDateTimeEdit" name="validFromDatetime">
+       <property name="displayFormat">
+        <string>d/M/yy hh:mm</string>
+       </property>
+      </widget>
      </item>
      <item row="8" column="1">
-      <widget class="QDateTimeEdit" name="validUntilDatetime"/>
+      <widget class="QDateTimeEdit" name="validUntilDatetime">
+       <property name="displayFormat">
+        <string>d/M/yy hh:mm</string>
+       </property>
+      </widget>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_10">
@@ -273,8 +284,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>266</x>
-     <y>349</y>
+     <x>275</x>
+     <y>380</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -289,8 +300,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>334</x>
-     <y>349</y>
+     <x>343</x>
+     <y>380</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
