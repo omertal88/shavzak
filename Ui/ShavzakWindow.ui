@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>598</width>
+    <width>961</width>
     <height>534</height>
    </rect>
   </property>
@@ -261,16 +261,17 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>598</width>
-     <height>22</height>
+     <width>961</width>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>קובץ</string>
     </property>
     <addaction name="importAction"/>
     <addaction name="exportAction"/>
+    <addaction name="importFromCsvAction"/>
    </widget>
    <addaction name="menuFile"/>
   </widget>
@@ -283,6 +284,11 @@
   <action name="exportAction">
    <property name="text">
     <string>שמור נתונים לקובץ</string>
+   </property>
+  </action>
+  <action name="importFromCsvAction">
+   <property name="text">
+    <string>טען מקובץ CSV</string>
    </property>
   </action>
  </widget>
@@ -474,6 +480,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>importFromCsvAction</sender>
+   <signal>triggered()</signal>
+   <receiver>Shavzak</receiver>
+   <slot>importFromCsv()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>184</x>
+     <y>445</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>298</x>
+     <y>266</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addSoldier()</slot>
@@ -488,5 +510,6 @@
   <slot>selectionChanged(QModelIndex)</slot>
   <slot>importData()</slot>
   <slot>exportData()</slot>
+  <slot>importFromCsv()</slot>
  </slots>
 </ui>

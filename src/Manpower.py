@@ -12,14 +12,15 @@ class Absence:
     from_time  : datetime
     until_time : datetime
 
-@dataclass(init=True)
+@dataclass(init=True ,)
 class Soldier:
-    pn : int
+    pn : str
     name : str
     platoon : str
-    telephone : str
-    roles : int
-    absences : List[Absence]
+    telephone : str = ""
+    roles : int = 0
+    comment: str = ""
+    absences : List[Absence] = None
     
     @staticmethod
     def make(ui : Ui_SoldierDialog):
@@ -39,9 +40,23 @@ class Soldier:
                      Role.HALAMIST           * ui.rolesWidget.hamalistCheck.isChecked()        |
                      Role.HAMAL_RUNNER       * ui.rolesWidget.hamalRunnerCheck.isChecked()     |
                      Role.DRIVER             * ui.rolesWidget.driverCheck.isChecked()),
+            comment = ui.commentEdit.text(),
             absences = []  # Todo: Add absences
         ) # No need to avoid exceptions because we use validator
         
+        return soldier
+    
+    @staticmethod
+    def makeFromCsv(pn : int, name : str, platoon : str, telephone : str, comment : str):
+        
+        soldier = Soldier(
+            pn = pn,
+            name = name,
+            platoon = platoon,
+            telephone = telephone,
+            comment = comment,
+            absences=[]
+        )
         return soldier
     
 class SoldierDialog(QDialog):
@@ -63,7 +78,8 @@ class SoldierDialog(QDialog):
             self.ui.soldierNameEdit.setText(soldier.name)
             self.ui.platoonCombo.setCurrentText(soldier.platoon)
             self.ui.telephoneEdit.setText(soldier.telephone)
-            
+            self.ui.commentEdit.setText(soldier.comment)
+            # TODO: Handle absences
             self.ui.rolesWidget.companyCommanderCheck.setChecked(soldier.roles & Role.COMPANY_COMMANDER)
             self.ui.rolesWidget.platoonCommanderCheck.setChecked(soldier.roles & Role.PLATOON_COMMANDER)
             self.ui.rolesWidget.squadCommanderCheck.setChecked(soldier.roles & Role.SQUAD_COMMANDER)

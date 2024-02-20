@@ -7,7 +7,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtCore import QModelIndex, QDateTime
 from Ui.ShavzakWindow import Ui_Shavzak
 
-from src.Common import DialogReturnCode
+from src.Common import DialogReturnCode, DateTimeTools
+from src.CsvImporter import importFromCsv
 from src.Manpower import SoldierDialog, Soldier, Absence
 from src.ManpowerModel import ManpowerModel
 from src.PositionsModel import PositionsModel
@@ -28,10 +29,9 @@ class ShavzakWindow(QMainWindow):
         self.currentPositionUid = 1
         self.currentShiftUid = 1
         
-        self.ui.fromDateTime.setDateTime(QDateTime(
-            *[getattr(QDateTime.currentDateTime().date(), attr)() for attr in ("year", "month", "day")],
-            QDateTime.currentDateTime().time().hour(), 0, 0).addSecs(60 * 60))
-        self.ui.untilDateTime.setDateTime(self.ui.fromDateTime.dateTime().addDays(1))
+        nextHourDateTime = DateTimeTools.getCurrentDateWithNextHour()
+        self.ui.fromDateTime.setDateTime(nextHourDateTime)
+        self.ui.untilDateTime.setDateTime(nextHourDateTime.addDays(1))
         
         self.manpowerModel = ManpowerModel()
         self.positionsModel = PositionsModel()
@@ -46,7 +46,7 @@ class ShavzakWindow(QMainWindow):
         self.ui.shiftsView.selectionModel().currentRowChanged.connect(self.shiftSelectionChanged)
         
         self.ui.manpowerView.setColumnWidth(0, 130)
-        self.ui.manpowerView.setColumnWidth(1, 20)
+        self.ui.manpowerView.setColumnWidth(1, 60)
         self.ui.manpowerView.horizontalHeader().setStretchLastSection(True)
         
         self.ui.positionsView.setColumnWidth(0, 100)
@@ -63,10 +63,14 @@ class ShavzakWindow(QMainWindow):
         self.exitAction.setShortcut("Esc")
         self.exitAction.triggered.connect(self.close)
         self.addAction(self.exitAction)
-
+    
+    ##============================================================================##
+    
     def openGenericDialog(self, dialog : QDialog) -> DialogReturnCode:
         dialog.show()
         return DialogReturnCode(dialog.exec_())
+    
+    ##============================================================================##
         
     def addSoldier(self):
         dialog = SoldierDialog(self)
@@ -75,10 +79,14 @@ class ShavzakWindow(QMainWindow):
         if retval == DialogReturnCode.OK:
             soldier = Soldier.make(dialog.ui)
             self.manpowerModel.add(soldier)
-            
+    
+    ##============================================================================##
+    
     def removeSoldier(self):
         for soldier in self.ui.manpowerView.selectionModel().selectedRows():
             self.manpowerModel.remove(self.manpowerModel.soldiers[soldier.row()])
+    
+    ##============================================================================##
     
     def editSoldier(self, index : QModelIndex):
         soldier = self.manpowerModel.soldiers[index.row()]
@@ -89,6 +97,8 @@ class ShavzakWindow(QMainWindow):
             newSoldier = Soldier.make(dialog.ui)
             self.manpowerModel.update(newSoldier)
     
+    ##============================================================================##
+    
     def addPosition(self):
         dialog = PositionDialog(self)
         dialog.ui.uidEdit.setText(str(self.currentPositionUid))
@@ -98,11 +108,15 @@ class ShavzakWindow(QMainWindow):
             self.currentPositionUid += 1
             position = Position.make(dialog.ui)
             self.positionsModel.add(position)
-
+    
+    ##============================================================================##
+    
     def removePosition(self):
         for position in self.ui.positionsView.selectionModel().selectedRows():
             self.positionsModel.remove(self.positionsModel.positions[position.row()])
-
+    
+    ##============================================================================##
+    
     def editPosition(self, index : QModelIndex):
         position = self.positionsModel.positions[index.row()]
         dialog = PositionDialog(self, position)
@@ -111,34 +125,51 @@ class ShavzakWindow(QMainWindow):
         if retval == DialogReturnCode.OK:
             newPosition = Position.make(dialog.ui)
             self.positionsModel.update(newPosition)
-        
+    
+    ##============================================================================##
+    
     def addShift(self):
         dialog = ShiftDialog(self)
         dialog.ui.uidEdit.setText(str(self.currentShiftUid))
         dialog.ui.positionCombo.addItems([x.name for x in self.positionsModel.positions])
+        dialog.ui.positionCombo.setCurrentText(self.positionsModel.positions[self.ui.positionsView.selectedIndexes()[0].row()].name)
+        dialog.ui.validFromDatetime = DateTimeTools.getCurrentDateWithHour()
+        dialog.ui.validUntilDatetime = DateTimeTools.getCurrentDateWithHour().addDays(7)
         retval : DialogReturnCode = self.openGenericDialog(dialog)
         
         if retval == DialogReturnCode.OK:
             self.currentShiftUid += 1
             shift = Shift.make(dialog.ui, [x.uid for x in self.positionsModel.positions])
             self.shiftsModel.add(shift)
-
+    
+    ##============================================================================##
+    
     def removeShift(self):
         pass
+    
+    ##============================================================================##
     
     def editShift(self):
         pass
     
+    ##============================================================================##
+    
     def soldierSelectionChanged(self, current : QModelIndex, previous : QModelIndex):
         self.ui.removeSoldierButton.setEnabled(current.row() != -1)
-        
+    
+    ##============================================================================##
+    
     def positionSelectionChanged(self, current : QModelIndex, previous : QModelIndex):
         self.ui.removePositionButton.setEnabled(current.row() != -1)
         self.ui.addShiftButton.setEnabled(current.row() != -1)
     
+    ##============================================================================##
+    
     def shiftSelectionChanged(self, current : QModelIndex, previous : QModelIndex):
         self.ui.removeShiftButton.setEnabled(current.row() != -1)
-
+    
+    ##============================================================================##
+    
     def importData(self):
         path, accepted = QInputDialog.getText(self, "ייבא נתונים", "אנא הכנס נתיב לקובץ השמור", text = "%s" % os.path.join(dirname(abspath(sys.argv[0])), "shavzak.dat"))
         if not accepted:
@@ -150,12 +181,19 @@ class ShavzakWindow(QMainWindow):
             self.positionsModel.clear()
             self.shiftsModel.clear()
             
+            self.currentPositionUid = 1
+            self.currentShiftUid = 1
+            
             for soldier in data.soldiers:
                 self.manpowerModel.add(soldier)
             for position in data.positions:
                 self.positionsModel.add(position)
+                self.currentPositionUid += 1
             for shift in data.shifts:
                 self.shiftsModel.add(shift)
+                self.currentShiftUid += 1
+    
+    ##============================================================================##
     
     def exportData(self):
         path, accepted = QInputDialog.getText(self, "ייצא נתונים", "אנא הכנס נתיב לשמירת הקובץ", text = "%s" % os.path.join(dirname(abspath(sys.argv[0])), "shavzak.dat"))
@@ -168,3 +206,15 @@ class ShavzakWindow(QMainWindow):
             shifts = self.shiftsModel.shifts
         )
         data.dump(path)
+    
+    ##============================================================================##
+    
+    def importFromCsv(self):
+        path, accepted = QInputDialog.getText(self, "ייבא נתונים", "אנא הכנס נתיב לקובץ הידני", text = "%s" % os.path.join(dirname(abspath(sys.argv[0])), "soldiers.csv"))
+        if not accepted:
+            return
+        
+        if os.path.exists(path):
+            soldiers = importFromCsv(path)
+            for soldier in soldiers:
+                self.manpowerModel.add(soldier)

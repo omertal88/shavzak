@@ -5,9 +5,10 @@ from PyQt5.QtCore import Qt
 from src.Manpower import Soldier
 
 class Column:
-    NAME     = 0
-    PLATOON  = 1
-    COUNT    = 2
+    NAME       = 0
+    PLATOON    = 1
+    TELEPHONE  = 2
+    COUNT      = 3
 
 class ManpowerModel(QAbstractTableModel):
     
@@ -43,12 +44,14 @@ class ManpowerModel(QAbstractTableModel):
                 return QVariant(soldier.name)
             elif index.column() == Column.PLATOON:
                 return QVariant(soldier.platoon)
+            elif index.column() == Column.TELEPHONE:
+                return QVariant(soldier.telephone)
         
     def sort(self, column : int, order : Qt.SortOrder):
-        if column == Column.PLATOON:
-            sorter = lambda x: "%s%s" % (x.platoon, x.name)
-        else:
-            sorter = lambda x: x.name
+        # if column == Column.PLATOON:
+        sorter = lambda x: "%s%s" % (x.platoon, x.name)
+        # else:
+            # sorter = lambda x: x.name
             
         self.soldiers.sort(key = sorter, reverse = order == Qt.DescendingOrder)
 
@@ -59,6 +62,8 @@ class ManpowerModel(QAbstractTableModel):
                     return QVariant("שם")
                 elif column == Column.PLATOON:
                     return QVariant("מחלקה")
+                elif column == Column.TELEPHONE:
+                    return QVariant("טלפון")
 
     def clear(self):
         self.beginRemoveRows(QModelIndex(), 0, len(self.soldiers) - 1)

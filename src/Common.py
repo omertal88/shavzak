@@ -1,5 +1,5 @@
 from enum import Enum, IntFlag, auto
-
+from PyQt5.QtCore import QDateTime
 class DialogReturnCode(Enum):
     
     CANCEL = 0
@@ -32,3 +32,15 @@ class Weekday(IntFlag):
     THURSDAY    = auto()
     FRIDAY      = auto()
     SATURDAY    = auto()
+
+class DateTimeTools:
+    
+    @staticmethod
+    def getCurrentDateWithHour():
+        return QDateTime(
+            *[getattr(QDateTime.currentDateTime().date(), attr)() for attr in ("year", "month", "day")],
+            QDateTime.currentDateTime().time().hour(), 0, 0)
+    
+    @classmethod
+    def getCurrentDateWithNextHour(cls):
+        return cls.getCurrentDateWithHour().addSecs(60 * 60)

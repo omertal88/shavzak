@@ -64,14 +64,14 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>היעדרויות</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item row="6" column="1">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QListWidget" name="listWidget"/>
@@ -123,6 +123,16 @@
        </property>
       </widget>
      </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="label_7">
+       <property name="text">
+        <string>הערות</string>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="1">
+      <widget class="QLineEdit" name="commentEdit"/>
+     </item>
     </layout>
    </item>
    <item>
@@ -151,6 +161,7 @@
   <tabstop>platoonCombo</tabstop>
   <tabstop>telephoneEdit</tabstop>
   <tabstop>rolesWidget</tabstop>
+  <tabstop>commentEdit</tabstop>
   <tabstop>listWidget</tabstop>
   <tabstop>addAbsenceButton</tabstop>
   <tabstop>removeAbsenceButton</tabstop>
