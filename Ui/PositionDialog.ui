@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>587</width>
-    <height>261</height>
+    <height>281</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -53,28 +53,28 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0">
+     <item row="4" column="0">
       <widget class="QLabel" name="label_2">
        <property name="text">
         <string>בעלי תפקידים</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
+     <item row="4" column="1">
       <widget class="RolesWidget" name="rolesWidget" native="true">
        <property name="focusPolicy">
         <enum>Qt::TabFocus</enum>
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QLabel" name="label_4">
        <property name="text">
         <string>מאפיינים</string>
        </property>
       </widget>
      </item>
-     <item row="5" column="1">
+     <item row="6" column="1">
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="1" column="1">
         <widget class="QCheckBox" name="notPhysicalCheck">
@@ -97,16 +97,23 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="1">
+        <widget class="QCheckBox" name="restingPositionCheck">
+         <property name="text">
+          <string>עמדת מנוחה</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
-     <item row="4" column="0">
+     <item row="5" column="0">
       <widget class="QCheckBox" name="spacingNeededCheck">
        <property name="text">
         <string>הפסקה דרושה</string>
        </property>
       </widget>
      </item>
-     <item row="4" column="1">
+     <item row="5" column="1">
       <widget class="QWidget" name="widget" native="true">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <property name="leftMargin">
@@ -164,6 +171,16 @@
        </property>
       </widget>
      </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_8">
+       <property name="text">
+        <string>קדימות בשיבוץ</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QSpinBox" name="prioritySpin"/>
+     </item>
     </layout>
    </item>
    <item>
@@ -189,14 +206,16 @@
  <tabstops>
   <tabstop>positionNameEdit</tabstop>
   <tabstop>manpowerSpin</tabstop>
+  <tabstop>prioritySpin</tabstop>
   <tabstop>rolesWidget</tabstop>
-  <tabstop>organicPlatoonsCheck</tabstop>
-  <tabstop>notPhysicalCheck</tabstop>
-  <tabstop>uidEdit</tabstop>
-  <tabstop>notCommanderCheck</tabstop>
   <tabstop>spacingNeededCheck</tabstop>
   <tabstop>spacingHourSpin</tabstop>
   <tabstop>spacingMinuteSpin</tabstop>
+  <tabstop>organicPlatoonsCheck</tabstop>
+  <tabstop>notPhysicalCheck</tabstop>
+  <tabstop>notCommanderCheck</tabstop>
+  <tabstop>restingPositionCheck</tabstop>
+  <tabstop>uidEdit</tabstop>
  </tabstops>
  <resources/>
  <connections>

@@ -22,9 +22,11 @@ class PositionProperty(IntFlag):
     NOT_PHYSICAL       = auto()
     SPACING_NEEDED     = auto()
     NOT_COMMANDER      = auto()
+    RESTING_POSITION   = auto()
     
 class SoldierProperty(IntFlag):
     MANUAL_ASSIGN      = auto()
+    NO_PHYSICAL        = auto()
 
 class Weekday(IntFlag):
     SUNDAY      = auto()

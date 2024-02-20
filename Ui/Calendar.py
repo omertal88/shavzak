@@ -22,6 +22,8 @@ class Ui_Calendar(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.calendarWidget = QtWidgets.QCalendarWidget(self.centralwidget)
+        self.calendarWidget.setLayoutDirection(QtCore.Qt.RightToLeft)
+        self.calendarWidget.setLocale(QtCore.QLocale(QtCore.QLocale.Hebrew, QtCore.QLocale.Israel))
         self.calendarWidget.setMinimumDate(QtCore.QDate(2023, 9, 14))
         self.calendarWidget.setFirstDayOfWeek(QtCore.Qt.Sunday)
         self.calendarWidget.setGridVisible(True)

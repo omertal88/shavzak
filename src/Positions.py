@@ -18,6 +18,7 @@ class Position:
     needed_roles : int # bit field (Role)
     properties : int # bit field (PositionProperty)
     required_spacing : timedelta = timedelta()
+    priority : int = 0
 
     @staticmethod
     def make(ui : Ui_NewPositionDialog):
@@ -25,6 +26,7 @@ class Position:
             uid = int(ui.uidEdit.text()),
             name = ui.positionNameEdit.text(),
             needed_manpower = ui.manpowerSpin.value(),
+            priority = ui.prioritySpin.value(),
             needed_roles = (
                 Role.COMPANY_COMMANDER  * ui.rolesWidget.companyCommanderCheck.isChecked()     |
                 Role.PLATOON_COMMANDER  * ui.rolesWidget.platoonCommanderCheck.isChecked()     |
@@ -85,6 +87,7 @@ class PositionDialog(QDialog):
             self.ui.uidEdit.setText(str(position.uid))
             self.ui.positionNameEdit.setText(position.name)
             self.ui.manpowerSpin.setValue(position.needed_manpower)
+            self.ui.prioritySpin.setValue(position.priority)
             
             # Roles
             self.ui.rolesWidget.companyCommanderCheck.setChecked(position.needed_roles & Role.COMPANY_COMMANDER)
@@ -106,3 +109,4 @@ class PositionDialog(QDialog):
             self.ui.spacingHourSpin.setValue(position.required_spacing.total_seconds() / 60 / 60)
             self.ui.spacingMinuteSpin.setValue(position.required_spacing.total_seconds() / 60 % 60)
             self.ui.notCommanderCheck.setChecked(position.properties & PositionProperty.NOT_COMMANDER)
+            self.ui.restingPositionCheck.setChecked(position.properties & PositionProperty.RESTING_POSITION)

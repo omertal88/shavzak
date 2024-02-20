@@ -180,6 +180,13 @@
          </property>
         </widget>
        </item>
+       <item row="0" column="1">
+        <widget class="QCheckBox" name="noPhysicalCheck">
+         <property name="text">
+          <string>לא משימות פיזיות</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
     </layout>

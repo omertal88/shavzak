@@ -262,7 +262,12 @@ def findAllDesiredAssignmentsWithinInterval(schedule : Schedule, interval : Time
         assignments.append(assignment)
         
         iterTime = nextShiftTime
-        
+    
+    # Nowe we sort the assignments based on their priorities and their start times
+    # The order of the list will force the order of assignments.
+    # Notice that the priority key is negative (because higher priority means assigning first)
+    sortFunction : Callable[[Assignment], Tuple[int, datetime]] = lambda x: (-x.position.priority, x.interval.start_time)
+    assignments.sort(key = sortFunction)
     return assignments
 
 ##============================================================================##
@@ -277,7 +282,11 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
 
     # Start permutations...
     for assignment in assignments:
-        availableSoldiers = [permutationSoldier for permutationSoldier in permutationSoldiers if permutationSoldier.soldier.isAvailable(assignment.interval, schedule)]
+        assigneeFilterFunction : Callable[[PermutationSoldier, Assignment], List[PermutationSoldier]] = \
+            lambda soldier, assignment: soldier.soldier.isAvailable(assignment.interval, schedule) and \
+                hasProperty(soldier.soldier.properties, SoldierProperty.NO_PHYSICAL) <= hasProperty(assignment.position.properties, PositionProperty.NOT_PHYSICAL)
+            
+        availableSoldiers = [permutationSoldier for permutationSoldier in permutationSoldiers if assigneeFilterFunction]
         
         mannedSoldiers = manAssignment(assignment, availableSoldiers, schedule)
         if mannedSoldiers is None:
@@ -308,28 +317,7 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
 def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier], schedule : Schedule) -> Union[List[Soldier],None]:
     
     mannedSoldiers : List[Soldier] = []
-    platoonBound = False
     position = assignment.position
-    
-    # if position.needed_roles:
-    #     for role in Role:
-    #         if not role & position.needed_roles:
-    #             continue
-            
-    #         # This role is needed
-    #         relevantSoldiers = [soldier for soldier in soldiers if soldier.roles & role]
-            
-    #         if not relevantSoldiers:
-    #             return None
-            
-    #         # Randomly pick a soldier
-    #         randomSoldier = choice(relevantSoldiers)
-    #         mannedSoldiers.append(randomSoldier)
-            
-    #         if not position.properties & PositionProperty.MIX_PLATOONS and not platoonBound:
-    #             platoonBound = True
-    #             soldiers = [soldier for soldier in soldiers if soldier.platoon == randomSoldier.platoon]
-    #             soldiers.remove(randomSoldier)
     
     soldiersGroup = []
     candidates = []
@@ -358,13 +346,6 @@ def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier], 
             soldier.addAssignment(assignment)
             
         mannedSoldiers.extend(manpower)
-        
-        # randomSoldier.addAssignment(assignment)
-        
-        # if not position.properties & PositionProperty.ORGANIC_PLATOONS and not platoonBound:
-        #     platoonBound = True
-        #     soldiers = [soldier for soldier in soldiers if soldier.soldier.platoon == randomSoldier.soldier.platoon]
-
         
     return [permutationSoldier.soldier for permutationSoldier in mannedSoldiers]
     
@@ -424,10 +405,6 @@ def canCandidatesManPosition(position : Position, candidates : List[PermutationS
     
     # TODO: Currently hard coded commanders.
     
-    
-    # mannableCandidates : List[PermutationSoldier] = filteredSoldiers
-    
-    
 ##============================================================================##
 
 def getNextGroupOfSoldiersByRatio(soldiers : List[PermutationSoldier], currentTime : datetime, schedule : Schedule):
@@ -435,17 +412,11 @@ def getNextGroupOfSoldiersByRatio(soldiers : List[PermutationSoldier], currentTi
     # TODO: Improve code readability!!!! This function is written terribly.
     assert len(soldiers)
     
-    # The measuring time is either last 48 hours, or the point where assignments started (like when arriving to a new post)
-    # if schedule.assignments:
-        # startMeasureTime = max(currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS), schedule.assignments[0].interval.start_time)
-    # else:
     startMeasureTime = currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS)
         
     soldiersAndRatios = [(soldier, soldier.calculateRatioWithinIntervalWithRespectToFutureAssignments(TimeInterval(startMeasureTime, currentTime), schedule)) for soldier in soldiers]
     
     sortedSoldiersAndRatios = sorted(soldiersAndRatios, key = lambda item: item[1], reverse=True)
-    # print("Interval: %s -> %s" % (currentTime - timedelta(hours=LAST_ASSIGNMENTS_HISTORY_HOURS), currentTime))
-    # print(sortedSoldiersAndRatios)
     
     lastSoldierAndRatioIdx = 0
     for soldierAndRatioIdx in range(1, len(sortedSoldiersAndRatios)):

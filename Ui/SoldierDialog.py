@@ -91,6 +91,9 @@ class Ui_SoldierDialog(object):
         self.manualAssignCheck = QtWidgets.QCheckBox(SoldierDialog)
         self.manualAssignCheck.setObjectName("manualAssignCheck")
         self.gridLayout.addWidget(self.manualAssignCheck, 0, 0, 1, 1)
+        self.noPhysicalCheck = QtWidgets.QCheckBox(SoldierDialog)
+        self.noPhysicalCheck.setObjectName("noPhysicalCheck")
+        self.gridLayout.addWidget(self.noPhysicalCheck, 0, 1, 1, 1)
         self.formLayout.setLayout(8, QtWidgets.QFormLayout.FieldRole, self.gridLayout)
         self.verticalLayout_2.addLayout(self.formLayout)
         self.buttonBox = QtWidgets.QDialogButtonBox(SoldierDialog)
@@ -131,4 +134,5 @@ class Ui_SoldierDialog(object):
         self.removeAbsenceButton.setText(_translate("SoldierDialog", "הסר היעדרות"))
         self.label_8.setText(_translate("SoldierDialog", "מאפיינים"))
         self.manualAssignCheck.setText(_translate("SoldierDialog", "שיבוץ ידני בלבד"))
+        self.noPhysicalCheck.setText(_translate("SoldierDialog", "לא משימות פיזיות"))
 from Ui.Promoted.RolesWidget import RolesWidget

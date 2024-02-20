@@ -47,7 +47,8 @@ class Soldier:
                      Role.DRIVER.value             * ui.rolesWidget.driverCheck.isChecked()),
             comment = ui.commentEdit.text(),
             absences = ui.absencesView.model().absences,
-            properties = (SoldierProperty.MANUAL_ASSIGN.value    * ui.manualAssignCheck.isChecked())
+            properties = (SoldierProperty.MANUAL_ASSIGN.value    * ui.manualAssignCheck.isChecked()       |
+                          SoldierProperty.NO_PHYSICAL.value      * ui.noPhysicalCheck.isChecked())
         ) # No need to avoid exceptions because we use validator
         
         return soldier
@@ -189,19 +190,20 @@ class SoldierDialog(QDialog):
             self.ui.telephoneEdit.setText(soldier.telephone)
             self.ui.commentEdit.setText(soldier.comment)
 
-            self.ui.rolesWidget.companyCommanderCheck.setChecked(soldier.roles & Role.COMPANY_COMMANDER)
-            self.ui.rolesWidget.platoonCommanderCheck.setChecked(soldier.roles & Role.PLATOON_COMMANDER)
-            self.ui.rolesWidget.squadCommanderCheck.setChecked(soldier.roles & Role.SQUAD_COMMANDER)
-            self.ui.rolesWidget.sharpshooterCheck.setChecked(soldier.roles & Role.SHARPSHOOTER)
-            self.ui.rolesWidget.grenadeLauncherCheck.setChecked(soldier.roles & Role.GRENADE_LAUNCHER)
-            self.ui.rolesWidget.medicCheck.setChecked(soldier.roles & Role.MEDIC)
-            self.ui.rolesWidget.sniperCheck.setChecked(soldier.roles & Role.SNIPER)
-            self.ui.rolesWidget.signallerCheck.setChecked(soldier.roles & Role.SIGNALLER)
-            self.ui.rolesWidget.hamalistCheck.setChecked(soldier.roles & Role.HALAMIST)
-            self.ui.rolesWidget.hamalRunnerCheck.setChecked(soldier.roles & Role.HAMAL_RUNNER)
-            self.ui.rolesWidget.driverCheck.setChecked(soldier.roles & Role.DRIVER)
+            self.ui.rolesWidget.companyCommanderCheck.setChecked(hasProperty(soldier.roles, Role.COMPANY_COMMANDER))
+            self.ui.rolesWidget.platoonCommanderCheck.setChecked(hasProperty(soldier.roles, Role.PLATOON_COMMANDER))
+            self.ui.rolesWidget.squadCommanderCheck.setChecked(hasProperty(soldier.roles, Role.SQUAD_COMMANDER))
+            self.ui.rolesWidget.sharpshooterCheck.setChecked(hasProperty(soldier.roles, Role.SHARPSHOOTER))
+            self.ui.rolesWidget.grenadeLauncherCheck.setChecked(hasProperty(soldier.roles, Role.GRENADE_LAUNCHER))
+            self.ui.rolesWidget.medicCheck.setChecked(hasProperty(soldier.roles, Role.MEDIC))
+            self.ui.rolesWidget.sniperCheck.setChecked(hasProperty(soldier.roles, Role.SNIPER))
+            self.ui.rolesWidget.signallerCheck.setChecked(hasProperty(soldier.roles, Role.SIGNALLER))
+            self.ui.rolesWidget.hamalistCheck.setChecked(hasProperty(soldier.roles, Role.HALAMIST))
+            self.ui.rolesWidget.hamalRunnerCheck.setChecked(hasProperty(soldier.roles, Role.HAMAL_RUNNER))
+            self.ui.rolesWidget.driverCheck.setChecked(hasProperty(soldier.roles, Role.DRIVER))
             
-            self.ui.manualAssignCheck.setChecked(soldier.properties & SoldierProperty.MANUAL_ASSIGN)
+            self.ui.manualAssignCheck.setChecked(hasProperty(soldier.properties, SoldierProperty.MANUAL_ASSIGN))
+            self.ui.noPhysicalCheck.setChecked(hasProperty(soldier.properties, SoldierProperty.NO_PHYSICAL))
             
             for absence in soldier.absences:
                 self.absencesModel.add(absence)

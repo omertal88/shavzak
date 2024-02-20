@@ -21,6 +21,12 @@
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <item>
      <widget class="QCalendarWidget" name="calendarWidget">
+      <property name="layoutDirection">
+       <enum>Qt::RightToLeft</enum>
+      </property>
+      <property name="locale">
+       <locale language="Hebrew" country="Israel"/>
+      </property>
       <property name="minimumDate">
        <date>
         <year>2023</year>
