@@ -334,7 +334,7 @@
   </action>
   <action name="exportToCsvAction">
    <property name="text">
-    <string>יצא כ&quot;אלקובץ CSV</string>
+    <string>יצא כ&quot;א לקובץ CSV</string>
    </property>
   </action>
  </widget>

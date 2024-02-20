@@ -116,7 +116,7 @@ class Soldier:
     ##============================================================================##
     
     def getRestTimestForInterval(self, interval : TimeInterval, schedule : "Schedule") -> Tuple[Union[timedelta, None],Union[timedelta, None]]:
-        
+        # TODO: Remove this function? (Unused...)
         restBeforeInterval = restAfterInterval = None
         soldierAssignments = [assignment for assignment in schedule.assignments if self in assignment.manpower]
         

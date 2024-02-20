@@ -272,6 +272,9 @@
    </item>
    <item row="9" column="1">
     <widget class="QSpinBox" name="splitShiftSpin">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="maximum">
       <number>1000</number>
      </property>
@@ -355,16 +358,32 @@
   <connection>
    <sender>splitShiftCheck</sender>
    <signal>toggled(bool)</signal>
-   <receiver>widget</receiver>
-   <slot>setDisabled(bool)</slot>
+   <receiver>splitShiftSpin</receiver>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>112</x>
-     <y>326</y>
+     <y>330</y>
     </hint>
     <hint type="destinationlabel">
-     <x>259</x>
-     <y>142</y>
+     <x>151</x>
+     <y>329</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>splitShiftCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>nicknameEdit</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>95</x>
+     <y>329</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>186</x>
+     <y>51</y>
     </hint>
    </hints>
   </connection>

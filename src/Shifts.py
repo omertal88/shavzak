@@ -1,7 +1,7 @@
 from typing import List, Union
 import datetime
 from dataclasses import dataclass
-from PyQt5.QtWidgets import QDialog, QWidget
+from PyQt5.QtWidgets import QDialog, QWidget, QMessageBox
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QIntValidator
 
@@ -86,3 +86,25 @@ class ShiftDialog(QDialog):
             self.ui.splitShiftSpin.setDisabled(True)
             
             # self.ui.check
+    
+    ##============================================================================##
+    
+    def done(self, ret : QDialog.DialogCode):
+        
+        if (ret == QDialog.Accepted):
+            
+            if self.ui.splitShiftCheck.isChecked():
+                
+                if (self.ui.durationHourSpin.value() > 24) or (self.ui.durationHourSpin.value() == 24 and self.ui.durationMinuteSpin.value() > 0):
+                    
+                    QMessageBox.critical(self, "הוספת משמרת", "לא ניתן לפצל משמרת אשר ארוכה יותר מיממה", QMessageBox.Ok)
+                    return
+
+                splittedShiftDuration = datetime.timedelta(hours = self.ui.durationHourSpin.value(), minutes = self.ui.durationMinuteSpin.value()) / self.ui.splitShiftSpin.value()
+                lastShiftStartHour = (self.ui.fromTime.time().minute() + (splittedShiftDuration * (self.ui.splitShiftSpin.value() - 1)).total_seconds() / 60) / 60 + self.ui.fromTime.time().hour()
+                if lastShiftStartHour >= 24: # Exceeds to next day
+                    QMessageBox.critical(self, "הוספת משמרת", "לא ניתן לפצל משמרת כאשר אחד המופעים מתחיל ביום הבא", QMessageBox.Ok)
+                    return
+                
+                
+        return super().done(ret)

@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>587</width>
-    <height>281</height>
+    <height>289</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -136,7 +136,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spacingHourSpin"/>
+         <widget class="QSpinBox" name="spacingHourSpin">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QLabel" name="label_7">
@@ -146,7 +150,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spacingMinuteSpin"/>
+         <widget class="QSpinBox" name="spacingMinuteSpin">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <spacer name="horizontalSpacer">
@@ -226,8 +234,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>266</x>
-     <y>251</y>
+     <x>275</x>
+     <y>279</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -242,12 +250,44 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>334</x>
-     <y>251</y>
+     <x>343</x>
+     <y>279</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
      <y>230</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spacingNeededCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spacingHourSpin</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>80</x>
+     <y>165</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>193</x>
+     <y>171</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>spacingNeededCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>spacingMinuteSpin</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>38</x>
+     <y>171</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>290</x>
+     <y>171</y>
     </hint>
    </hints>
   </connection>

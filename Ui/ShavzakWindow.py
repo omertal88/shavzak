@@ -230,5 +230,5 @@ class Ui_Shavzak(object):
         self.importAction.setText(_translate("Shavzak", "טען נתונים מקובץ"))
         self.exportAction.setText(_translate("Shavzak", "שמור נתונים לקובץ"))
         self.importFromCsvAction.setText(_translate("Shavzak", "ייבא כ\"א מקובץ CSV"))
-        self.exportToCsvAction.setText(_translate("Shavzak", "יצא כ\"אלקובץ CSV"))
+        self.exportToCsvAction.setText(_translate("Shavzak", "יצא כ\"א לקובץ CSV"))
 from Ui import resources_rc
