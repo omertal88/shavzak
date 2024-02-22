@@ -37,12 +37,12 @@ shift2 = shift2 = Shift("Test Shift2", position1,
                Weekday.SUNDAY | Weekday.MONDAY | Weekday.TUESDAY |
                Weekday.WEDNESDAY | Weekday.THURSDAY |
                Weekday.FRIDAY | Weekday.SATURDAY, start_time = time(16, 0), duration = timedelta(hours=2), valid_from = datetime(2024, 2, 1), valid_until = None)
-assignment1 = Assignment(TimeInterval(datetime(2024, 2, 1, 12, 0, 0), datetime(2024, 2, 1, 14, 0, 0)), position1, manpower = [soldier2])
-assignment2 = Assignment(TimeInterval(datetime(2024,2,25, 8, 0, 0), datetime(2024,2,25, 12, 0, 0)), position1, manpower = [soldier2])
-assignment3 = Assignment(TimeInterval(datetime(2024,2,26, 12, 0, 0), datetime(2024,2,26, 16, 0, 0)), position1, manpower = [soldier2])
-assignment4 = Assignment(TimeInterval(datetime(2024,2,28, 12, 0, 0), datetime(2024,2,28, 16, 0, 0)), position1, manpower = [soldier2])  # Testing soldier rest-assignment ratio
-assignment5 = Assignment(TimeInterval(datetime(2024,2,29, 8, 0, 0), datetime(2024,2,29, 12, 0, 0)), position1, manpower = [soldier2])  # Testing soldier rest-assignment ratio
-assignment6 = Assignment(TimeInterval(datetime(2024,2,29, 20, 0, 0), datetime(2024,3,1, 0, 0, 0)), position1, manpower = [soldier2])  # Testing soldier rest-assignment ratio
+assignment1 = Assignment(TimeInterval(datetime(2024, 2, 1, 12, 0, 0), datetime(2024, 2, 1, 14, 0, 0)), position1, None, manpower = [soldier2])
+assignment2 = Assignment(TimeInterval(datetime(2024,2,25, 8, 0, 0), datetime(2024,2,25, 12, 0, 0)), position1, None, manpower = [soldier2])
+assignment3 = Assignment(TimeInterval(datetime(2024,2,26, 12, 0, 0), datetime(2024,2,26, 16, 0, 0)), position1, None, manpower = [soldier2])
+assignment4 = Assignment(TimeInterval(datetime(2024,2,28, 12, 0, 0), datetime(2024,2,28, 16, 0, 0)), position1, None, manpower = [soldier2])  # Testing soldier rest-assignment ratio
+assignment5 = Assignment(TimeInterval(datetime(2024,2,29, 8, 0, 0), datetime(2024,2,29, 12, 0, 0)), position1, None, manpower = [soldier2])  # Testing soldier rest-assignment ratio
+assignment6 = Assignment(TimeInterval(datetime(2024,2,29, 20, 0, 0), datetime(2024,3,1, 0, 0, 0)), position1, None, manpower = [soldier2])  # Testing soldier rest-assignment ratio
 
 schedule = Schedule()
 schedule.add(assignment1)

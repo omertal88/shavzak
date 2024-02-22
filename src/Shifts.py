@@ -18,6 +18,7 @@ class Shift:
     duration : datetime.timedelta
     valid_from : datetime.datetime
     valid_until : Union[datetime.datetime,None]
+    stick_to_position : Union[Position, None] = None
 
     def make(ui : Ui_ShiftDialog, positions : List[Position]):
         shift = Shift(
@@ -35,7 +36,8 @@ class Shift:
             start_time = datetime.time(ui.fromTime.time().hour(), ui.fromTime.time().minute()),
             duration = datetime.timedelta(hours = ui.durationHourSpin.value(), minutes = ui.durationMinuteSpin.value()),
             valid_from = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.validFromDatetime),
-            valid_until = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.validUntilDatetime) if ui.validUntilCheck.isChecked() else None
+            valid_until = DateTimeTools.qDateTimeToDateTimeNoSeconds(ui.validUntilDatetime) if ui.validUntilCheck.isChecked() else None,
+            stick_to_position = ui.stickToShiftCombo.currentData(Qt.UserRole)
         )
         
         return shift

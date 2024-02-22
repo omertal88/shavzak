@@ -139,6 +139,12 @@ class ShavzakWindow(QMainWindow):
         dialog.ui.positionCombo.setCurrentText(self.positionsModel.positions[self.ui.positionsView.selectedIndexes()[0].row()].name)
         dialog.ui.validFromDatetime = DateTimeTools.getCurrentDateWithHour()
         dialog.ui.validUntilDatetime = DateTimeTools.getCurrentDateWithHour().addDays(7)
+
+        for position in self.positionsModel.positions:
+            # TODO: The combobox is not updated if the position is changed in the dialog.
+            if position != self.positionsModel.positions[self.ui.positionsView.selectedIndexes()[0].row()]:
+                dialog.ui.stickToShiftCombo.addItem(position.name, position)
+            
         retval : QDialog.DialogCode = self.openGenericDialog(dialog)
         
         if retval == QDialog.Accepted:

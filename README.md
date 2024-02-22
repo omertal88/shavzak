@@ -10,7 +10,6 @@ Exported Xlsx sheets don't contain the assignments that started at some previous
 
 ## To-Do
 4. Handle special roles.
-5. Binding shifts to one-another (Maybe it needs to be binding positions instead of shifts)
 8. Allows user to accept / dismiss a permutation.
 9. Allows user to auto assign soldiers to a manual assignment.
 10. Manual assignments - add ability to split assignment (like with shifts).
@@ -18,11 +17,14 @@ Exported Xlsx sheets don't contain the assignments that started at some previous
 12. Split shifts - spinbox should be limitted to 24 hours.
 14. Don't allow soldiers to begin a new assignment if they just finished one (unless it's a `no rest needed` one) (Not sure about that one)
 15. Some UI validations. For example: Gray-out the `run` button if no Soldiers, positions or shifts are present.
+16. Easy removal of assignments in calendar.
+17. Adding auto assignment to resting position based on different logic (hardest worker gets that assignment? or maybe random?)
 
 ## Done
 1. Handle absences when calculating ratios (absence should reset ratio to 1.0). 
 2. Fix UI bug where an assignment appears twice in the calendar - FIXED
 3. Export assignments to Excel Sheet (within some time interval) - DONE
+5. Binding positions to one-another. Shifts are still needed to be defined in order for the binding to occur.
 6. Fix bug where updating positions doesn't also update the corresponding shifts  - FIXED
 7. Export soldiers to CSV (For easily updating roles and stuff) - DONE
 13. Implement `Required spacing` for specific positions to ensure some positions get a minimal break regardless of ratios (those positions will have the calculateRatio functions only look back until returning from those positions) - same as with absence. - DONE

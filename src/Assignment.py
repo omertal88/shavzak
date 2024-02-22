@@ -10,6 +10,7 @@ from Ui.AssignmentDialog import Ui_AssignmentDialog
 from src.Common import SoldierProperty, TimeInterval, hasProperty
 from src.Manpower import Soldier
 from src.Positions import Position
+from src.Shifts import Shift
 from src.Assignee import AssigneeDialog
 
 ValidationResult = Union[str, None]
@@ -43,12 +44,14 @@ class AssignmentIntervalTest(AssignmentValidationTest):
 class Assignment:
     interval   : TimeInterval
     position   : Position
+    shift      : Union[Shift, None]
     manpower   : List[Soldier]
 
     @staticmethod
     def make(ui : Ui_AssignmentDialog):
         assignment = Assignment(interval   = TimeInterval(ui.startDatetime.dateTime().toPyDateTime(), ui.endDatetime.dateTime().toPyDateTime()),
                                 position   = ui.positionCombo.currentData(Qt.UserRole),
+                                shift      = None,
                                 manpower   = [ui.soldiersListWidget.item(idx).data(Qt.UserRole) for idx in range(ui.soldiersListWidget.count())]
         )
         return assignment
@@ -58,6 +61,7 @@ class Assignment:
     def update(self, newAssignment : "Assignment"):
         self.interval = newAssignment.interval
         self.position = newAssignment.position
+        self.shift    = newAssignment.shift
         self.manpower = newAssignment.manpower
     
     ##============================================================================##

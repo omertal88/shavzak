@@ -24,7 +24,6 @@ class PermutationSoldier(object):
         
         self.soldier = soldier
         self.assignments : Dict[date, List[Assignment]] = {}
-        self.accumalutingAssignmentDuration = timedelta()
 
         self.lastAssignment : Union[Assignment, None] = None
         self.schedule = schedule
@@ -45,9 +44,11 @@ class PermutationSoldier(object):
             self.assignments[assignment.interval.start_time.date()] = []
 
         self.assignments[assignment.interval.start_time.date()].append(assignment)
-        self.accumalutingAssignmentDuration += assignment.interval.duration()
         
-        self.lastAssignment = assignment
+        if not hasProperty(assignment.position.properties, PositionProperty.RESTING_POSITION):
+            # We don't treat resting positions as real assignments.
+            self.lastAssignment = assignment
+            
         assignment.manpower.append(self.soldier)
     
     def __repr__(self):
@@ -114,7 +115,7 @@ class PermutationSoldier(object):
                         totalWorkTime = timedelta()
                         interval.start_time = nextAssignment.interval.start_time
                             
-                if assignment.interval.intersects(interval):
+                if assignment.interval.intersects(interval) and not hasProperty(assignment.position.properties, PositionProperty.RESTING_POSITION):
                     assignmentRelevantInterval = TimeInterval(
                         start_time = assignment.interval.start_time if interval.contains(assignment.interval.start_time) else interval.start_time,
                         end_time = assignment.interval.end_time if interval.contains(assignment.interval.end_time) else interval.end_time
@@ -142,16 +143,6 @@ class PermutationSoldier(object):
         return None
 
     ##============================================================================##
-    
-    # def calculateAccumulatedRatio(self, currentTime : datetime):
-
-    #     if self.schedule.assignments and self.schedule.assignments[0].interval.start_time != currentTime:
-    #         timeSinceFirstAssignment = currentTime - self.schedule.assignments[0].interval.start_time # Note: This is the first assignment EVER. Not just for this soldier.
-    #         absencesDuration = sum([absence.interval.duration() for absence in self.soldier.absences], timedelta())
-    #         return 1.0 - (self.accumalutingAssignmentDuration.total_seconds() / (timeSinceFirstAssignment.total_seconds() - absencesDuration.total_seconds()))
-        
-    #     else:
-    #         return 1.0
     
     def calculateRatioSinceLastAssignment(self, currentTime : datetime):
         
@@ -255,7 +246,7 @@ def findAllDesiredAssignmentsWithinInterval(schedule : Schedule, interval : Time
             break
         
         nextShiftInterval = TimeInterval(nextShiftTime, nextShiftTime + nextShift.duration)
-        assignment = Assignment(nextShiftInterval, nextShift.position, [])
+        assignment = Assignment(nextShiftInterval, nextShift.position, nextShift, [])
         
         # schedule.assignments.append(assignment)
         copySchedule.add(assignment)
@@ -317,6 +308,20 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
 def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier], schedule : Schedule) -> Union[List[Soldier],None]:
     
     mannedSoldiers : List[Soldier] = []
+    
+    if assignment.shift.stick_to_position is not None:
+        # We need to find an assignment of that position that ends right when this assignment begins.
+        
+        for iterAssignment in schedule.assignments:
+            
+            if iterAssignment.position == assignment.shift.stick_to_position and iterAssignment.interval.end_time == assignment.interval.start_time:
+                
+                # Found the assignment
+                mannedSoldiers.extend(iterAssignment.manpower.copy())
+        
+        if mannedSoldiers:
+            return mannedSoldiers
+        
     position = assignment.position
     
     soldiersGroup = []
