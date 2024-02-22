@@ -248,7 +248,15 @@ def findAllDesiredAssignmentsWithinInterval(schedule : Schedule, interval : Time
         nextShiftInterval = TimeInterval(nextShiftTime, nextShiftTime + nextShift.duration)
         assignment = Assignment(nextShiftInterval, nextShift.position, nextShift, [])
         
-        # schedule.assignments.append(assignment)
+        if assignment.shift.stick_to_position is not None:
+            # We need to find an assignment of that position that ends right when this assignment begins.
+            
+            for iterAssignment in copySchedule.assignments:
+                
+                if iterAssignment.position == assignment.shift.stick_to_position and iterAssignment.interval.end_time == assignment.interval.start_time:
+                    # Found the assignment
+                    iterAssignment.bound_assignment = assignment
+
         copySchedule.add(assignment)
         assignments.append(assignment)
         
@@ -273,6 +281,11 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
 
     # Start permutations...
     for assignment in assignments:
+        
+        if assignment.shift.stick_to_position is not None and assignment.manpower:
+            # Already manned this assignment
+            continue
+        
         assigneeFilterFunction : Callable[[PermutationSoldier, Assignment], List[PermutationSoldier]] = \
             lambda soldier, assignment: soldier.soldier.isAvailable(assignment.interval, schedule) and \
                 hasProperty(soldier.soldier.properties, SoldierProperty.NO_PHYSICAL) <= hasProperty(assignment.position.properties, PositionProperty.NOT_PHYSICAL)
@@ -288,6 +301,9 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
         assignment.manpower = mannedSoldiers
         permutation.schedule.add(assignment)
         permutation.assignments.append(assignment)
+        
+        if assignment.bound_assignment is not None:
+            assignment.bound_assignment.manpower.extend(mannedSoldiers.copy())
     
     print("Done")
     if success:
@@ -309,18 +325,18 @@ def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier], 
     
     mannedSoldiers : List[Soldier] = []
     
-    if assignment.shift.stick_to_position is not None:
-        # We need to find an assignment of that position that ends right when this assignment begins.
+    # if assignment.shift.stick_to_position is not None:
+    #     # We need to find an assignment of that position that ends right when this assignment begins.
         
-        for iterAssignment in schedule.assignments:
+    #     for iterAssignment in schedule.assignments:
             
-            if iterAssignment.position == assignment.shift.stick_to_position and iterAssignment.interval.end_time == assignment.interval.start_time:
+    #         if iterAssignment.position == assignment.shift.stick_to_position and iterAssignment.interval.end_time == assignment.interval.start_time:
                 
-                # Found the assignment
-                mannedSoldiers.extend(iterAssignment.manpower.copy())
+    #             # Found the assignment
+    #             mannedSoldiers.extend(iterAssignment.manpower.copy())
         
-        if mannedSoldiers:
-            return mannedSoldiers
+    #     if mannedSoldiers:
+    #         return mannedSoldiers
         
     position = assignment.position
     

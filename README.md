@@ -24,11 +24,12 @@ Exported Xlsx sheets don't contain the assignments that started at some previous
 1. Handle absences when calculating ratios (absence should reset ratio to 1.0). 
 2. Fix UI bug where an assignment appears twice in the calendar - FIXED
 3. Export assignments to Excel Sheet (within some time interval) - DONE
-5. Binding positions to one-another. Shifts are still needed to be defined in order for the binding to occur.
+5. Binding positions to one-another. Shifts are still needed to be defined in order for the binding to occur. - DONE
 6. Fix bug where updating positions doesn't also update the corresponding shifts  - FIXED
 7. Export soldiers to CSV (For easily updating roles and stuff) - DONE
 13. Implement `Required spacing` for specific positions to ensure some positions get a minimal break regardless of ratios (those positions will have the calculateRatio functions only look back until returning from those positions) - same as with absence. - DONE
 16. When assigning a soldier - we should also take in consideration the future assignments (those assigned manually for example) - DONE
+18. Bug: It is possible for someone to be allocated twice at the same time (due to binding shifts). Not likely but possible. - DONE
 
 
 # Apendix

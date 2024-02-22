@@ -42,10 +42,11 @@ class AssignmentIntervalTest(AssignmentValidationTest):
     
 @dataclass(init = True)
 class Assignment:
-    interval   : TimeInterval
-    position   : Position
-    shift      : Union[Shift, None]
-    manpower   : List[Soldier]
+    interval          : TimeInterval
+    position          : Position
+    shift             : Union[Shift, None]
+    manpower          : List[Soldier]
+    bound_assignment  : Union["Assignment", None] = None
 
     @staticmethod
     def make(ui : Ui_AssignmentDialog):
