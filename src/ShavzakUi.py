@@ -78,7 +78,7 @@ class ShavzakWindow(QMainWindow):
     ##============================================================================##
         
     def addSoldier(self):
-        dialog = SoldierDialog(self)
+        dialog = SoldierDialog(self, self.positionsModel.positions)
         retval : QDialog.DialogCode = self.openGenericDialog(dialog)
         
         if retval == QDialog.Accepted:
@@ -95,7 +95,7 @@ class ShavzakWindow(QMainWindow):
     
     def editSoldier(self, index : QModelIndex):
         soldier = self.manpowerModel.soldiers[index.row()]
-        dialog = SoldierDialog(self, soldier)
+        dialog = SoldierDialog(self, self.positionsModel.positions, soldier)
         retval = self.openGenericDialog(dialog)
         
         if retval == QDialog.Accepted:
@@ -249,6 +249,7 @@ class ShavzakWindow(QMainWindow):
             self.positionsModel.clear()
             self.shiftsModel.clear()
             self.calendar.clear()
+            
             self.calendar.schedule = data.schedule
             
             self.currentPositionUid = 1

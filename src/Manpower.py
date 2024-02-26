@@ -1,16 +1,25 @@
 from typing import List, Union, Tuple, TYPE_CHECKING
+from enum import Enum, auto
 from dataclasses import dataclass
 from datetime import timedelta
 
-from PyQt5.QtWidgets import QWidget, QDialog
+from PyQt5.QtWidgets import QWidget, QDialog, QListWidgetItem
 from PyQt5.QtGui import QIntValidator
+from PyQt5.QtCore import Qt
 from Ui.SoldierDialog import Ui_SoldierDialog
+from src.Positions import Position
 from src.Absence import Absence, AbsenceDialog
 from src.AbsencesModel import AbsencesModel
 from src.Common import Role, SoldierProperty, PositionProperty, TimeInterval, hasProperty
 if TYPE_CHECKING:
     from src.Assignment import Assignment
     from src.Schedule import Schedule
+
+class SoldierPositionsMode(Enum):
+    ALL         = auto()
+    WHITELIST   = auto()
+    BLACKLIST   = auto()
+    
 
 ##============================================================================##
 
@@ -24,6 +33,8 @@ class Soldier:
     comment: str = ""
     absences : List[Absence] = None
     properties : int = 0
+    positions_mode : SoldierPositionsMode = SoldierPositionsMode.ALL
+    selected_positions : Union[List[Position],None] = None
     
     ##============================================================================##
     
@@ -48,7 +59,9 @@ class Soldier:
             comment = ui.commentEdit.text(),
             absences = ui.absencesView.model().absences,
             properties = (SoldierProperty.MANUAL_ASSIGN.value    * ui.manualAssignCheck.isChecked()       |
-                          SoldierProperty.NO_PHYSICAL.value      * ui.noPhysicalCheck.isChecked())
+                          SoldierProperty.NO_PHYSICAL.value      * ui.noPhysicalCheck.isChecked()),
+            positions_mode = SoldierPositionsMode.ALL if ui.allPositionsRadio.isChecked() else SoldierPositionsMode.BLACKLIST if ui.blackListRadio.isChecked() else SoldierPositionsMode.WHITELIST,
+            selected_positions = None if ui.allPositionsRadio.isChecked() else [positionItem.data(Qt.UserRole) for positionItem in ui.positionsList.selectedItems()]
         ) # No need to avoid exceptions because we use validator
         
         return soldier
@@ -64,6 +77,8 @@ class Soldier:
         self.comment = other.comment
         self.absences = other.absences
         self.properties = other.properties
+        self.positions_mode = other.positions_mode
+        self.selected_positions = other.selected_positions
         
     ##============================================================================##
     
@@ -164,7 +179,7 @@ class Soldier:
 
 class SoldierDialog(QDialog):
     
-    def __init__(self, parent : QWidget, soldier : Soldier = None):
+    def __init__(self, parent : QWidget, positions : List[Position], soldier : Union[Soldier, None] = None):
         
         super().__init__(parent)
         
@@ -177,11 +192,16 @@ class SoldierDialog(QDialog):
         self.ui.absencesView.setColumnWidth(1, 130)
         self.ui.absencesView.setColumnWidth(2, 200)
         self.ui.absencesView.horizontalHeader().setStretchLastSection(True)
+        
+        
                         
         # PN Validator
         pnValidator = QIntValidator(self.ui.pnEdit)
         pnValidator.setBottom(0)
         self.ui.pnEdit.setValidator(pnValidator)
+        
+        # Load positions into list
+        self.loadPositions(positions, soldier)
         
         if soldier is not None:
             self.ui.pnEdit.setText(soldier.pn)
@@ -223,3 +243,23 @@ class SoldierDialog(QDialog):
         if len(self.ui.absencesView.selectedIndexes()):
             absence = self.absencesModel.absences[self.ui.absencesView.selectedIndexes()[0].row()]
             self.absencesModel.remove(absence)
+    
+    ##============================================================================##
+    
+    def loadPositions(self, positions : List[Position], soldier : Union[Soldier, None]):
+        
+        if soldier is not None:
+            if soldier.positions_mode == SoldierPositionsMode.WHITELIST:
+                self.ui.whiteListRadio.setChecked(True)
+            elif soldier.positions_mode == SoldierPositionsMode.BLACKLIST:
+                self.ui.blackListRadio.setChecked(True)
+        
+        for position in positions:
+            
+            item = QListWidgetItem(position.name, self.ui.positionsList)
+            item.setData(Qt.UserRole, position)
+            self.ui.positionsList.addItem(item)
+            
+            if soldier is not None and soldier.positions_mode != SoldierPositionsMode.ALL:
+                if position in soldier.selected_positions:
+                    item.setSelected(True)

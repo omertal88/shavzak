@@ -8,7 +8,7 @@ from typing import List, Union, Dict, Tuple, Callable
 from datetime import datetime, timedelta, date
 from multiprocessing.pool import Pool
 from src.Common import Role, TimeInterval, SoldierProperty, PositionProperty, hasProperty
-from src.Manpower import Soldier
+from src.Manpower import Soldier, SoldierPositionsMode
 from src.Positions import Position
 from src.Shifts import Shift
 from src.Assignment import Assignment
@@ -288,7 +288,8 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
         
         assigneeFilterFunction : Callable[[PermutationSoldier, Assignment], List[PermutationSoldier]] = \
             lambda soldier, assignment: soldier.soldier.isAvailable(assignment.interval, schedule) and \
-                hasProperty(soldier.soldier.properties, SoldierProperty.NO_PHYSICAL) <= hasProperty(assignment.position.properties, PositionProperty.NOT_PHYSICAL)
+                hasProperty(soldier.soldier.properties, SoldierProperty.NO_PHYSICAL) <= hasProperty(assignment.position.properties, PositionProperty.NOT_PHYSICAL) and \
+                isPositionWhitelisted(soldier.soldier, assignment.position)
             
         availableSoldiers = [permutationSoldier for permutationSoldier in permutationSoldiers if assigneeFilterFunction(permutationSoldier, assignment)]
         
@@ -297,7 +298,6 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
             success = False
             break
         
-        # print("Manned soldier for assignment %s: %s" % (assignment.position.name, ",".join(["%s" % s.name for s in mannedSoldiers])))
         assignment.manpower = mannedSoldiers
         permutation.schedule.add(assignment)
         permutation.assignments.append(assignment)
@@ -323,6 +323,7 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
 
 def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier], schedule : Schedule) -> Union[List[Soldier],None]:
     
+    print ("Manning assignment \"%s\"" % assignment.position.name)
     mannedSoldiers : List[Soldier] = []
     
     # if assignment.shift.stick_to_position is not None:
@@ -487,3 +488,16 @@ def calculateAndSortRatios(schedule : Schedule, soldiers : List[Soldier], interv
     
     # Sort by ratio
     return sorted(soldiersAndRatios, key = lambda x: x[1], reverse = True)  # Highest ratios (most rest) first
+
+##============================================================================##
+
+def isPositionWhitelisted(soldier : Soldier, position : Position):
+    
+    if soldier.positions_mode == SoldierPositionsMode.ALL:
+        return True
+    
+    if soldier.positions_mode == SoldierPositionsMode.WHITELIST:
+        return position in soldier.selected_positions
+    
+    if soldier.positions_mode == SoldierPositionsMode.BLACKLIST:
+        return position not in soldier.selected_positions
