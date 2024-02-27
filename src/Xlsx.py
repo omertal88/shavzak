@@ -11,6 +11,7 @@ from src.Schedule import Schedule
 Cell = namedtuple("Cell", ["row", "col"])
 
 COLUMN_WIDTH = 25
+ROW_HEIGHT = 20
 
 def get_random_color(pastel_factor = 0.7):
     return [(x+pastel_factor)/(1.0+pastel_factor) for x in [uniform(0,1.0) for i in [1,2,3]]]
@@ -67,7 +68,9 @@ def exportToXlsx(path : str, schedule : Schedule, interval : TimeInterval):
         
         assignmentDate = assignment.interval.start_time.date()
         
-        dateToAssignments.setdefault(assignmentDate, []).append(assignment)
+        while assignmentDate <= assignment.interval.end_time.date():
+            dateToAssignments.setdefault(assignmentDate, []).append(assignment)
+            assignmentDate += timedelta(days=1)
     
     discoveredColors = []
     positionToAssignmentFormat : Dict[str, format.Format] = {}
@@ -99,7 +102,12 @@ def exportToXlsx(path : str, schedule : Schedule, interval : TimeInterval):
                 currentColumn += 1
             
             cell = positionToCell[assignment.position.name]
-            worksheet.write(cell.row, cell.col, assignment.interval.start_time.time().strftime("%H:%M"), assignment_time_format)
+            if assignment.interval.start_time.date() == assignment.interval.end_time.date():
+                worksheet.write(cell.row, cell.col, assignment.interval.start_time.time().strftime("%H:%M"), assignment_time_format)
+            else:
+                worksheet.write(cell.row, cell.col, "%s ->\n %s" % (assignment.interval.start_time.strftime("%Y/%m/%d %H:%M"),
+                                                                  assignment.interval.end_time.strftime("%Y/%m/%d %H:%M")), assignment_time_format)
+                worksheet.set_row_pixels(cell.row, ROW_HEIGHT * 2)
             
             assignmentFormat = positionToAssignmentFormat[assignment.position.name]
             for i, assignee in enumerate(assignment.manpower, start=1):

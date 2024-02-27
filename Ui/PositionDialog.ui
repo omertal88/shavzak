@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>587</width>
-    <height>289</height>
+    <height>413</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -55,20 +55,28 @@
      </item>
      <item row="4" column="0">
       <widget class="QLabel" name="label_2">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>בעלי תפקידים</string>
        </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="RolesWidget" name="rolesWidget" native="true">
-       <property name="focusPolicy">
-        <enum>Qt::TabFocus</enum>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
        </property>
       </widget>
      </item>
      <item row="6" column="0">
       <widget class="QLabel" name="label_4">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="MinimumExpanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="text">
         <string>מאפיינים</string>
        </property>
@@ -189,6 +197,144 @@
      <item row="3" column="1">
       <widget class="QSpinBox" name="prioritySpin"/>
      </item>
+     <item row="4" column="1">
+      <widget class="QFrame" name="frame">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="2" column="4">
+         <widget class="QLabel" name="label_17">
+          <property name="text">
+           <string>חמליסט</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QSpinBox" name="platoonCommanderSpin"/>
+        </item>
+        <item row="2" column="2">
+         <widget class="QLabel" name="label_16">
+          <property name="text">
+           <string>קשר</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>מ&quot;כ</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_15">
+          <property name="text">
+           <string>צלף</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="5">
+         <widget class="QSpinBox" name="squadCommanderSpin"/>
+        </item>
+        <item row="1" column="4">
+         <widget class="QLabel" name="label_14">
+          <property name="text">
+           <string>חובש</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="companyCommanderSpin"/>
+        </item>
+        <item row="1" column="2">
+         <widget class="QLabel" name="label_13">
+          <property name="text">
+           <string>מטול</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_12">
+          <property name="text">
+           <string>קלע</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QLabel" name="label_10">
+          <property name="text">
+           <string>מ&quot;מ / סמ&quot;ח</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_9">
+          <property name="text">
+           <string>מ&quot;פ / סמ&quot;פ</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="0">
+         <widget class="QLabel" name="label_18">
+          <property name="text">
+           <string>רץ חמל</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QLabel" name="label_19">
+          <property name="text">
+           <string>נהג</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="4">
+         <widget class="QLabel" name="label_20">
+          <property name="text">
+           <string>חפ&quot;ש</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QSpinBox" name="sharpshooterSpin"/>
+        </item>
+        <item row="2" column="1">
+         <widget class="QSpinBox" name="sniperSpin"/>
+        </item>
+        <item row="3" column="1">
+         <widget class="QSpinBox" name="hamalRunnerSpin"/>
+        </item>
+        <item row="1" column="3">
+         <widget class="QSpinBox" name="grenadeLauncherSpin"/>
+        </item>
+        <item row="2" column="3">
+         <widget class="QSpinBox" name="signallerSpin"/>
+        </item>
+        <item row="3" column="3">
+         <widget class="QSpinBox" name="driverSpin"/>
+        </item>
+        <item row="1" column="5">
+         <widget class="QSpinBox" name="medicSpin"/>
+        </item>
+        <item row="2" column="5">
+         <widget class="QSpinBox" name="hamalistSpin"/>
+        </item>
+        <item row="3" column="5">
+         <widget class="QSpinBox" name="riflemanSpin"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -203,19 +349,22 @@
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>RolesWidget</class>
-   <extends>QWidget</extends>
-   <header>Ui.Promoted.RolesWidget.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <tabstops>
   <tabstop>positionNameEdit</tabstop>
   <tabstop>manpowerSpin</tabstop>
   <tabstop>prioritySpin</tabstop>
-  <tabstop>rolesWidget</tabstop>
+  <tabstop>companyCommanderSpin</tabstop>
+  <tabstop>platoonCommanderSpin</tabstop>
+  <tabstop>squadCommanderSpin</tabstop>
+  <tabstop>sharpshooterSpin</tabstop>
+  <tabstop>grenadeLauncherSpin</tabstop>
+  <tabstop>medicSpin</tabstop>
+  <tabstop>sniperSpin</tabstop>
+  <tabstop>signallerSpin</tabstop>
+  <tabstop>hamalistSpin</tabstop>
+  <tabstop>hamalRunnerSpin</tabstop>
+  <tabstop>driverSpin</tabstop>
+  <tabstop>riflemanSpin</tabstop>
   <tabstop>spacingNeededCheck</tabstop>
   <tabstop>spacingHourSpin</tabstop>
   <tabstop>spacingMinuteSpin</tabstop>

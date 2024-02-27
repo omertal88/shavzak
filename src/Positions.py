@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
 from datetime import datetime, timedelta
 from dataclasses import dataclass
 from PyQt5.QtWidgets import QDialog, QWidget
@@ -15,7 +15,7 @@ class Position:
     uid : int
     name : str
     needed_manpower : int
-    needed_roles : int # bit field (Role)
+    needed_roles : Dict[Role, int] # Count needed for each role
     properties : int # bit field (PositionProperty)
     required_spacing : timedelta = timedelta()
     priority : int = 0
@@ -27,23 +27,27 @@ class Position:
             name = ui.positionNameEdit.text(),
             needed_manpower = ui.manpowerSpin.value(),
             priority = ui.prioritySpin.value(),
-            needed_roles = (
-                Role.COMPANY_COMMANDER  * ui.rolesWidget.companyCommanderCheck.isChecked()     |
-                Role.PLATOON_COMMANDER  * ui.rolesWidget.platoonCommanderCheck.isChecked()     |
-                Role.SQUAD_COMMANDER    * ui.rolesWidget.squadCommanderCheck.isChecked()  |
-                Role.SHARPSHOOTER       * ui.rolesWidget.sharpshooterCheck.isChecked()    |
-                Role.GRENADE_LAUNCHER   * ui.rolesWidget.grenadeLauncherCheck.isChecked() |
-                Role.MEDIC              * ui.rolesWidget.medicCheck.isChecked()           |
-                Role.SNIPER             * ui.rolesWidget.sniperCheck.isChecked()          |
-                Role.SIGNALLER          * ui.rolesWidget.signallerCheck.isChecked()       |
-                Role.HALAMIST           * ui.rolesWidget.hamalistCheck.isChecked()        |
-                Role.HAMAL_RUNNER       * ui.rolesWidget.hamalRunnerCheck.isChecked()     |
-                Role.DRIVER             * ui.rolesWidget.driverCheck.isChecked()),
+            needed_roles = {
+                Role.COMPANY_COMMANDER :  ui.companyCommanderSpin.value() ,
+                Role.PLATOON_COMMANDER :  ui.platoonCommanderSpin.value() ,
+                Role.SQUAD_COMMANDER   :  ui.squadCommanderSpin.value()   ,
+                Role.SHARPSHOOTER      :  ui.sharpshooterSpin.value()     ,
+                Role.GRENADE_LAUNCHER  :  ui.grenadeLauncherSpin.value()  ,
+                Role.MEDIC             :  ui.medicSpin.value()            ,
+                Role.SNIPER            :  ui.sniperSpin.value()           ,
+                Role.SIGNALLER         :  ui.signallerSpin.value()        ,
+                Role.HALAMIST          :  ui.hamalistSpin.value()         ,
+                Role.HAMAL_RUNNER      :  ui.hamalRunnerSpin.value()      ,
+                Role.DRIVER            :  ui.driverSpin.value()           ,
+                Role.RIFLEMAN          :  ui.riflemanSpin.value()
+                
+            },
             properties = (
-                PositionProperty.ORGANIC_PLATOONS  * ui.organicPlatoonsCheck.isChecked()    |
-                PositionProperty.NOT_PHYSICAL      * ui.notPhysicalCheck.isChecked()    |
-                PositionProperty.SPACING_NEEDED    * ui.spacingNeededCheck.isChecked()         |
-                PositionProperty.NOT_COMMANDER     * ui.notCommanderCheck.isChecked()
+                PositionProperty.ORGANIC_PLATOONS  * ui.organicPlatoonsCheck.isChecked()   |
+                PositionProperty.NOT_PHYSICAL      * ui.notPhysicalCheck.isChecked()       |
+                PositionProperty.SPACING_NEEDED    * ui.spacingNeededCheck.isChecked()     |
+                PositionProperty.NOT_COMMANDER     * ui.notCommanderCheck.isChecked()      |
+                PositionProperty.RESTING_POSITION  * ui.restingPositionCheck.isChecked()
             ),
             required_spacing = timedelta(hours = ui.spacingHourSpin.value(),
                                          minutes = ui.spacingMinuteSpin.value()) if ui.spacingNeededCheck.isChecked() else timedelta()
@@ -90,17 +94,24 @@ class PositionDialog(QDialog):
             self.ui.prioritySpin.setValue(position.priority)
             
             # Roles
-            self.ui.rolesWidget.companyCommanderCheck.setChecked(position.needed_roles & Role.COMPANY_COMMANDER)
-            self.ui.rolesWidget.platoonCommanderCheck.setChecked(position.needed_roles & Role.PLATOON_COMMANDER)
-            self.ui.rolesWidget.squadCommanderCheck.setChecked(position.needed_roles & Role.SQUAD_COMMANDER)
-            self.ui.rolesWidget.sharpshooterCheck.setChecked(position.needed_roles & Role.SHARPSHOOTER)
-            self.ui.rolesWidget.grenadeLauncherCheck.setChecked(position.needed_roles & Role.GRENADE_LAUNCHER)
-            self.ui.rolesWidget.medicCheck.setChecked(position.needed_roles & Role.MEDIC)
-            self.ui.rolesWidget.sniperCheck.setChecked(position.needed_roles & Role.SNIPER)
-            self.ui.rolesWidget.signallerCheck.setChecked(position.needed_roles & Role.SIGNALLER)
-            self.ui.rolesWidget.hamalistCheck.setChecked(position.needed_roles & Role.HALAMIST)
-            self.ui.rolesWidget.hamalRunnerCheck.setChecked(position.needed_roles & Role.HAMAL_RUNNER)
-            self.ui.rolesWidget.driverCheck.setChecked(position.needed_roles & Role.DRIVER)
+            if isinstance(position.needed_roles, int):
+                position.needed_roles = {}
+
+            if Role.RIFLEMAN not in position.needed_roles:
+                position.needed_roles[Role.RIFLEMAN] = 0
+                
+            self.ui.companyCommanderSpin.setValue(position.needed_roles.get(Role.COMPANY_COMMANDER, 0))
+            self.ui.platoonCommanderSpin.setValue(position.needed_roles.get(Role.PLATOON_COMMANDER, 0))
+            self.ui.squadCommanderSpin.setValue(position.needed_roles.get(Role.SQUAD_COMMANDER, 0))
+            self.ui.sharpshooterSpin.setValue(position.needed_roles.get(Role.SHARPSHOOTER, 0))
+            self.ui.grenadeLauncherSpin.setValue(position.needed_roles.get(Role.GRENADE_LAUNCHER, 0))
+            self.ui.medicSpin.setValue(position.needed_roles.get(Role.MEDIC, 0))
+            self.ui.sniperSpin.setValue(position.needed_roles.get(Role.SNIPER, 0))
+            self.ui.signallerSpin.setValue(position.needed_roles.get(Role.SIGNALLER, 0))
+            self.ui.hamalistSpin.setValue(position.needed_roles.get(Role.HALAMIST, 0))
+            self.ui.hamalRunnerSpin.setValue(position.needed_roles.get(Role.HAMAL_RUNNER, 0))
+            self.ui.driverSpin.setValue(position.needed_roles.get(Role.DRIVER, 0))
+            self.ui.riflemanSpin.setValue(position.needed_roles.get(Role.RIFLEMAN, 0))
 
             # Properties
             self.ui.organicPlatoonsCheck.setChecked(position.properties & PositionProperty.ORGANIC_PLATOONS)

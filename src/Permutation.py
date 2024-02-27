@@ -304,6 +304,10 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
         
         if assignment.bound_assignment is not None:
             assignment.bound_assignment.manpower.extend(mannedSoldiers.copy())
+            
+            permutation.schedule.add(assignment.bound_assignment)
+            permutation.assignments.append(assignment.bound_assignment)
+            
     
     print("Done")
     if success:
@@ -323,7 +327,6 @@ def generatePermutation(schedule : Schedule, interval : TimeInterval,
 
 def manAssignment(assignment : Assignment, soldiers : List[PermutationSoldier], schedule : Schedule) -> Union[List[Soldier],None]:
     
-    print ("Manning assignment \"%s\"" % assignment.position.name)
     mannedSoldiers : List[Soldier] = []
     
     # if assignment.shift.stick_to_position is not None:
@@ -404,8 +407,8 @@ def canCandidatesManPosition(position : Position, candidates : List[PermutationS
     
     mannableCandidates : List[PermutationSoldier] = []
     for role in Role:
-        foundRole = False
-        if hasProperty(position.needed_roles, role): # This role is needed
+        for i in range(position.needed_roles[role]): # This role is needed
+            foundRole = False
             for candidate in candidates:
                 if hasProperty(candidate.soldier.roles, role) and candidate not in mannableCandidates:
                     mannableCandidates.append(candidate)

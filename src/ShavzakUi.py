@@ -185,6 +185,15 @@ class ShavzakWindow(QMainWindow):
         dialog = ShiftDialog(self, shift)
         dialog.ui.positionCombo.addItems([x.name for x in self.positionsModel.positions])
         dialog.ui.positionCombo.setCurrentText(next(position.name for position in self.positionsModel.positions if position is shift.position))
+        
+        for position in self.positionsModel.positions:
+            # TODO: The combobox is not updated if the position is changed in the dialog.
+            if position != self.positionsModel.positions[self.ui.positionsView.selectedIndexes()[0].row()]:
+                dialog.ui.stickToShiftCombo.addItem(position.name, position)
+                
+            if shift.stick_to_position == position:
+                dialog.ui.stickToShiftCombo.setCurrentIndex(dialog.ui.stickToShiftCombo.count() - 1)
+
         retval = self.openGenericDialog(dialog)
         
         if retval == QDialog.Accepted:
