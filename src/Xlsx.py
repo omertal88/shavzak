@@ -103,7 +103,8 @@ def exportToXlsx(path : str, schedule : Schedule, interval : TimeInterval):
             
             cell = positionToCell[assignment.position.name]
             if assignment.interval.start_time.date() == assignment.interval.end_time.date():
-                worksheet.write(cell.row, cell.col, assignment.interval.start_time.time().strftime("%H:%M"), assignment_time_format)
+                worksheet.write(cell.row, cell.col, "%s -> %s" % (assignment.interval.start_time.time().strftime("%H:%M"),
+                                                                    assignment.interval.end_time.time().strftime("%H:%M")), assignment_time_format)
             else:
                 worksheet.write(cell.row, cell.col, "%s ->\n %s" % (assignment.interval.start_time.strftime("%Y/%m/%d %H:%M"),
                                                                   assignment.interval.end_time.strftime("%Y/%m/%d %H:%M")), assignment_time_format)
